@@ -1,3 +1,7 @@
 {
-  "extends": ["@edsc"]
+  "extends": ["@edsc"],
+  // Define any global variables to avoid no-undef errors
+  "globals": {
+    "vi": "readonly"
+  }
 }

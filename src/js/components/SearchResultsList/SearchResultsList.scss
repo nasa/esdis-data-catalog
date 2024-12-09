@@ -1,0 +1,194 @@
+.data-catalog-wrapper {
+  .search-result-navigation {
+    border-top: 1px solid #d1d1d1;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 20px;
+    padding: .5rem;
+  }
+
+  .pagination {
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 20px;
+  }
+
+  .pagination .page-item .page-link  {
+    border: none;
+    color: #000;
+    cursor: pointer;
+    font-size: 18px;
+    margin: 0 2px;
+    padding: 1rem;
+  }
+
+  .pagination .page-item .page-link {
+    background-color: transparent;
+    border: none;
+    border: none;
+    color: #000;
+    cursor: pointer;
+    margin: 0 2px;
+    text-decoration: none;
+  }
+
+  .pagination .page-item.active .page-link::after {
+    background-color: #000;
+    bottom: 10px;
+    content: '';
+    height: 2px;
+    left: 0;
+    margin: 0 4px;
+    position: absolute;
+    right: 0;
+    width: 32px;
+  }
+
+  .pagination .page-item.pagination-prev .page-link,
+  .pagination .page-item.pagination-next .page-link {
+    align-items: center;
+    border-radius: 50%;
+    border: 1px solid #B9B9BB;
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    width: 32px;
+
+  }
+
+  .pagination .page-item.pagination-next.disabled .page-link,
+  .pagination .page-item.pagination-prev.disabled .page-link {
+    border: 1px solid #F6F6F6;
+  }
+
+  .pagination .page-item.pagination-next.disabled .page-link .svg-icon,
+  .pagination .page-item.pagination-prev.disabled .page-link .svg-icon {
+    fill: #B9B9BB;
+  }
+
+  .dropdown-toggle::after {
+    border: none
+  }
+
+  .pagination .page-item.pagination-next .page-link .svg-icon,
+  .pagination .page-item.pagination-prev .page-link .svg-icon {
+    fill: black;
+  }
+
+  .search-result-navigation__row {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 16px;
+    padding: 8px;
+    justify-content: right;
+    display: flex;
+  }
+
+  .search-result-navigation__dropdown {
+    width: 128px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #D1D1D1;
+    padding-bottom: .5rem;
+  }
+
+  .search-result-navigation__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0.25px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .search-result-navigation__page-size {
+    margin-left: .8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 2.25px;
+    color: #58585B
+  }
+
+  .search-result-navigation__row .dropdown-toggle{
+    background-color: transparent;
+    border:transparent;
+    color: black;
+    padding-left: 0;
+  }
+
+  .search-result-navigation__svg-icon{
+    margin-left: 2.8rem;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid #B9B9BB;
+    height: 20px;
+    width: 20px;
+    padding: .3rem;
+  }
+
+  .dropdown-toggle::after {
+    border: none
+  }
+
+  .search-results-header__summary {
+    margin-top: auto;
+  }
+
+  .search-result-sort__row {
+    justify-content: right;
+    display: flex;
+    margin-top: auto;
+  }
+
+
+  .search-result-sort__dropdown {
+    height: 20px;
+  }
+
+  .search-result-sort__label {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0.25px;
+    text-transform: uppercase;
+    text-align: left;
+    color: #58585B;
+    margin-right: .2rem;
+  }
+
+  .search-result-sort__value {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 19px;
+    letter-spacing: 0.25px;
+    text-align: right;
+    text-transform: uppercase;
+  }
+
+  .search-result-sort__row .dropdown-toggle{
+    background-color: transparent;
+    border:transparent;
+    color: black;
+    padding: 0;
+  }
+
+  .search-result-sort__svg-icon{
+    margin-left: .5rem;
+    background-color: transparent;
+    border-radius: 50%;
+    border: 1px solid #B9B9BB;
+    height: 20px;
+    width: 20px;
+    padding: .3rem;
+  }
+}

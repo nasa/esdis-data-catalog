@@ -1,0 +1,7 @@
+{
+  "cmrHost": "https://cmr.sit.earthdata.nasa.gov",
+  "defaultPageSize": 20,
+  "edlHost": "https://sit.urs.earthdata.nasa.gov",
+  "feedbackApp": "",
+  "version": "development"
+}

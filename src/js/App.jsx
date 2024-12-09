@@ -1,18 +1,21 @@
 import React from 'react'
 
 import {
-  BrowserRouter as Router,
-  Route,
-  Switch
+  BrowserRouter,
+  Routes,
+  Route
 } from 'react-router-dom'
-import DataCatalog from './pages/DataCatalog/DataCatalog'
 
-export const DataCatalogRoot = () => (
+import DataCatalog from './pages/DataCatalog/DataCatalog'
+import './css/main.scss'
+
+export const App = () => (
   <div>
-    <Router>
-      <Switch>
-        <Route path="/" component={DataCatalog} />
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<DataCatalog />} />
+      </Routes>
+    </BrowserRouter>
   </div>
 )
+export default App

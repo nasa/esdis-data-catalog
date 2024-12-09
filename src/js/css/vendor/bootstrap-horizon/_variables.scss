@@ -1,0 +1,144 @@
+
+@use "sass:map";
+
+/*
+ * This file pulls in all the Bootstrap variables and customizations. This file is
+ * separated so it can can be imported into a component SASS file to make the variables
+ * available in the component scope.
+ *
+ * See https://getbootstrap.com/docs/5.0/customize/sass/ for more info.
+*/
+
+/*
+ * Bootstrap utils
+*/
+
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+
+/*
+ * Theme customizations
+ *
+ * Included after `variables` and before `maps` as noted in the Bootstrap documentation
+*/
+
+$grid-breakpoints: (
+  xs: 0,
+  sm: 320px,
+  md: 672px,
+  lg: 1056px,
+  xl: 1320px,
+);
+
+$container-max-widths: (
+  xs: 1320px,
+  sm: 1320px,
+  md: 1320px,
+  lg: 1320px,
+  xl: 1320px,
+);
+
+$grid-gutter-width: 12px;
+
+/*
+ * Color
+*/
+
+$custom-colors: (
+  "blue": #2276ac,
+  "blue-light": #2c93d5,
+  "indigo": #2c3e50,
+  "purple": #673285,
+  "pink": #e74c3c,
+  "red": #b3241c,
+  "orange": #f28429,
+  "yellow": #f2d029,
+  "green": #189c54,
+  "teal": #20ce6f,
+  "cyan": #7ab5da,
+  "white": #fff,
+  "gray": #6c757d,
+  "gray-dark": #343a40,
+  "primary": #2276ac,
+  "secondary": #58585B,
+  "success": #189c54,
+  "info": #7ab5da,
+  "warning": #f2d029,
+  "danger": #b3241c,
+  "light": #eeeeee,
+  "dark": #17171B
+);
+
+/* stylelint-disable-next-line function-no-unknown */
+$theme-colors: map-merge($theme-colors, $custom-colors);
+$gradient: linear-gradient(180deg, rgb(255 255 255 / 15%), rgb(255 255 255 / 0%));
+
+/*
+ * Text
+*/
+
+$headings-font-family: Inter, sans-serif;
+$headings-color: #000;
+
+
+$font-family-sans-serif: "Public Sans", sans-serif;
+$font-family-monospace: "DM Mono",  monospace;
+
+/*
+ * Accordions
+ */
+$accordion-button-icon:         url("data:image/svg+xml,<svg width='20' height='20' viewBox='0 0 20 20' fill='#{$accordion-icon-color}' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M10 12.6378L18.0821 4.5L20 6.43111L10 16.5L-8.44115e-08 6.43111L1.9179 4.5L10 12.6378Z'/></svg>");
+$accordion-button-active-icon:  url("data:image/svg+xml,<svg width='20' height='20' viewBox='0 0 20 20' fill='#{$accordion-icon-active-color}' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M10 12.6378L18.0821 4.5L20 6.43111L10 16.5L-8.44115e-08 6.43111L1.9179 4.5L10 12.6378Z'/></svg>");
+$accordion-icon-width: 10px;
+$accordion-border-radius: 0;
+$accordion-inner-border-radius: 0;
+$accordion-border-width: 0;
+$accordion-button-focus-box-shadow: none;
+$accordion-button-bg: transparent;
+$accordion-button-active-bg: transparent;
+$accordion-button-padding-x: 0;
+$accordion-button-padding-y: 0;
+
+/*
+ * Forms
+ */
+$input-border-radius: 0;
+$input-border-radius-sm: 0;
+$input-border-radius-lg: 0;
+$input-border-color: #D1D1D1;
+$input-placeholder-color: #959599;
+
+/*
+ * Links
+*/
+
+$link-color: map.get($theme-colors, "blue-light");
+$link-hover-color: map.get($theme-colors, "blue");
+
+/*
+ * Navbar
+*/
+$navbar-padding-y: 0.75rem;
+$navbar-brand-padding-y: 0.75rem;
+$navbar-brand-font-size: calc(1.285rem + 0.42vw);
+
+/*
+ * Nav Pills
+*/
+$nav-link-color: map.get($theme-colors, "blue-light");
+$nav-link-hover-color: map.get($theme-colors, "blue");
+$nav-pills-link-active-bg: map.get($theme-colors, "blue");
+$nav-pills-border-radius: 0;
+
+/*
+ * Pagination
+*/
+$pagination-disabled-bg: transparent;
+
+/*
+ * Bootstrap utilities
+*/
+
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
