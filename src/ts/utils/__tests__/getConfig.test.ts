@@ -4,7 +4,7 @@ import {
   set
 } from '../getConfig'
 
-vi.mock('../../../../../static.config.json', () => ({
+vi.mock('../../../../static.config.json', () => ({
   default: {
     testKey: 'testValue',
     overrideKey: 'originalValue'
