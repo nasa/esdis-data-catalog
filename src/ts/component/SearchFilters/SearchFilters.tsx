@@ -1,11 +1,11 @@
 import React from 'react'
-import { Accordion } from 'react-bootstrap';
-import Form from 'react-bootstrap/Form';
-import SearchFilterSection from '../SearchFilterSection/SearchFilterSection';
-import SearchFilterSectionList from '../SearchFilterSectionList/SearchFilterSectionList';
-import FacetChecklist from '../FacetChecklist/FacetChecklist';
+import { Accordion } from 'react-bootstrap'
+import Form from 'react-bootstrap/Form'
+import SearchFilterSection from '../SearchFilterSection/SearchFilterSection'
+import SearchFilterSectionList from '../SearchFilterSectionList/SearchFilterSectionList'
+import FacetChecklist from '../FacetChecklist/FacetChecklist'
 
-import { Facet } from '../../../types/global';
+import { Facet } from '../../../types/global'
 
 import './SearchFilters.scss'
 
@@ -18,20 +18,22 @@ interface SearchFiltersProps {
     temporal?: string[] | string
     page_num?: number
   };
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
-  setQueryString: (query: string) => void;
-  setSidebarOpened: (isOpened: boolean) => void;
+  handleChange: (_event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBlur: (_event: React.FocusEvent<HTMLInputElement>) => void;
+  setQueryString: (_query: string) => void;
+  setSidebarOpened: (_isOpened: boolean) => void;
 }
 
 const findFacet = (facets: Facet, title: string): Facet | null => {
   if (!facets || !facets.children) return null
+
   return facets.children.find((c) => c.title === title) || null
 }
 
 const findChildFacets = (facets: Facet, title: string): Facet[] => {
   const facet = findFacet(facets, title)
   if (!facet || !facet.children) return []
+
   return facet.children
 }
 
@@ -43,7 +45,7 @@ const namesToParams: { [key: string]: string } = {
   'Horizontal Data Resolution': 'horizontal_data_resolution_range',
   'Data Format': 'granule_data_format_h',
   'Processing Levels': 'processing_level_id'
-};
+}
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
   facets,
@@ -53,9 +55,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   setQueryString,
   setSidebarOpened
 }) => {
-
   const onChange = (facet: Facet, isChecked: boolean) => {
-
     const { apply, remove } = facet.links || {}
     if (isChecked && apply) {
       setQueryString(apply.split('?')[1])

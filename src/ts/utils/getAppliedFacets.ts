@@ -1,4 +1,4 @@
-import { Facet } from "../../types/global"
+import { Facet } from '../../types/global'
 
 /**
  * Takes a parsed list of facets returned from CMR and returns a flat list

@@ -1,36 +1,35 @@
-import React from 'react';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
+import React from 'react'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
 import {
   get,
   template,
   uniq
-} from 'lodash-es';
-import { getConfig } from '../../utils/getConfig';
-import TextIcon from '../TextIcon/TextIcon';
-
-// Helper functions (you may want to move these to a separate file)
+} from 'lodash-es'
+import { getConfig } from '../../utils/getConfig'
+import TextIcon from '../TextIcon/TextIcon'
 
 function toDateStr(dateTimeStr: string | null): string | null {
-  if (dateTimeStr) return dateTimeStr.split('T')[0];
-  return null;
+  if (dateTimeStr) return dateTimeStr.split('T')[0]
+
+  return null
 }
 
 function ummTemporalToHuman(umm: object): string | null {
-  const singleDate = get(umm, ['TemporalExtents', 0, 'SingleDateTimes', 0]);
-  if (singleDate) return toDateStr(singleDate);
+  const singleDate = get(umm, ['TemporalExtents', 0, 'SingleDateTimes', 0])
+  if (singleDate) return toDateStr(singleDate)
 
-  const rangeDate = get(umm, ['TemporalExtents', 0, 'RangeDateTimes', 0]);
-  if (!rangeDate) return null;
+  const rangeDate = get(umm, ['TemporalExtents', 0, 'RangeDateTimes', 0])
+  if (!rangeDate) return null
 
-  const start = toDateStr(rangeDate.BeginningDateTime);
-  const end = toDateStr(rangeDate.EndingDateTime);
+  const start = toDateStr(rangeDate.BeginningDateTime)
+  const end = toDateStr(rangeDate.EndingDateTime)
 
-  if (!start && !end) return null;
-  if (start === end) return start;
-  if (!end) return `${start} ongoing`;
+  if (!start && !end) return null
+  if (start === end) return start
+  if (!end) return `${start} ongoing`
 
-  return `${start} to ${end}`;
+  return `${start} to ${end}`
 }
 
 interface GeoPoint {
@@ -39,56 +38,58 @@ interface GeoPoint {
 }
 
 function ummSpatialToSummary(umm: object): string | null {
-  const geometry = get(umm, ['SpatialExtent', 'HorizontalSpatialDomain', 'Geometry']);
+  const geometry = get(umm, ['SpatialExtent', 'HorizontalSpatialDomain', 'Geometry'])
 
-  if (!geometry) return null;
+  if (!geometry) return null
 
   const {
     Points,
     BoundingRectangles,
     GPolygons,
     CoordinateSystem
-  } = geometry;
+  } = geometry
 
   if (Points && Points[0]) {
-    let result = `(${Points[0].Latitude}, ${Points[0].Longitude})`;
-    if (Points.length > 1) result += '...';
-    return result;
+    let result = `(${Points[0].Latitude}, ${Points[0].Longitude})`
+    if (Points.length > 1) result += '...'
+
+    return result
   }
 
   const bboxToSummary = (west: number, east: number, south: number, north: number): string => {
-    if (west === -180 && east === 180 && south === -90 && north === 90) return 'Global';
-    return `Latitudes ${south} to ${north}, Longitudes ${west} to ${east}`;
-  };
+    if (west === -180 && east === 180 && south === -90 && north === 90) return 'Global'
+
+    return `Latitudes ${south} to ${north}, Longitudes ${west} to ${east}`
+  }
 
   if (BoundingRectangles && BoundingRectangles[0]) {
-    if (BoundingRectangles.length > 1) return 'Multiple bounding rectangles';
+    if (BoundingRectangles.length > 1) return 'Multiple bounding rectangles'
 
     const {
       WestBoundingCoordinate: west,
       EastBoundingCoordinate: east,
       NorthBoundingCoordinate: north,
       SouthBoundingCoordinate: south
-    } = BoundingRectangles[0];
+    } = BoundingRectangles[0]
 
-    return bboxToSummary(west, east, south, north);
+    return bboxToSummary(west, east, south, north)
   }
 
   if (GPolygons && GPolygons[0] && CoordinateSystem === 'CARTESIAN') {
-    const points = get(GPolygons, [0, 'Boundary', 'Points'], []);
-    const lats = uniq(points.map((p: GeoPoint) => p.Latitude));
-    const lons = uniq(points.map((p: GeoPoint) => p.Longitude));
+    const points = get(GPolygons, [0, 'Boundary', 'Points'], [])
+    const lats = uniq(points.map((p: GeoPoint) => p.Latitude))
+    const lons = uniq(points.map((p: GeoPoint) => p.Longitude))
     if (lats.length === 2 && lons.length === 2) {
-      const west = Math.min(...lons as number[]);
-      const east = Math.max(...lons as number[]);
-      const south = Math.min(...lats as number[]);
-      const north = Math.max(...lats as number[]);
+      const west = Math.min(...lons as number[])
+      const east = Math.max(...lons as number[])
+      const south = Math.min(...lats as number[])
+      const north = Math.max(...lats as number[])
 
-      return bboxToSummary(west, east, south, north);
+      return bboxToSummary(west, east, south, north)
     }
   }
 
-  return null;
+  return null
 }
 
 interface DOI {
@@ -108,7 +109,7 @@ interface DoiLink extends DOI {
  * @returns {object} a link object with keys for 'link' (href) and 'title' text
  */
 function doiLink(doi: DOI) {
-  if (!doi || !doi.DOI) return null;
+  if (!doi || !doi.DOI) return null
 
   let link = doi.Authority || 'https://doi.org/'
   if (!link.endsWith('/')) link += '/'
@@ -156,17 +157,17 @@ interface Umm {
  * @returns an object summarizing the UMM-C JSON appropriate for display
  */
 function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
-  const daac = (umm.DataCenters || []).find(({ Roles }) => Roles.indexOf('ARCHIVER') !== -1);
+  const daac = (umm.DataCenters || []).find(({ Roles }) => Roles.indexOf('ARCHIVER') !== -1)
 
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])
-    .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null;
+    .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null
 
-  const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null;
+  const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
 
-  const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE');
+  const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
 
-  const dates = umm.DataDates;
-  const published = dates && dates.length > 0 && toDateStr(dates[dates.length - 1].Date);
+  const dates = umm.DataDates
+  const published = dates && dates.length > 0 && toDateStr(dates[dates.length - 1].Date)
 
   return {
     conceptId: meta['concept-id'],
@@ -181,7 +182,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
     projects,
     published,
     providerId: meta['provider-id']
-  };
+  }
 }
 
 export interface Metadata {
@@ -195,9 +196,9 @@ export interface Metadata {
     DOI?: DoiLink;
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
-      FileDistributionInformation: Array<{ 
-        Format: string 
-        FormatType: string; 
+      FileDistributionInformation: Array<{
+        Format: string
+        FormatType: string;
         FormatDescription: string;
         AverageFileSize: number;
         AverageFileSizeUnit: string;
@@ -233,57 +234,57 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     projects,
     published,
     providerId
-  } = ummToSummary(metadata);
+  } = ummToSummary(metadata)
 
-  const collection = metadata;
+  const collection = metadata
 
-  const collectionPath = getConfig('collectionPath') || '/collections/<%= id %>';
-  const providersWithLandingPages = getConfig('providersWithLandingPages');
+  const collectionPath = getConfig('collectionPath') || '/collections/<%= id %>'
+  const providersWithLandingPages = getConfig('providersWithLandingPages')
 
-  const landingPageNotFound = getConfig('landingPageNotFound');
+  const landingPageNotFound = getConfig('landingPageNotFound')
 
-  const compiledTemplate = template(collectionPath as string);
+  const compiledTemplate = template(collectionPath as string)
 
   // Create a new object with encoded umm values
-  const encodedUmm: { [key: string]: string } = {};
+  const encodedUmm: { [key: string]: string } = {}
 
   // // Iterate over the collection.umm object
   // Object.keys(collection.umm).forEach((key) => {
   //   // Encode each value and assign it to the new object
   //   encodedUmm[key] = encodeURIComponent(collection.umm[key] as string);
   // });
-  
+
   Object.entries(collection.umm).forEach(([key, value]) => {
-    encodedUmm[key] = encodeURIComponent(String(value));
-  });
+    encodedUmm[key] = encodeURIComponent(String(value))
+  })
 
   const fullPath = compiledTemplate({
     id: collection.meta['concept-id'],
     ProviderId: providerId,
     ...encodedUmm
-  });
+  })
 
   const titleLink = (): string => {
     // Render a clickable title link if:
     // 1. There's no list of providers with landing pages (all providers get links), or
     // 2. The current provider is in the list of providers that should have dataset landing pages
     if (!providersWithLandingPages || (providersWithLandingPages as string).includes(providerId)) {
-      return fullPath.toLowerCase().replace(/_/g, '-');
+      return fullPath.toLowerCase().replace(/_/g, '-')
     }
 
     // If a DOI is available and the provider is not in providersWithLandingPages,
     // render the title as a link to the DOI landing page
     if (doi) {
-      return doi.link;
+      return doi.link
     }
 
     // If there's a configured landing page in the CMR
     if (configuredLandingPage) {
-      return configuredLandingPage;
+      return configuredLandingPage
     }
 
     return (landingPageNotFound as string) || '/404'
-  };
+  }
 
   return (
     <div key={conceptId} className="hzn-search-result pb-2">
@@ -349,4 +350,3 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
 }
 
 export default SearchResultItem
-

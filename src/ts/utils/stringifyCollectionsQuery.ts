@@ -1,5 +1,5 @@
 import { stringify } from 'qs'
-import { isEqual } from 'lodash';  // Add this import at the top of your file
+import { isEqual } from 'lodash'
 
 import collectionDefaultParams from './collectionDefaultParams'
 import facetDefaultParams from './facetDefaultParams'
@@ -26,25 +26,26 @@ export const stringifyCollectionsQuery = (params: Params, removeDefaults = false
   const toStringify: Params = { ...params }
 
   // Temporal is an array joined by comma. It may have empty-string values
-  if (toStringify.temporal && Array.isArray(toStringify.temporal) && toStringify.temporal.filter((o) => o).length > 0) {
-    toStringify.temporal = toStringify.temporal.join(',');
+  if (toStringify.temporal
+    && Array.isArray(toStringify.temporal)
+    && toStringify.temporal.filter((o) => o).length > 0) {
+    toStringify.temporal = toStringify.temporal.join(',')
   } else {
-    delete toStringify.temporal;
+    delete toStringify.temporal
   }
 
+  // ...
 
-// ...
-
-if (removeDefaults) {
-  Object.entries(toStringify as Record<string, unknown>).forEach(([k, v]) => {
-    if ((k in facetDefaultParams && isEqual(facetDefaultParams[k as keyof typeof facetDefaultParams], v)) ||
-        (k in collectionDefaultParams && isEqual(collectionDefaultParams[k as keyof typeof collectionDefaultParams], v))) {
-      delete (toStringify as Record<string, unknown>)[k];
-    }
-  });
-  
-}
-
+  if (removeDefaults) {
+    Object.entries(toStringify as Record<string, unknown>).forEach(([k, v]) => {
+      if ((k in facetDefaultParams
+        && isEqual(facetDefaultParams[k as keyof typeof facetDefaultParams], v))
+        || (k in collectionDefaultParams
+          && isEqual(collectionDefaultParams[k as keyof typeof collectionDefaultParams], v))) {
+        delete (toStringify as Record<string, unknown>)[k]
+      }
+    })
+  }
 
   const result = stringify(toStringify, { encodeValuesOnly: true })
 

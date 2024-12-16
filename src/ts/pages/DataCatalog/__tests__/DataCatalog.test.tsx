@@ -21,13 +21,13 @@ vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
 }))
 
-const mockedUseMediaQuery = useMediaQuery as ReturnType<typeof vi.fn>;
+const mockedUseMediaQuery = useMediaQuery as ReturnType<typeof vi.fn>
 
 function joinUrl(url :string, params: string) {
   // Split the URL into the base part and the query string
   const [baseUrl, queryString] = url.split('?')
 
-  const urlParams: Record<string, string> = {};
+  const urlParams: Record<string, string> = {}
   if (queryString) {
     queryString.split('&').forEach((pair) => {
       const [key, value] = pair.split('=')
@@ -49,7 +49,6 @@ function joinUrl(url :string, params: string) {
   // Return the updated URL
   return `${baseUrl}?${updatedQueryString}`
 }
-
 
 function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefix = '', appliedFacets = {}) {
   const { searchResponse, facetsResponse } = makeMockResponse(
@@ -87,7 +86,7 @@ const setup = ({ params }: { params?: string } = {}) => {
 
   const user = userEvent.setup()
 
-  const initialPath = params ? `?${params}` : '/';
+  const initialPath = params ? `?${params}` : '/'
 
   const { container } = render(
     <Router initialEntries={[initialPath]}>
@@ -95,7 +94,10 @@ const setup = ({ params }: { params?: string } = {}) => {
     </Router>
   )
 
-  return { container, user }
+  return {
+    container,
+    user
+  }
 }
 
 describe('DataCatalog', () => {
@@ -133,7 +135,7 @@ describe('DataCatalog', () => {
     })
 
     expect(await screen.findByText('Found collection 1')).toBeTruthy()
-    
+
     expect((screen.getByLabelText('Found Keyw0 (10)') as HTMLInputElement).checked).toBe(false)
     expect((screen.getByLabelText('Found Keyw1 (20)') as HTMLInputElement).checked).toBe(true)
 
@@ -175,7 +177,7 @@ describe('DataCatalog', () => {
       expect(screen.getByLabelText('Bounding Box')).toHaveValue(value)
     })
   })
-  
+
   describe('Loading a URL with spatial in it', () => {
     test('returns filtered results, populates the bounding box spatial field, and shows a remove button', async () => {
       const key = 'bounding_box'
@@ -277,7 +279,7 @@ describe('DataCatalog', () => {
     })
   })
 
-    // The applied filters buttons under the search field interact with everything else
+  // The applied filters buttons under the search field interact with everything else
   // on the page in complicated ways. Adding extra page-level tests to ensure it works
   describe('When filters have been applied', () => {
     // Factored out boilerplate for setting up filter tests that click a filter
@@ -301,6 +303,7 @@ describe('DataCatalog', () => {
           <DataCatalog />
         </Router>
       )
+
       expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
       if (filterName) {
@@ -638,7 +641,7 @@ describe('DataCatalog', () => {
 
       expect(await screen.findByText('Found collection 1')).toBeTruthy()
       expect((screen.getByLabelText('Found Keyw0 (10)') as HTMLInputElement).checked).toBe(false)
-  expect((screen.getByLabelText('Found Keyw1 (20)') as HTMLInputElement).checked).toBe(true)
+      expect((screen.getByLabelText('Found Keyw1 (20)') as HTMLInputElement).checked).toBe(true)
     })
   })
 })

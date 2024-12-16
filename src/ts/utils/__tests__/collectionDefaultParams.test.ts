@@ -1,4 +1,4 @@
-import collectionDefaultParams from '../collectionDefaultParams';
+import collectionDefaultParams from '../collectionDefaultParams'
 
 describe('collectionDefaultParams', () => {
   test('returns default values', () => {
@@ -10,10 +10,10 @@ describe('collectionDefaultParams', () => {
       page_num: '1',
       page_size: 20,
       consortium: 'EOSDIS'
-    };
+    }
 
-    const result = collectionDefaultParams;
+    const result = collectionDefaultParams
 
-    expect(result).toEqual(expectedResult);
-  });
-});
+    expect(result).toEqual(expectedResult)
+  })
+})

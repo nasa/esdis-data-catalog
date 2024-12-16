@@ -1,3 +1,5 @@
+import React from 'react'
+
 interface TextIconProps {
   className?: string;
   field?: string | null;
@@ -8,16 +10,16 @@ interface TextIconProps {
 /**
  * Small helper to display text with an icon
  */
-const TextIcon: React.FC<TextIconProps> = ({
+export const TextIcon: React.FC<TextIconProps> = ({
   className = '',
   field,
   iconName,
   title
-}) => field ? (
+}) => (field ? (
   <div className={`hzn-text-icon ${className}`}>
     <i className={`hzn-icon hzn-icon-${iconName} hzn-text-icon__icon`} title={title} />
     <span className="hzn-text-icon__field">{field}</span>
   </div>
-) : null;
+) : null)
 
-export default TextIcon;
+export default TextIcon

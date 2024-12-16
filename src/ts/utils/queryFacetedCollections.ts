@@ -22,7 +22,6 @@ const validParameters = [
   'temporal'
 ] as const
 
-
 type CustomError = Error & { response?: QueryResult };
 
 /**

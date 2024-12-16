@@ -6,19 +6,15 @@ import { queryFacetedCollections } from '../queryFacetedCollections'
 vi.mock('../getConfig')
 vi.mock('../stringifyCollectionsQuery')
 
+const mockedGetConfig = getConfig as ReturnType<typeof vi.fn>
+const mockedStringifyCollectionsQuery = stringifyCollectionsQuery as ReturnType<typeof vi.fn>
+
 describe('queryFacetedCollections', () => {
   const cmrHost = 'https://cmr.example.com'
 
   beforeEach(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    // Mock getConfig
-    getConfig.mockReturnValue(cmrHost)
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    // Mock stringifyCollectionsQuery
-    stringifyCollectionsQuery.mockReturnValue('mocked_query_string')
+    mockedGetConfig.mockReturnValue(cmrHost)
+    mockedStringifyCollectionsQuery.mockReturnValue('mocked_query_string')
   })
 
   afterEach(() => {

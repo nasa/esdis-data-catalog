@@ -1,13 +1,14 @@
-import { render, screen, waitFor } from '@testing-library/react'
-
-import { MemoryRouter as Router } from 'react-router-dom'
+import {
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react'
 
 import userEvent from '@testing-library/user-event'
 
 import { makeMockResponse } from '../../../__mocks__/mocks'
 
 import SearchFilters from '../SearchFilters'
-
 
 vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
@@ -32,9 +33,7 @@ const setup = (overrideProps = {}) => {
   const user = userEvent.setup()
 
   const { container } = render(
-    <Router>
-      <SearchFilters {...props} />
-    </Router>
+    <SearchFilters {...props} />
   )
 
   return {
@@ -50,7 +49,7 @@ const setup = (overrideProps = {}) => {
 describe('DataCatalog SearchFilters component and facets', () => {
   test('renders the filters list with all facets and fields', () => {
     setup()
-    
+
     expect(screen.getByText('Topics')).toBeInTheDocument()
     expect(screen.getByLabelText('Keyw0 (10)')).toBeInTheDocument()
 
@@ -88,6 +87,7 @@ describe('DataCatalog SearchFilters component and facets', () => {
     expect((screen.getByLabelText('Start Date') as HTMLInputElement).value).toEqual('2023-01-01')
     expect((screen.getByLabelText('End Date') as HTMLInputElement).value).toEqual('2024-02-02')
   })
+
   test('calls handleChange on change', async () => {
     const { handleChange, user } = setup()
 

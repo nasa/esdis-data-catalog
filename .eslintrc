@@ -1,7 +1,20 @@
 {
   "extends": ["@edsc"],
+  "plugins": ["@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   // Define any global variables to avoid no-undef errors
   "globals": {
     "vi": "readonly"
-  }
+  },
+  "rules": 
+  {
+    // https://github.com/import-js/eslint-plugin-import/blob/main/docs/rules/no-unresolved.md
+    // If you're using a module bundler other than Node or Webpack, you may end up with a lot of false positive reports of missing dependencies.
+    // We are using Vite, and it is giving incorrect results for .ts files
+    "import/no-unresolved": "off",
+    "react/jsx-filename-extension": [2, { "extensions": [".js", ".jsx", ".ts", ".tsx"] }],
+    "react/require-default-props": "off",
+    "react/react-in-jsx-scope": "off",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  },
 }

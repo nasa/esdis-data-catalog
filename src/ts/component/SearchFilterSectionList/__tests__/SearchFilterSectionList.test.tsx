@@ -1,11 +1,8 @@
-import {
-  render,
-  screen
-} from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { useMediaQuery } from 'react-responsive'
 
-import SearchFilterSectionList from '../SearchFilterSectionList'
 import userEvent from '@testing-library/user-event'
+import SearchFilterSectionList from '../SearchFilterSectionList'
 
 // Mock the useMediaQuery hook
 vi.mock('react-responsive', () => ({
@@ -25,27 +22,27 @@ const setup = ({ overrideUseMedia }: { overrideUseMedia?: boolean } = {}) => {
 
   mockedUseMediaQuery.mockReturnValue(overrideUseMedia || false)
 
-  const { container } = render(<SearchFilterSectionList {...defaultProps} />)
+  const { container } = render(
+    <SearchFilterSectionList {...defaultProps} />
+  )
 
-  return{
+  return {
     container,
     defaultProps,
-    screen,
     user
   }
 }
 
 describe('SearchFilterSectionList', () => {
   test('renders correctly for large screens', () => {
-
-    const { container, screen } = setup({overrideUseMedia: true})
+    const { container } = setup({ overrideUseMedia: true })
     expect(container.querySelector('.hzn-filters')).toBeInTheDocument()
     expect(container.querySelector('.hzn-filters__accordion')).toBeInTheDocument()
     expect(screen.getByText('Test Child')).toBeInTheDocument()
   })
 
   test('renders correctly for small screens', () => {
-    const { container } = setup({})  
+    const { container } = setup({})
     expect(container.querySelector('.hzn-offcanvas__body')).toBeInTheDocument()
     expect(container.querySelector('.hzn-offcanvas__apply')).toBeInTheDocument()
     expect(screen.getByText('Test Child')).toBeInTheDocument()

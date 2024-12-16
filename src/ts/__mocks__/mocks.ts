@@ -1,8 +1,6 @@
-
 import { range } from 'lodash-es'
-import { getConfig } from '../utils/getConfig';
-import { Facet } from '../../types/global';
-
+import { getConfig } from '../utils/getConfig'
+import { Facet } from '../../types/global'
 
 export const host = getConfig('cmrHost')
 interface Collection {
@@ -21,17 +19,17 @@ function groupFacet(title: string, children: Facet[]): Facet {
     type: 'group',
     hasChildren: true,
     children,
-    applied: children.some(child => child.applied),
+    applied: children.some((child) => child.applied),
     count: children.reduce((sum, child) => sum + child.count, 0)
-  };
+  }
 }
 
 function mockFacetGroup(prefix: string, url: string, name: string, param: string, appliedIndexes: number[] = [], childCount = 6): Facet {
-  const childPrefix = prefix + name.substring(0, 4);
-  const children: Facet[] = [];
+  const childPrefix = prefix + name.substring(0, 4)
+  const children: Facet[] = []
   for (let i = 0; i < childCount; i += 1) {
-    const title = `${childPrefix}${i}`;
-    const applied = appliedIndexes.includes(i);
+    const title = `${childPrefix}${i}`
+    const applied = appliedIndexes.includes(i)
     children.push({
       title,
       type: 'filter',
@@ -39,12 +37,12 @@ function mockFacetGroup(prefix: string, url: string, name: string, param: string
       count: 10 * (1 + i),
       hasChildren: false,
       children: [],
-      links: applied ? { remove: `${url}&${encodeURIComponent(param.replace('0', `${appliedIndexes.length}`))}=${title}` } 
-                     : { apply: `${url}&${encodeURIComponent(param.replace('0', `${appliedIndexes.length}`))}=${title}` }
-    });
+      links: applied ? { remove: `${url}&${encodeURIComponent(param.replace('0', `${appliedIndexes.length}`))}=${title}` }
+        : { apply: `${url}&${encodeURIComponent(param.replace('0', `${appliedIndexes.length}`))}=${title}` }
+    })
   }
 
-  return groupFacet(name, children);
+  return groupFacet(name, children)
 }
 
 function mockCollection(prefix: string, mockIndex: number, overrides: Partial<Collection['umm']> = {}): Collection {

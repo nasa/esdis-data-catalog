@@ -8,8 +8,8 @@ describe('stringifyCollectionsQuery', () => {
         bounding_box: '',
         processing_level_id_h: [],
         science_keywords_h: [],
-        temporal: "mock temporal value",
-        keyword: "mock keyword",
+        temporal: 'mock temporal value',
+        keyword: 'mock keyword'
       }
       const result = stringifyCollectionsQuery(params)
       expect(result).toBe('bounding_box=&keyword=mock%20keyword')
@@ -37,8 +37,8 @@ describe('stringifyCollectionsQuery', () => {
         bounding_box: '',
         processing_level_id_h: [],
         science_keywords_h: [],
-        temporal: "mock temporal value",
-        keyword: "mock keyword",
+        temporal: 'mock temporal value',
+        keyword: 'mock keyword',
         extraParam: 'value'
       }
       const result = stringifyCollectionsQuery(params, true)

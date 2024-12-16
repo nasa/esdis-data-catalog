@@ -1,6 +1,6 @@
-import React from 'react';
-import { commafy } from 'commafy-anything';
-import pluralize from 'pluralize';
+import React from 'react'
+import { commafy } from 'commafy-anything'
+import pluralize from 'pluralize'
 
 import './SearchResultsList.scss'
 
@@ -12,8 +12,8 @@ import {
   Nav,
   Pagination,
   Row
-} from 'react-bootstrap';
-import SearchResultItem from '../SearchResultItem/SearchResultItem';
+} from 'react-bootstrap'
+import SearchResultItem from '../SearchResultItem/SearchResultItem'
 
 interface DOI {
   DOI?: string;
@@ -36,9 +36,9 @@ interface CollectionItems {
     DOI?: DoiLink;
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
-      FileDistributionInformation: Array<{ 
-        Format: string 
-        FormatType: string; 
+      FileDistributionInformation: Array<{
+        Format: string
+        FormatType: string;
         FormatDescription: string;
         AverageFileSize: number;
         AverageFileSizeUnit: string;
@@ -67,10 +67,10 @@ interface SearchResultsListProps {
   currentPageSize: number;
   currentSortKey?: string;
   filterCount: number;
-  setQueryPage: (page: number) => void;
-  setQueryPageSize: (size: number) => void;
-  setQuerySort: (key: string) => void;
-  setSidebarOpened: (isOpened: boolean) => void;
+  setQueryPage: (_page: number) => void;
+  setQueryPageSize: (_size: number) => void;
+  setQuerySort: (_key: string) => void;
+  setSidebarOpened: (_isOpened: boolean) => void;
 }
 
 interface SortKey {
@@ -89,48 +89,60 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
   setQuerySort,
   setSidebarOpened
 }) => {
-  const { count: collectionCount, items } = collections;
+  const { count: collectionCount, items } = collections
 
-  const rows = [10, 20, 50, 100];
+  const rows = [10, 20, 50, 100]
 
   const sortKeys: SortKey[] = [
-    { key: 'relevance', value: 'Relevance' },
-    { key: 'usage_score', value: 'Usage' },
-    { key: 'start_date', value: 'Start Date' },
-    { key: 'end_date', value: 'End Date' }
-  ];
+    {
+      key: 'relevance',
+      value: 'Relevance'
+    },
+    {
+      key: 'usage_score',
+      value: 'Usage'
+    },
+    {
+      key: 'start_date',
+      value: 'Start Date'
+    },
+    {
+      key: 'end_date',
+      value: 'End Date'
+    }
+  ]
 
-  const totalPages = Math.ceil(collectionCount / currentPageSize);
+  const totalPages = Math.ceil(collectionCount / currentPageSize)
 
   const handleScroll = () => {
     setTimeout(() => {
       window.scrollTo({
         top: 0
-      });
-    }, 100);
-  };
+      })
+    }, 100)
+  }
 
   const handleNextPage = () => {
-    handleScroll();
+    handleScroll()
     if (currentPage < totalPages) {
-      setQueryPage(currentPage + 1);
+      setQueryPage(currentPage + 1)
     }
-  };
+  }
 
   const handlePreviousPage = () => {
-    handleScroll();
+    handleScroll()
     if (currentPage > 1) {
-      setQueryPage(currentPage - 1);
+      setQueryPage(currentPage - 1)
     }
-  };
+  }
 
   const renderPageNumbers = () => {
-    const paginationItems: JSX.Element[] = [];
+    const paginationItems: React.JSX.Element[] = []
 
     const pageNumbers = Array.from(
       { length: (totalPages < 5 ? totalPages : 5) },
       (_, index) => index + Math.max(1, currentPage - 2)
-    );
+    )
 
     paginationItems.push(
       <Pagination.Prev
@@ -143,7 +155,7 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
           <path className="svg-icon" fillRule="evenodd" clipRule="evenodd" d="M2.145 4L5.4 7.233 4.627 8 .6 4l4.027-4L5.4.767 2.145 4z" />
         </svg>
       </Pagination.Prev>
-    );
+    )
 
     if (pageNumbers[0] > 1) {
       paginationItems.push(
@@ -151,8 +163,9 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
           disabled
           key="start-ellipsis"
         />
-      );
+      )
     }
+
     pageNumbers.forEach((number) => {
       if (number <= totalPages - 1 && number >= 1) {
         paginationItems.push(

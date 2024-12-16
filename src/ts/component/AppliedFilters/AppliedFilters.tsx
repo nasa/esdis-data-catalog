@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
-import { useFormikContext } from 'formik';
+import { useFormikContext } from 'formik'
 
-import { Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap'
 
-import { omit } from 'lodash-es';
+import { omit } from 'lodash-es'
 
-import { Facet } from '../../../types/global';
+import { Facet } from '../../../types/global'
 
-import getAppliedFacets from '../../utils/getAppliedFacets';
+import getAppliedFacets from '../../utils/getAppliedFacets'
 
 import './AppliedFilters.scss'
 
@@ -38,7 +38,7 @@ interface AppliedFiltersProps {
     temporal?: string[] | string
   };
   isLoading: boolean;
-  setQueryString: (query: string) => void;
+  setQueryString: (_value: string) => void;
 }
 
 const temporalToTitle = (temporal: string[] | string) => {
@@ -48,6 +48,7 @@ const temporalToTitle = (temporal: string[] | string) => {
   if (start === end) return start
   if (!end) return `${start} ongoing`
   if (!start) return `Up to ${end}`
+
   return `${start} to ${end}`
 }
 
@@ -60,7 +61,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   const { temporal, bounding_box: boundingBox } = filterValues
 
   const formik = useFormikContext()
-  const [applied, setApplied] = useState<AppliedFilter[]>([]);
+  const [applied, setApplied] = useState<AppliedFilter[]>([])
 
   // This is fairly ugly how this has to work. Filter state of temporal / spatial
   // is managed by Formik and clears instantly. Filter state of facets is managed
@@ -71,7 +72,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   useEffect(() => {
     if (isLoading || formik.dirty) return
 
-    const nextApplied = getAppliedFacets(facets) as AppliedFilter[];
+    const nextApplied = getAppliedFacets(facets) as AppliedFilter[]
 
     if (temporal) {
       const title = temporalToTitle(temporal)
@@ -81,8 +82,8 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
           title,
           links: {
             remove: () => {
-              formik.setFieldValue('temporal', null);
-              formik.setFieldValue('page_num', null);
+              formik.setFieldValue('temporal', null)
+              formik.setFieldValue('page_num', null)
             }
           },
           applied: false,
@@ -98,8 +99,8 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
         title: boundingBox,
         links: {
           remove: () => {
-            formik.setFieldValue('bounding_box', null);
-            formik.setFieldValue('page_num', null);
+            formik.setFieldValue('bounding_box', null)
+            formik.setFieldValue('page_num', null)
           }
         },
         applied: false,
@@ -114,11 +115,12 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
 
   const remove = (action: string | (() => void)) => {
     if (typeof action === 'string') {
-      setQueryString(action.split('?')[1]);
+      const [, queryString] = action.split('?')
+      setQueryString(queryString)
     } else if (typeof action === 'function') {
-      action();
+      action()
     }
-  };
+  }
 
   const clearAll = () => {
     // Long-term, it probably makes more sense to use `_.pick`, but right now the
@@ -144,7 +146,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       {
         applied.map(({ title, links }) => (
           <li className="hzn-applied-filters__item" key={title}>
-            <Button className="hzn-applied-filters__remove" onClick={() => links?.remove ? remove(links.remove) : null}>{title}</Button>
+            <Button className="hzn-applied-filters__remove" onClick={() => (links?.remove ? remove(links.remove) : null)}>{title}</Button>
           </li>
         ))
       }

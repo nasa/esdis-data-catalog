@@ -1,6 +1,6 @@
 import { parse } from 'qs'
-import facetDefaultParams, { FacetDefaultParams } from './facetDefaultParams';
-import { Params } from '../../types/global';
+import facetDefaultParams, { FacetDefaultParams } from './facetDefaultParams'
+import { Params } from '../../types/global'
 
 /**
  * Parses a CMR collections query into a key/value object in a way that
@@ -26,9 +26,9 @@ export const parseCollectionsQuery = (query: string) => {
   // Remove default facet query params
   Object.entries(result).forEach(([k, v]) => {
     if (k in facetDefaultParams && facetDefaultParams[k as keyof FacetDefaultParams] === v) {
-      delete (result as { [key: string]: string })[k];
+      delete (result as { [key: string]: string })[k]
     }
-  });
+  })
 
   return result
 }

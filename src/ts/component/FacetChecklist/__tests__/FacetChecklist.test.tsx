@@ -1,5 +1,11 @@
+import React from 'react'
+
 import { MemoryRouter as Router } from 'react-router-dom'
-import { render, screen, waitFor } from '@testing-library/react'
+import {
+  render,
+  screen,
+  waitFor
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Facet } from '../../../../types/global'
 
@@ -8,7 +14,6 @@ import { FacetChecklist } from '../FacetChecklist'
 vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
 }))
-
 
 const setup = (facetCount: number) => {
   const facets: Facet[] = []
@@ -38,8 +43,6 @@ const setup = (facetCount: number) => {
 
   return user
 }
-
-
 
 describe('FacetChecklist component', () => {
   describe('when there are more than five facets', () => {

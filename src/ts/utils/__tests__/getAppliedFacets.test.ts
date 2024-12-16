@@ -70,7 +70,7 @@ describe('getAppliedFacets', () => {
       expect(getAppliedFacets(root)).toEqual([
         ...(root.children?.[0] ? [root.children[0]] : []),
         ...(root.children?.[2] ? [root.children[2]] : [])
-      ]);
+      ])
     })
   })
 })

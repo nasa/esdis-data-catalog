@@ -1,6 +1,5 @@
 import config from '../../../static.config.json'
 
-
 interface Config {
   [key: string]: string | number
 }
@@ -8,10 +7,10 @@ interface Config {
 let mergedConfig: Config = { ...config }
 
 export function mergeConfig() {
-  const configScript = document.getElementById('config-data');
+  const configScript = document.getElementById('config-data')
   if (configScript && configScript.textContent) {
     try {
-      const userConfig: Config = JSON.parse(configScript.textContent);
+      const userConfig: Config = JSON.parse(configScript.textContent)
       mergedConfig = {
         ...mergedConfig,
         ...userConfig
@@ -21,8 +20,9 @@ export function mergeConfig() {
     }
   }
 }
+
 export function getConfig(key: string | number) {
-  return mergedConfig[key];
+  return mergedConfig[key]
 }
 
 export function set(newConfig: Config) {
