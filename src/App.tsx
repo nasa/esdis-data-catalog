@@ -4,9 +4,9 @@ import {
   Route
 } from 'react-router-dom'
 
-import './ts/css/main.scss'
-
 import DataCatalog from './ts/pages/DataCatalog/DataCatalog'
+
+import './ts/css/main.scss'
 
 const App = () => (
   <div>

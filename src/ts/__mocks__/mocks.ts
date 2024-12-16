@@ -3,6 +3,7 @@ import { getConfig } from '../utils/getConfig'
 import { Facet } from '../../types/global'
 
 export const host = getConfig('cmrHost')
+
 interface Collection {
   meta: {
     'concept-id': string;
@@ -13,18 +14,23 @@ interface Collection {
   };
 }
 
-function groupFacet(title: string, children: Facet[]): Facet {
-  return {
-    title,
-    type: 'group',
-    hasChildren: true,
-    children,
-    applied: children.some((child) => child.applied),
-    count: children.reduce((sum, child) => sum + child.count, 0)
-  }
-}
+const groupFacet = (title: string, children: Facet[]): Facet => ({
+  title,
+  type: 'group',
+  hasChildren: true,
+  children,
+  applied: children.some((child) => child.applied),
+  count: children.reduce((sum, child) => sum + child.count, 0)
+})
 
-function mockFacetGroup(prefix: string, url: string, name: string, param: string, appliedIndexes: number[] = [], childCount = 6): Facet {
+const mockFacetGroup = (
+  prefix: string,
+  url: string,
+  name: string,
+  param: string,
+  appliedIndexes: number[] = [],
+  childCount = 6
+): Facet => {
   const childPrefix = prefix + name.substring(0, 4)
   const children: Facet[] = []
   for (let i = 0; i < childCount; i += 1) {

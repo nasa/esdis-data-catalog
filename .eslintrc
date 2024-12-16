@@ -16,5 +16,5 @@
     "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
-  },
+  }
 }
