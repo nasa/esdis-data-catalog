@@ -8,8 +8,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: undefined,
-        name: 'Data-Catalog'
+        entryFileNames: 'DataCatalog.js',
+        manualChunks: undefined
+
       }
     }
   }

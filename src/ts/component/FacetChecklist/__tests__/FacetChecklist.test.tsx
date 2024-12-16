@@ -1,6 +1,3 @@
-import React from 'react'
-
-import { MemoryRouter as Router } from 'react-router-dom'
 import {
   render,
   screen,
@@ -31,14 +28,12 @@ const setup = (facetCount: number) => {
   const user = userEvent.setup()
 
   render(
-    <Router>
-      <FacetChecklist
-        facets={facets}
-        name="test facets"
-        param="test_vs"
-        onChange={vi.fn()}
-      />
-    </Router>
+    <FacetChecklist
+      facets={facets}
+      name="test facets"
+      param="test_vs"
+      onChange={vi.fn()}
+    />
   )
 
   return user

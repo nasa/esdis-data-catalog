@@ -8,13 +8,12 @@ import getAppliedFacets from '../../../utils/getAppliedFacets'
 // Mock the dependencies
 vi.mock('formik', () => ({
   useFormikContext: vi.fn()
-}));
+}))
 
-
-vi.mock('../../../utils/getAppliedFacets');
+vi.mock('../../../utils/getAppliedFacets')
 
 // Create typed versions of the mocked functions
-const mockedUseFormikContext = useFormikContext as ReturnType<typeof vi.fn>;
+const mockedUseFormikContext = useFormikContext as ReturnType<typeof vi.fn>
 
 const setup = ({ overrideProps = {} }) => {
   vi.mocked(getAppliedFacets).mockReturnValue([
@@ -42,9 +41,7 @@ const setup = ({ overrideProps = {} }) => {
       count: 0,
       hasChildren: false,
       type: 'group',
-      title: 'Root Facet',
-      // Add children if needed
-      // children: []
+      title: 'Root Facet'
     },
     filterValues: {},
     isLoading: false,
@@ -57,7 +54,6 @@ const setup = ({ overrideProps = {} }) => {
     setValues: vi.fn(),
     dirty: false
   }
-
 
   mockedUseFormikContext.mockReturnValue(mockFormik)
 
@@ -84,6 +80,7 @@ describe('AppliedFilters', () => {
       expect(screen.getByText('Facet 2')).toBeInTheDocument()
     })
   })
+
   describe('when temporal filter select', () => {
     test('renders the temporal range', () => {
       setup({

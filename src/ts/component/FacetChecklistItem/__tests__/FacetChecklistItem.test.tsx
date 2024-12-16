@@ -1,8 +1,4 @@
-import React from 'react'
-
 import userEvent from '@testing-library/user-event'
-
-import { MemoryRouter as Router } from 'react-router-dom'
 
 import { render, screen } from '@testing-library/react'
 
@@ -27,9 +23,7 @@ const setup = (props = {}) => {
   const user = userEvent.setup()
 
   render(
-    <Router>
-      <FacetChecklistItem {...defaultProps} />
-    </Router>
+    <FacetChecklistItem {...defaultProps} />
   )
 
   return {
