@@ -8,17 +8,17 @@ import { getConfig } from '../../../utils/getConfig'
 // Mock the getConfig module
 vi.mock('../../../utils/getConfig', () => ({
   getConfig: vi.fn()
-}));
+}))
 
 // Define the type for getConfig
-type GetConfigFunction = (key: string) => string | string[] | number;
+type GetConfigFunction = (_key: string) => string | string[] | number;
 
 // Create a typed version of the mocked getConfig
-const mockedGetConfig = vi.mocked(getConfig as GetConfigFunction);
+const mockedGetConfig = vi.mocked(getConfig as GetConfigFunction)
 
 const providersWithLandingPages = {
   providersWithLandingPages: ['TEST_PROVIDER']
-};
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mockUmm = (): any => cloneDeep({
@@ -361,7 +361,11 @@ describe('DataCatalog SearchResultItem component', () => {
   })
 
   test('renders link to fullPath when provider is in providersWithLandingPages', () => {
-    mockedGetConfig.mockImplementation((configName: string) => providersWithLandingPages[configName as keyof typeof providersWithLandingPages]);
+    mockedGetConfig.mockImplementation(
+      (
+        configName: string
+      ) => providersWithLandingPages[configName as keyof typeof providersWithLandingPages]
+    )
 
     const metadata = mockUmm()
     // Delete metadata.umm.DOI
@@ -377,9 +381,9 @@ describe('DataCatalog SearchResultItem component', () => {
 
     const providers: Providers = {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
-    };
+    }
 
-    mockedGetConfig.mockImplementation((configName: keyof Providers) => providers[configName]);
+    mockedGetConfig.mockImplementation((configName: keyof Providers) => providers[configName])
 
     const metadata = mockUmm()
     const { getByText } = renderMetadata(metadata)
@@ -393,11 +397,11 @@ describe('DataCatalog SearchResultItem component', () => {
 
     const providers: Providers = {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
-    };
+    }
 
-    mockedGetConfig.mockImplementation((configName: string) => {
-      return providers[configName as keyof Providers]
-    });
+    mockedGetConfig.mockImplementation(
+      (configName: string) => providers[configName as keyof Providers]
+    )
 
     const metadata = mockUmm()
     delete metadata.umm.DOI
@@ -414,12 +418,11 @@ describe('DataCatalog SearchResultItem component', () => {
 
     const providers: Providers = {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
-    };
+    }
 
-
-    mockedGetConfig.mockImplementation((configName: string) => {
-      return providers[configName as keyof Providers];
-    })
+    mockedGetConfig.mockImplementation(
+      (configName: string) => providers[configName as keyof Providers]
+    )
 
     const metadata = mockUmm()
     delete metadata.umm.DOI
@@ -430,7 +433,11 @@ describe('DataCatalog SearchResultItem component', () => {
   })
 
   test('does not link to a DOI when the UMM-C decides to replace the DOI link with an entirely different object making it seem like it\'s there, but it\'s definitely not, grrrrrr', () => {
-    mockedGetConfig.mockImplementation((configName: string) => providersWithLandingPages[configName as keyof typeof providersWithLandingPages]);
+    mockedGetConfig.mockImplementation(
+      (
+        configName: string
+      ) => providersWithLandingPages[configName as keyof typeof providersWithLandingPages]
+    )
 
     const metadata = mockUmm()
     metadata.umm.DOI = { // Real-world example. ARGH. Just give me null.
@@ -453,9 +460,9 @@ describe('DataCatalog SearchResultItem component', () => {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
     }
 
-    mockedGetConfig.mockImplementation((configName: string) => {
-      return providers[configName as keyof Providers]
-    })
+    mockedGetConfig.mockImplementation(
+      (configName: string) => providers[configName as keyof Providers]
+    )
 
     const metadata = mockUmm()
     metadata.umm.DOI = { DOI: 'ab:cd.ef' }
@@ -474,9 +481,9 @@ describe('DataCatalog SearchResultItem component', () => {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
     }
 
-    mockedGetConfig.mockImplementation((configName: string) => {
-      return providers[configName as keyof Providers]
-    })
+    mockedGetConfig.mockImplementation(
+      (configName: string) => providers[configName as keyof Providers]
+    )
 
     // I'm not aware of any DOI authority other than the default, why do we allow this?!
     const metadata = mockUmm()

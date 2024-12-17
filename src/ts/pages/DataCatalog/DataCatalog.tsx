@@ -133,7 +133,8 @@ const DataCatalog: React.FC = () => {
         setCalled(true)
         setLoading(true)
 
-        const response: QueryResult = await queryFacetedCollections(collectionSearchParams as Params)
+        const response: QueryResult = await
+        queryFacetedCollections(collectionSearchParams as Params)
         const { facetData, data: responseData } = response
 
         const items = responseData?.items
