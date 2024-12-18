@@ -67,10 +67,10 @@ interface SearchResultsListProps {
   currentPageSize: number;
   currentSortKey?: string;
   filterCount: number;
-  setQueryPage: (_page: number) => void;
-  setQueryPageSize: (_size: number) => void;
-  setQuerySort: (_key: string) => void;
-  setSidebarOpened: (_isOpened: boolean) => void;
+  setQueryPage: (page: number) => void;
+  setQueryPageSize: (size: number) => void;
+  setQuerySort: (key: string) => void;
+  setSidebarOpened: (isOpened: boolean) => void;
 }
 
 interface SortKey {

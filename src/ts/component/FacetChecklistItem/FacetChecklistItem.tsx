@@ -5,8 +5,8 @@ const noop = (e: string): string => e
 
 interface FacetChecklistItemProps {
   facet: Facet;
-  humanize?: (_value: string) => string;
-  onChange: (_facet: Facet, _isChecked: boolean) => void;
+  humanize?: (value: string) => string;
+  onChange: (facet: Facet, isChecked: boolean) => void;
   param: string;
 }
 

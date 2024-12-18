@@ -13,7 +13,7 @@ vi.mock('../../../utils/getConfig', () => ({
 }))
 
 // Define the type for getConfig
-type GetConfigFunction = (_key: string) => string | string[] | number;
+type GetConfigFunction = (key: string) => string | string[] | number;
 
 // Create a typed version of the mocked getConfig
 const mockedGetConfig = vi.mocked(getConfig as GetConfigFunction)
