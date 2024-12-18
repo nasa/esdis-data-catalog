@@ -9,6 +9,7 @@ import {
 import { MemoryRouter as Router } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import { filter, omit } from 'lodash-es'
+import React from 'react'
 import {
   defaultFacetsPath,
   defaultFacetsUrl,

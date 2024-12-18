@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Please review [Contribution.md](https://github.com/nasa/mmt/blob/main/CONTRIBUTING.md) before contributing to this project.
+Please review [Contribution.md](https://github.com/nasa/esdis-data-catalog/blob/main/CONTRIBUTING.md) before contributing to this project.
 
 ### Description
 Describe the purpose of the issue

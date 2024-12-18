@@ -13,8 +13,11 @@
     // We are using Vite, and it is giving incorrect results for .ts files
     "import/no-unresolved": "off",
     "react/jsx-filename-extension": [2, { "extensions": [".ts", ".tsx"] }],
+    // Disabled because we're using TypeScript for prop type checking,
+    // and defaultProps are not necessary with optional props in TS
     "react/require-default-props": "off",
-    "react/react-in-jsx-scope": "off",
-    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+    // https://stackoverflow.com/questions/57802057/eslint-configuring-no-unused-vars-for-typescript/61555310#61555310
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", {}]
   }
 }

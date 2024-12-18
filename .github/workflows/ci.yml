@@ -9,8 +9,8 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-          node-version: ['lts/jod']
+      matrix:
+        node-version: ['lts/jod']
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -39,8 +39,8 @@ jobs:
     needs: [eslint]
     runs-on: ubuntu-latest
     strategy:
-        matrix:
-          node-version: ['lts/jod']
+      matrix:
+        node-version: ['lts/jod']
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -78,9 +78,12 @@ jobs:
       run: 'echo true'
   
   build:
-    # if: success() && github.ref == 'refs/heads/main' # only run on main success
+    if: success() && github.ref == 'refs/heads/main' # only run on main success
     needs: [tests-passed]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['lts/jod']
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
