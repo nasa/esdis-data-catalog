@@ -1,5 +1,5 @@
 import { parse } from 'qs'
-import facetDefaultParams, { FacetDefaultParams } from './facetDefaultParams'
+import facetDefaultParams, { FacetDefaultParams } from '../constants/facetDefaultParams'
 import { Params } from '../../types/global'
 
 /**

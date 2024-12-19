@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-Before contributing to this project, please review [Contribution.md](https://github.com/nasa/esdis-data-catalog/blob/master/CONTRIBUTING.md).
+Before contributing to this project, please review [Contribution.md](https://github.com/nasa/esdis-data-catalog/blob/main/CONTRIBUTING.md).
 
 ### Description
 A clear and concise description of what the bug is.

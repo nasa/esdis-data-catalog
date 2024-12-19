@@ -4,8 +4,8 @@ import { pick } from 'lodash-es'
 
 import { getConfig } from './getConfig'
 import { stringifyCollectionsQuery } from './stringifyCollectionsQuery'
-import collectionDefaultParams from './collectionDefaultParams'
-import facetDefaultParams from './facetDefaultParams'
+import collectionDefaultParams from '../constants/collectionDefaultParams'
+import facetDefaultParams from '../constants/facetDefaultParams'
 import { Params, QueryResult } from '../../types/global'
 
 const validParameters = [

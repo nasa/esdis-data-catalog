@@ -1,4 +1,4 @@
-import facetDefaultParams from '../facetDefaultParams'
+import facetDefaultParams from '../../constants/facetDefaultParams'
 import { stringifyCollectionsQuery } from '../stringifyCollectionsQuery'
 
 describe('stringifyCollectionsQuery', () => {

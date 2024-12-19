@@ -9,10 +9,84 @@ import {
 import { getConfig } from '../../utils/getConfig'
 import TextIcon from '../TextIcon/TextIcon'
 
+interface GeoPoint {
+  Latitude: number;
+  Longitude: number;
+}
+
+interface DOI {
+  DOI?: string;
+  Authority?: string
+  Url?: string;
+}
+
+interface DoiLink extends DOI {
+  link?: string;
+  text?: string;
+}
+
 function toDateStr(dateTimeStr: string | null): string | null {
   if (dateTimeStr) return dateTimeStr.split('T')[0]
 
   return null
+}
+
+interface Meta {
+  'concept-id': string;
+  'provider-id': string;
+}
+
+interface FileDistributionInfo {
+  FormatType: string;
+  Format: string;
+  // Add other properties if needed
+}
+interface Umm {
+  DataCenters?: Array<{ Roles: string[], ShortName: string }>;
+  ArchiveAndDistributionInformation?: {
+    FileDistributionInformation?: FileDistributionInfo[];
+  };
+  Projects?: Array<{ ShortName: string }>;
+  RelatedUrls?: Array<{ Type: string, URL: string }>;
+  DataDates?: Array<{ Date: string }>;
+  EntryTitle: string;
+  Abstract: string;
+  DOI?: DoiLink;
+}
+
+export interface Metadata {
+  meta: {
+    'concept-id': string;
+    'provider-id': string;
+  };
+  umm: {
+    Abstract: string;
+    EntryTitle: string;
+    DOI?: DoiLink;
+    Projects?: Array<{ ShortName: string }>;
+    ArchiveAndDistributionInformation?: {
+      FileDistributionInformation: Array<{
+        Format: string
+        FormatType: string;
+        FormatDescription: string;
+        AverageFileSize: number;
+        AverageFileSizeUnit: string;
+        TotalCollectionFileSize: number;
+        TotalCollectionFileSizeUnit: string
+        Description: string
+
+      }>;
+    };
+    DataCenters?: Array<{ Roles: string[]; ShortName: string }>;
+    TemporalExtents?: object
+    SpatialExtent?:{
+      HorizontalSpatialDomain:object
+    }
+  };
+}
+
+interface SearchResultItemProps {
+  metadata: Metadata;
 }
 
 function ummTemporalToHuman(umm: object): string | null {
@@ -30,11 +104,6 @@ function ummTemporalToHuman(umm: object): string | null {
   if (!end) return `${start} ongoing`
 
   return `${start} to ${end}`
-}
-
-interface GeoPoint {
-  Latitude: number;
-  Longitude: number;
 }
 
 function ummSpatialToSummary(umm: object): string | null {
@@ -92,17 +161,6 @@ function ummSpatialToSummary(umm: object): string | null {
   return null
 }
 
-interface DOI {
-  DOI?: string;
-  Authority?: string
-  Url?: string;
-}
-
-interface DoiLink extends DOI {
-  link?: string;
-  text?: string;
-}
-
 /**
  * Extracts a link URL and text from a UMM DOI
  * @param {*} doi UMM-C DOI metadata
@@ -126,29 +184,6 @@ function doiLink(doi: DOI) {
     link,
     text: doi.DOI
   }
-}
-
-interface Meta {
-  'concept-id': string;
-  'provider-id': string;
-}
-
-interface FileDistributionInfo {
-  FormatType: string;
-  Format: string;
-  // Add other properties if needed
-}
-interface Umm {
-  DataCenters?: Array<{ Roles: string[], ShortName: string }>;
-  ArchiveAndDistributionInformation?: {
-    FileDistributionInformation?: FileDistributionInfo[];
-  };
-  Projects?: Array<{ ShortName: string }>;
-  RelatedUrls?: Array<{ Type: string, URL: string }>;
-  DataDates?: Array<{ Date: string }>;
-  EntryTitle: string;
-  Abstract: string;
-  DOI?: DoiLink;
 }
 
 /**
@@ -185,41 +220,6 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   }
 }
 
-export interface Metadata {
-  meta: {
-    'concept-id': string;
-    'provider-id': string;
-  };
-  umm: {
-    Abstract: string;
-    EntryTitle: string;
-    DOI?: DoiLink;
-    Projects?: Array<{ ShortName: string }>;
-    ArchiveAndDistributionInformation?: {
-      FileDistributionInformation: Array<{
-        Format: string
-        FormatType: string;
-        FormatDescription: string;
-        AverageFileSize: number;
-        AverageFileSizeUnit: string;
-        TotalCollectionFileSize: number;
-        TotalCollectionFileSizeUnit: string
-        Description: string
-
-      }>;
-    };
-    DataCenters?: Array<{ Roles: string[]; ShortName: string }>;
-    TemporalExtents?: object
-    SpatialExtent?:{
-      HorizontalSpatialDomain:object
-    }
-  };
-}
-
-interface SearchResultItemProps {
-  metadata: Metadata;
-}
-
 export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) => {
   const {
     conceptId,
@@ -247,12 +247,6 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
 
   // Create a new object with encoded umm values
   const encodedUmm: { [key: string]: string } = {}
-
-  // // Iterate over the collection.umm object
-  // Object.keys(collection.umm).forEach((key) => {
-  //   // Encode each value and assign it to the new object
-  //   encodedUmm[key] = encodeURIComponent(collection.umm[key] as string);
-  // });
 
   Object.entries(collection.umm).forEach(([key, value]) => {
     encodedUmm[key] = encodeURIComponent(String(value))
@@ -289,9 +283,13 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   return (
     <div key={conceptId} className="hzn-search-result pb-2">
       <Row>
-        <Col className="hzn-search-result__meta_metadata">
-          Data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Published&nbsp;
+        <Col className="hzn-search-result__meta_metadata d-flex align-items-center">
+          <span className="me-4">Data</span>
+          <span className="me-2">
+            Published
+          </span>
           {published}
+
         </Col>
       </Row>
       <Row>

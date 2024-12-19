@@ -9,7 +9,6 @@ interface LoadingBannerProps {
 
 export const LoadingBanner: React.FC<LoadingBannerProps> = ({
   dataTestId = 'loading-banner__spinner'
-
 }) => (
   <Row className="justify-content-center mt-5">
     <Spinner animation="grow" variant="primary" data-testid={dataTestId} />

@@ -74,11 +74,6 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
       defaultActiveKey={['1']}
       setSidebarOpened={setSidebarOpened}
     >
-      {/* Unimplemented. In Data Catalog comps but not site search comps. TBD if needed.
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Filter By Text</Accordion.Header>
-        <Accordion.Body />
-      </Accordion.Item> */}
       {
         getFacets('Keywords').length > 0 && (
           <SearchFilterSection title="Topics" eventKey="1" setSidebarOpened={setSidebarOpened}>
@@ -91,17 +86,6 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           </SearchFilterSection>
         )
       }
-      {/* Commented out until section is implemented
-      <Accordion.Item eventKey="2">
-        <Accordion.Header>Data Features</Accordion.Header>
-        <Accordion.Body>
-          {
-            // CUSTOM FIELDS HERE
-            // "Cloud Enabled"
-            // "Continuity Product"
-          }
-        </Accordion.Body>
-      </Accordion.Item> */}
       {
         getFacets('Platforms').length > 0 && (
           <SearchFilterSection title="Observation Method" eventKey="3" setSidebarOpened={setSidebarOpened}>

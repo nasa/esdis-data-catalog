@@ -1,8 +1,8 @@
 import { stringify } from 'qs'
 import { isEqual } from 'lodash'
 
-import collectionDefaultParams from './collectionDefaultParams'
-import facetDefaultParams from './facetDefaultParams'
+import collectionDefaultParams from '../constants/collectionDefaultParams'
+import facetDefaultParams from '../constants/facetDefaultParams'
 
 interface Params {
   bounding_box?: string

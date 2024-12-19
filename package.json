@@ -1,5 +1,5 @@
 {
-  "name": "esdic-data-catalog",
+  "name": "esdis-data-catalog",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,6 +11,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@eslint-recommended/eslint-config": "^26.1.1",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
     "bootstrap": "^5.3.3",

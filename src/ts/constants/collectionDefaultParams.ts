@@ -1,4 +1,4 @@
-import { getConfig } from './getConfig'
+import { getConfig } from '../utils/getConfig'
 
 interface CollectionDefaultParams {
   page_num: string;
