@@ -1,0 +1,13 @@
+.navbar {
+  line-height: 1;
+}
+
+.navbar-brand {
+  font-weight: 100;
+}
+
+@include media-breakpoint-up(xl) {
+  .navbar-brand {
+    --bs-navbar-brand-font-size: 1.6rem;
+  }
+}

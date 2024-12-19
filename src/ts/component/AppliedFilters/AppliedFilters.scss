@@ -1,0 +1,45 @@
+.data-catalog-wrapper {
+  .hzn-applied-filters {
+    list-style: none;
+    padding: 16px 0 0 0;
+    margin: 0;
+  }
+
+  .hzn-applied-filters > li {
+    display: inline-block;
+    padding: 0 16px 0 0;
+  }
+
+  .hzn-applied-filters .btn {
+    line-height: 1em;
+    border-radius: 0;
+    background: transparent;
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .hzn-applied-filters__remove {
+    color: #58585B;
+    border: 1px solid var(--hzn-nasa-blue);
+    font-family: var(--hzn-headings-font-family)
+  }
+
+  .hzn-applied-filters__remove:hover {
+    color: var(--hzn-nasa-blue) /* Not specified in comps */
+  }
+
+  .hzn-applied-filters__remove::after {
+    content:"\002715";
+    padding-left: 8px;
+    font-weight: 100;
+  }
+
+
+  .hzn-applied-filters .hzn-applied-filters__clear {
+    display: inline-block;
+    color: #17171B;
+    font-family: var(--hzn-body-font-family);
+    text-decoration-style: dashed;
+    padding-left: 0px;
+  }
+}

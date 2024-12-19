@@ -1,0 +1,77 @@
+/*
+ * This file pulls in all the necessary pieces of Bootstrap and sets some customizations.
+ *
+ * See https://getbootstrap.com/docs/5.0/customize/sass/ for more info.
+*/
+
+/**
+* Import Bootstrap variables and customizations
+**/
+@import 'variables';
+
+/**
+* Import Bootstrap classes
+**/
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/utilities/api";
+
+/*
+ * CSS reset
+ *
+ * These should be uncommented as new Bootstrap components are needed
+*/
+
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+
+/*
+ * Bootstrap components
+ *
+ * These should be uncommented as new Bootstrap components are needed. The order
+ * is important, so unused components are commented below. All components as of
+ * Bootstrap version 5.3.2 are included below
+*/
+@import "bootstrap/scss/type";
+// @import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar"; // Requires nav
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/breadcrumb";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+// @import "bootstrap/scss/progress";
+@import "bootstrap/scss/list-group";
+// @import "bootstrap/scss/close";
+// @import "bootstrap/scss/toasts";
+// @import "bootstrap/scss/modal"; // Requires transitions
+// @import "bootstrap/scss/tooltip";
+// @import "bootstrap/scss/popover";
+// @import "bootstrap/scss/carousel";
+@import "bootstrap/scss/spinners";
+// @import "bootstrap/scss/offcanvas"; // Requires transitions
+// @import "bootstrap/scss/placeholders";
+
+/*
+ * Helpers
+*/
+
+@import "bootstrap/scss/helpers";
+
+/*
+ * Overrides
+ *
+ * On occasion, it is necessary to globally override Bootstrap styles. When required,
+ * an override file is created in the `/overrides` directory.
+*/
+
+@import 'overrides'

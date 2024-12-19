@@ -1,0 +1,115 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['lts/jod']
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache node modules
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        # not caching node_modules because `npm ci` removes it
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      run: npm ci
+    - name: Run eslint
+      run: npm run lint
+  vitest:
+    needs: [eslint]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['lts/jod']
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache node modules
+      uses: actions/cache@v4
+      env:
+        cache-name: cache-node-modules
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        # not caching node_modules because `npm ci` removes it
+        path: ~/.npm
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      run: npm ci
+    - name: Run Vitest tests
+      run: npm run test
+    - name: Upload coverage to codecov
+      uses: codecov/codecov-action@v4
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  tests-passed:
+    needs: [vitest]
+    runs-on: ubuntu-latest
+    steps:
+    - name: All Tests Have Passed
+      run: 'echo true'
+  
+  build:
+    if: success() && github.ref == 'refs/heads/main' # only run on main success
+    needs: [tests-passed]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['lts/jod']
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Cache node modules
+        uses: actions/cache@v4
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          # not caching node_modules because `npm ci` removes it
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Build
+        run: npm run build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with: 
+          path: dist/DataCatalog.js
+          name: DataCatalog.js
