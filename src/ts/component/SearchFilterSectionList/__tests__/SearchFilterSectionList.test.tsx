@@ -24,12 +24,11 @@ const setup = ({ overrideUseMedia }: { overrideUseMedia?: boolean } = {}) => {
 
   mockedUseMediaQuery.mockReturnValue(overrideUseMedia || false)
 
-  const { container } = render(
+  render(
     <SearchFilterSectionList {...defaultProps} />
   )
 
   return {
-    container,
     defaultProps,
     user
   }
@@ -37,17 +36,26 @@ const setup = ({ overrideUseMedia }: { overrideUseMedia?: boolean } = {}) => {
 
 describe('SearchFilterSectionList', () => {
   test('renders correctly for large screens', () => {
-    const { container } = setup({ overrideUseMedia: true })
-    expect(container.querySelector('.hzn-filters')).toBeInTheDocument()
-    expect(container.querySelector('.hzn-filters__accordion')).toBeInTheDocument()
+    setup({ overrideUseMedia: true })
+
+    const filtersForm = screen.getByRole('search')
+    expect(filtersForm).toHaveClass('hzn-filters')
+
+    const accordion = screen.getByLabelText('Filters accordion')
+    expect(accordion).toHaveClass('hzn-filters__accordion', 'accordion')
+
     expect(screen.getByText('Test Child')).toBeInTheDocument()
   })
 
   test('renders correctly for small screens', () => {
-    const { container } = setup({})
-    expect(container.querySelector('.hzn-offcanvas__body')).toBeInTheDocument()
-    expect(container.querySelector('.hzn-offcanvas__apply')).toBeInTheDocument()
+    setup({})
+
+    const filtersForm = screen.getByRole('search')
+    expect(filtersForm).toHaveClass('offcanvas-body', 'hzn-offcanvas__body', 'hzn-filters')
     expect(screen.getByText('Test Child')).toBeInTheDocument()
+
+    const applyButton = screen.getByRole('button', { name: 'Apply' })
+    expect(applyButton).toHaveClass('hzn-offcanvas__apply', 'btn', 'btn-primary')
   })
 
   test('calls setSidebarOpened when Apply button is clicked on small screens', async () => {

@@ -46,9 +46,9 @@ describe('FacetChecklist component', () => {
     test('displays only the first five facets by default, with a button to show all', () => {
       setup(10)
 
-      expect(screen.queryByText('Show all test facets')).toBeInTheDocument()
-      expect(screen.queryByText('facet0 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet4 (10)')).toBeInTheDocument()
+      expect(screen.getByText('Show all test facets')).toBeInTheDocument()
+      expect(screen.getByText('facet0 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet4 (10)')).toBeInTheDocument()
       expect(screen.queryByText('facet5 (10)')).not.toBeInTheDocument()
       expect(screen.queryByText('facet9 (10)')).not.toBeInTheDocument()
       expect(screen.queryByText('Collapse test facets list')).not.toBeInTheDocument()
@@ -59,11 +59,11 @@ describe('FacetChecklist component', () => {
 
       await waitFor(() => user.click(screen.getByText('Show all test facets')))
 
-      expect(screen.queryByText('Collapse test facets list')).toBeInTheDocument()
-      expect(screen.queryByText('facet0 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet4 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet5 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet9 (10)')).toBeInTheDocument()
+      expect(screen.getByText('Collapse test facets list')).toBeInTheDocument()
+      expect(screen.getByText('facet0 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet4 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet5 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet9 (10)')).toBeInTheDocument()
       expect(screen.queryByText('Show all test facets')).not.toBeInTheDocument()
     })
 
@@ -73,9 +73,9 @@ describe('FacetChecklist component', () => {
       await waitFor(() => user.click(screen.getByText('Show all test facets')))
       await waitFor(() => user.click(screen.getByText('Collapse test facets list')))
 
-      expect(screen.queryByText('Show all test facets')).toBeInTheDocument()
-      expect(screen.queryByText('facet0 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet4 (10)')).toBeInTheDocument()
+      expect(screen.getByText('Show all test facets')).toBeInTheDocument()
+      expect(screen.getByText('facet0 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet4 (10)')).toBeInTheDocument()
       expect(screen.queryByText('facet5 (10)')).not.toBeInTheDocument()
       expect(screen.queryByText('facet9 (10)')).not.toBeInTheDocument()
       expect(screen.queryByText('Collapse test facets list')).not.toBeInTheDocument()
@@ -85,8 +85,8 @@ describe('FacetChecklist component', () => {
   describe('when there are five or fewer facets', () => {
     test('displays all facets without any expand/collapse buttons', () => {
       setup(5)
-      expect(screen.queryByText('facet0 (10)')).toBeInTheDocument()
-      expect(screen.queryByText('facet4 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet0 (10)')).toBeInTheDocument()
+      expect(screen.getByText('facet4 (10)')).toBeInTheDocument()
       expect(screen.queryByText('Show all test facets')).not.toBeInTheDocument()
       expect(screen.queryByText('Collapse test facets list')).not.toBeInTheDocument()
     })

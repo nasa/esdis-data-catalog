@@ -69,15 +69,15 @@ function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefi
 async function setupSidebarTest() {
   const user = userEvent.setup()
   setupMockResponse()
-  const { container } = render(
+  render(
     <Router>
       <DataCatalog />
     </Router>
   )
+
   await waitFor(async () => user.click(screen.getByRole('button', { name: 'Filter' })))
 
   return {
-    container,
     user
   }
 }
@@ -418,9 +418,13 @@ describe('DataCatalog', () => {
         await user.click(screen.getByRole('button', { name: 'Next' }))
       })
 
-      const activePageItem = screen.getByText('2').closest('li')
+      const pagination = screen.getByRole('list', { name: /pagination/i })
+      const pageItems = within(pagination).getAllByRole('listitem')
 
-      expect(activePageItem).toHaveClass('page-item active')
+      const activePage = pageItems.find((item) => item.classList.contains('active'))
+
+      expect(activePage).toHaveTextContent('2')
+      expect(activePage).toHaveClass('page-item', 'active')
     })
   })
 
@@ -520,7 +524,7 @@ describe('DataCatalog', () => {
 
       setupMockResponse()
       const user = userEvent.setup()
-      const { container } = setup({})
+      setup({})
 
       // RTL is not super happy with media queries / CSS, so we use class names as a proxy
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
@@ -530,10 +534,8 @@ describe('DataCatalog', () => {
 
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(true)
 
-      const filterHeader = container.querySelector('#search-filters > .offcanvas-header')
-      await waitFor(async () => {
-        await user.click(within(filterHeader as HTMLElement).getByLabelText('Close'))
-      })
+      const closeButton = screen.getByRole('button', { name: 'Close' })
+      await user.click(closeButton)
 
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
     })
@@ -544,7 +546,7 @@ describe('DataCatalog', () => {
 
     setupMockResponse()
     const user = userEvent.setup()
-    const { container } = setup({})
+    setup({})
 
     // RTL is not super happy with media queries / CSS, so we use class names as a proxy
     expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
@@ -554,9 +556,8 @@ describe('DataCatalog', () => {
 
     expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(true)
 
-    const filterHeader = container.querySelector('#search-filters')
-    await waitFor(() => user.click(within(filterHeader as HTMLElement).getByRole('button', { name: 'Apply' })))
-
+    const applyButton = screen.getByRole('button', { name: 'Apply' })
+    await user.click(applyButton)
     expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
   })
 
@@ -598,30 +599,27 @@ describe('DataCatalog', () => {
     })
 
     test('displays a close button that closes all sidebars', async () => {
-      const { container, user } = await setupSidebarTest()
+      const { user } = await setupSidebarTest()
       await waitFor(() => user.click(screen.getByRole('button', { name: 'Topics' })))
 
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(true)
 
-      const sectionHeader = container.querySelector('.hzn-offcanvas__section-header')
-      expect(within(sectionHeader as HTMLElement).getByLabelText('Close')).toBeInTheDocument()
-      await waitFor(() => user.click(within(sectionHeader as HTMLElement).getByLabelText('Close')))
-
+      const closeButton = await screen.findAllByRole('button', { name: /Close/i })
+      await user.click(closeButton[0])
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
     })
 
     test('displays an "Apply" button that closes all sidebars', async () => {
-      const { container, user } = await setupSidebarTest()
+      const { user } = await setupSidebarTest()
       await waitFor(() => user.click(screen.getByRole('button', { name: 'Topics' })))
 
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(true)
 
-      await waitFor(async () => {
-        const sectionHeader = container.querySelector('.hzn-filters .show')
-        await user.click(within(sectionHeader as HTMLElement).getByRole('button', { name: 'Apply' }))
-      })
-
+      const appliedFacets = await screen.findAllByRole('button', { name: /Apply/i })
+      await user.click(appliedFacets[0])
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
+
+      // Expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
     })
 
     test('displays the title of the filter group as a clickable back button', async () => {

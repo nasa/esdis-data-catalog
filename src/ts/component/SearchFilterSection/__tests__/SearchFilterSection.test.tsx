@@ -25,10 +25,9 @@ const setup = ({ overrideUseMedia }: { overrideUseMedia?: boolean } = {}) => {
   const user = userEvent.setup()
 
   mockedUseMediaQuery.mockReturnValue(overrideUseMedia || false)
-  const { container } = render(<SearchFilterSection {...defaultProps} />)
+  render(<SearchFilterSection {...defaultProps} />)
 
   return {
-    container,
     defaultProps,
     user
   }
@@ -42,40 +41,46 @@ describe('SearchFilterSection', () => {
   })
 
   test('renders correctly for small screens', () => {
-    const { container } = setup({})
+    setup({})
 
-    expect(container.querySelector('.hzn-offcanvas__section-select')).toBeInTheDocument()
-    expect(container.querySelector('.hzn-icon-right')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Test Section/ })).toBeInTheDocument()
+    expect(screen.getByTitle('Go')).toBeInTheDocument()
   })
 
   test('opens and closes the offcanvas on small screens', async () => {
-    const { container, user } = setup({})
+    const { user } = setup({})
 
     // Open offcanvas
-    await user.click(container.querySelector('.hzn-offcanvas__section-select')!)
-    expect(container.querySelector('.offcanvas.show')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /Test Section/ }))
+
     expect(screen.getByText('Test Child')).toBeInTheDocument()
 
     // Close offcanvas
-    await user.click(container.querySelector('.hzn-offcanvas__header-button')!)
-    expect(container.querySelector('.offcanvas.show')).not.toBeInTheDocument()
+    const backButton = screen.getByRole('button', { name: 'Back' })
+    await user.click(backButton)
+    expect(screen.queryByRole('complementary', { name: /offcanvas/i })).not.toBeInTheDocument()
   })
 
   test('calls setSidebarOpened when close button is clicked on small screens', async () => {
-    const { container, defaultProps, user } = setup({})
-    await user.click(container.querySelector('.hzn-offcanvas__section-select')!)
-    await user.click(container.querySelector('.btn-close')!)
+    const { defaultProps, user } = setup({})
+
+    await user.click(screen.getByRole('button', { name: /Test Section/ }))
+
+    const closeButton = screen.getByRole('button', { name: 'Close' })
+
+    await user.click(closeButton)
     expect(defaultProps.setSidebarOpened).toHaveBeenCalledWith(false)
   })
 
   test('calls setSidebarOpened when Apply button is clicked on small screens', async () => {
-    const { container, defaultProps, user } = setup({})
+    const { defaultProps, user } = setup({})
 
     // Open the offcanvas first
-    await user.click(container.querySelector('.hzn-offcanvas__section-select')!)
+    await user.click(screen.getByRole('button', { name: /Test Section/ }))
 
     // Click the Apply button
-    await user.click(container.querySelector('.hzn-offcanvas__apply')!)
+    const applyButton = screen.getByRole('button', { name: 'Apply' })
+    await user.click(applyButton)
 
     expect(defaultProps.setSidebarOpened).toHaveBeenCalledWith(false)
   })

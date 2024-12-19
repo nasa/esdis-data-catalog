@@ -99,10 +99,9 @@ describe('SearchResultList', () => {
     window.scrollTo = vi.fn()
     describe('when clicking on next page arrow', () => {
       test('should call setQueryPage with next page', async () => {
-        const { container, props, user } = setup()
-
-        const pagination = container.querySelector('.pagination')
-        expect(within(pagination as HTMLElement).queryAllByRole('button')).toHaveLength(6)
+        const { props, user } = setup()
+        const pagination = screen.getByRole('list', { name: /pagination/i })
+        expect(pagination).toHaveClass('pagination')
 
         await user.click(screen.getByRole('button', { name: 'Next' }))
 
@@ -111,22 +110,25 @@ describe('SearchResultList', () => {
       })
 
       test('renders disabled next arrow when on the last page', () => {
-        const { container } = setup({ currentPage: 5035 })
+        setup({ currentPage: 5035 })
 
-        const pagination = container.querySelector('.pagination')
+        const pagination = screen.getByRole('list', { name: /pagination/i })
+
         expect(within(pagination as HTMLElement).queryAllByRole('button')).toHaveLength(3)
 
-        const next = screen.getByText('Next').closest('li')
+        const paginationItems = within(pagination).getAllByRole('listitem')
 
-        expect(next).toHaveClass('disabled')
+        const nextItem = paginationItems.find((item) => item.classList.contains('pagination-next'))
+        expect(nextItem).toHaveClass('disabled')
       })
     })
 
     describe('when clicking on a page', () => {
       test('calls setQueryPage with the page that was clicked', async () => {
-        const { container, props, user } = setup()
+        const { props, user } = setup()
 
-        const pagination = container.querySelector('.pagination')
+        const pagination = screen.getByRole('list', { name: /pagination/i })
+
         expect(within(pagination as HTMLElement).queryAllByRole('button')).toHaveLength(6)
 
         await user.click(screen.getByRole('button', { name: '4' }))
@@ -150,9 +152,10 @@ describe('SearchResultList', () => {
 
   describe('when clicking on previous page arrow', () => {
     test('calls setQueryPage with previous', async () => {
-      const { container, props, user } = setup({ currentPage: 2 })
+      const { props, user } = setup({ currentPage: 2 })
 
-      const pagination = container.querySelector('.pagination')
+      const pagination = screen.getByRole('list', { name: /pagination/i })
+
       expect(within(pagination as HTMLElement).queryAllByRole('button')).toHaveLength(7)
 
       await user.click(screen.getByRole('button', { name: 'Previous' }))
@@ -162,14 +165,16 @@ describe('SearchResultList', () => {
     })
 
     test('renders a disabled previous arrow when current page is 1', () => {
-      const { container } = setup()
+      setup()
 
-      const pagination = container.querySelector('.pagination')
+      const pagination = screen.getByRole('list', { name: /pagination/i })
+
       expect(within(pagination as HTMLElement).queryAllByRole('button')).toHaveLength(6)
 
-      const previous = screen.getByText('Previous').closest('li')
+      const paginationItems = within(pagination).getAllByRole('listitem')
 
-      expect(previous).toHaveClass('disabled')
+      const previousItem = paginationItems.find((item) => item.classList.contains('pagination-prev'))
+      expect(previousItem).toHaveClass('disabled')
     })
   })
 

@@ -388,8 +388,8 @@ describe('DataCatalog SearchResultItem component', () => {
     mockedGetConfig.mockImplementation((configName: keyof Providers) => providers[configName])
 
     const metadata = mockUmm()
-    const { getByText } = renderMetadata(metadata)
-    expect(getByText('Fake Collection')).toHaveAttribute('href', 'https://doi.org/ab:cd.ef')
+    renderMetadata(metadata)
+    expect(screen.getByText('Fake Collection')).toHaveAttribute('href', 'https://doi.org/ab:cd.ef')
   })
 
   test('renders link to the landing page RelatedUrl when no DOI and provider not in providersWithLandingPages', () => {
@@ -407,8 +407,8 @@ describe('DataCatalog SearchResultItem component', () => {
 
     const metadata = mockUmm()
     delete metadata.umm.DOI
-    const { getByText } = renderMetadata(metadata)
-    expect(getByText('Fake Collection')).toHaveAttribute('href', 'https://example.com/landing/page')
+    renderMetadata(metadata)
+    expect(screen.getByText('Fake Collection')).toHaveAttribute('href', 'https://example.com/landing/page')
     expect(getConfig).toHaveBeenCalledWith('providersWithLandingPages')
   })
 
@@ -429,8 +429,8 @@ describe('DataCatalog SearchResultItem component', () => {
     const metadata = mockUmm()
     delete metadata.umm.DOI
     metadata.umm.RelatedUrls.pop()
-    const { getByText } = renderMetadata(metadata)
-    expect(getByText('Fake Collection')).toHaveAttribute('href', '/404')
+    renderMetadata(metadata)
+    expect(screen.getByText('Fake Collection')).toHaveAttribute('href', '/404')
     expect(getConfig).toHaveBeenCalledWith('providersWithLandingPages')
   })
 

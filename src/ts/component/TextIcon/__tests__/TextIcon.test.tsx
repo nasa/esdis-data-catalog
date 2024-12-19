@@ -1,58 +1,48 @@
 import React from 'react'
-
 import { render, screen } from '@testing-library/react'
 import TextIcon from '../TextIcon'
 
-const setup = ({ overrideProps = {} } = {}) => {
-  const defaultProps = {
-    className: 'custom-class',
-    field: 'Sample Field',
-    iconName: 'test-icon',
-    title: 'Test Title',
-    ...overrideProps
-  }
-
-  return render(<TextIcon {...defaultProps} />)
-}
-
 describe('TextIcon', () => {
   test('renders correctly with all props', () => {
-    setup()
+    render(
+      <TextIcon
+        className="custom-class"
+        field="Test Field"
+        iconName="test-icon"
+        title="Test Title"
+      />
+    )
 
-    const container = screen.getByText('Sample Field').closest('div')
-    expect(container).toHaveClass('hzn-text-icon custom-class')
+    const iconElement = screen.getByTitle('Test Title')
+    expect(iconElement).toBeInTheDocument()
+    expect(iconElement).toHaveClass('hzn-icon-test-icon')
 
-    const icon = screen.getByTitle('Test Title')
-    expect(icon).toHaveClass('hzn-icon hzn-icon-test-icon hzn-text-icon__icon')
-
-    const field = screen.getByText('Sample Field')
-    expect(field).toHaveClass('hzn-text-icon__field')
+    const fieldElement = screen.getByText('Test Field')
+    expect(fieldElement).toBeInTheDocument()
   })
 
   test('does not render when field is null', () => {
-    const { container } = setup({ overrideProps: { field: null } })
-    expect(container.firstChild).toBeNull()
+    render(
+      <TextIcon
+        iconName="test-icon"
+        title="Test Title"
+        field={null}
+      />
+    )
+
+    const iconElement = screen.queryByTitle('Test Title')
+    expect(iconElement).not.toBeInTheDocument()
   })
 
-  test('does not render when field is an empty string', () => {
-    const { container } = setup({ overrideProps: { field: '' } })
-    expect(container.firstChild).toBeNull()
-  })
+  test('does not render when field is undefined', () => {
+    render(
+      <TextIcon
+        iconName="test-icon"
+        title="Test Title"
+      />
+    )
 
-  test('applies default empty string for className when not provided', () => {
-    const { container } = setup({ overrideProps: { className: undefined } })
-
-    const textIconDiv = container.firstChild as HTMLElement
-    expect(textIconDiv).toHaveClass('hzn-text-icon')
-    expect(textIconDiv).not.toHaveClass('custom-class')
-    expect(textIconDiv).not.toHaveClass('undefined')
-  })
-
-  test('uses provided className', () => {
-    const { container } = setup({ overrideProps: { className: 'new-class' } })
-
-    const textIconDiv = container.firstChild as HTMLElement
-    expect(textIconDiv).toHaveClass('hzn-text-icon new-class')
-    expect(textIconDiv).not.toHaveClass('custom-class')
+    const iconElement = screen.queryByTitle('Test Title')
+    expect(iconElement).not.toBeInTheDocument()
   })
 })

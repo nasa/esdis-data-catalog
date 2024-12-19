@@ -299,7 +299,7 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
           <Col>
             {
               totalPages > 1 && (
-                <Pagination className="d-none d-md-flex ">
+                <Pagination className="d-none d-md-flex" aria-label="pagination">
                   {renderPageNumbers()}
                 </Pagination>
               )

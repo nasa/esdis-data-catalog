@@ -24,7 +24,7 @@ export const SearchFilterSectionList: React.FC<SearchFilterSectionListProps> = (
       {
         isLargeScreen && (
           <Form className="hzn-filters" role="search">
-            <Accordion alwaysOpen className="hzn-filters__accordion" defaultActiveKey={defaultActiveKey}>
+            <Accordion alwaysOpen className="hzn-filters__accordion" defaultActiveKey={defaultActiveKey} aria-label="Filters accordion">
               {children}
             </Accordion>
           </Form>

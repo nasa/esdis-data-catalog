@@ -107,7 +107,7 @@ describe('AppliedFilters', () => {
         }
       })
 
-      expect(screen.queryAllByText('-180,-90,180,90')[0]).toBeInTheDocument()
+      expect(screen.getByText('-180,-90,180,90')).toBeInTheDocument()
     })
   })
 
