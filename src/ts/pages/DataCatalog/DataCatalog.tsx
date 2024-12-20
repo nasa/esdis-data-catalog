@@ -1,7 +1,7 @@
 import '../../css/horizon/index.scss'
 
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router'
 import {
   debounce,
   identity,

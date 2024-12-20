@@ -8,9 +8,8 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        entryFileNames: 'DataCatalog.js',
+        entryFileNames: 'dataCatalogMain.js',
         manualChunks: undefined
-
       }
     }
   }

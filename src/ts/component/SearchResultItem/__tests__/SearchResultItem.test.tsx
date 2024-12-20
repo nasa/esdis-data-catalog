@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MemoryRouter as Router } from 'react-router-dom'
+import { MemoryRouter as Router } from 'react-router'
 import { render, screen } from '@testing-library/react'
 import cloneDeep from 'lodash-es/cloneDeep'
 
