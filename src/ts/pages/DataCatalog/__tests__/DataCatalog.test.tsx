@@ -6,7 +6,7 @@ import {
   waitFor,
   within
 } from '@testing-library/react'
-import { MemoryRouter as Router } from 'react-router-dom'
+import { MemoryRouter as Router } from 'react-router'
 import { useMediaQuery } from 'react-responsive'
 import { filter, omit } from 'lodash-es'
 import React from 'react'

@@ -7,6 +7,14 @@
   </head>
   <body>
     <div id="data-catalog"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <script id="config-data" type="application/json">
+      {
+        "defaultPageSize": 10,
+        "collectionPath": "/data/catalog/<%= ProviderId %>-<%= ShortName %>-<%= Version %>",
+        "cmrHost": "https://cmr.earthdata.nasa.gov",
+        "providersWithLandingPages": ["GHRC_DAAC", "SEDAC", "LANCEAMSR2", "LANCEMODIS", "LM_FIRMS"]
+      }
+    </script>
+    <script type="module" src="/src/main.tsx" defer></script>
   </body>
 </html>
