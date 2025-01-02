@@ -402,8 +402,13 @@ describe('DataCatalog', () => {
     test('should click the next button and page 2 should be active ', async () => {
       setupMockResponse()
 
-      const user = userEvent.setup()
-      setup({})
+      const { user } = setup({})
+
+      expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
+
+      await waitFor(async () => {
+        await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
+      })
 
       expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
@@ -414,9 +419,7 @@ describe('DataCatalog', () => {
       setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
       // Click the Next button
-      await waitFor(async () => {
-        await user.click(screen.getByRole('button', { name: 'Next' }))
-      })
+      await user.click(screen.getByRole('button', { name: 'Next' }))
 
       const pagination = screen.getByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
