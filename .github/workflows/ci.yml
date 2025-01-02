@@ -78,7 +78,6 @@ jobs:
       run: 'echo true'
   
   build:
-    if: success() && github.ref == 'refs/heads/main' # only run on main success
     needs: [tests-passed]
     runs-on: ubuntu-latest
     strategy:

@@ -8,7 +8,9 @@ import {
 
 import DataCatalog from './ts/pages/DataCatalog/DataCatalog'
 
-import './ts/css/main.scss'
+if (import.meta.env.MODE === 'development') {
+  import('./ts/css/main.scss')
+}
 
 const App = () => (
   <div>

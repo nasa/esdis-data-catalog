@@ -13,14 +13,12 @@
     "test-dist": "http-server dist"
   },
   "dependencies": {
-    "@eslint-recommended/eslint-config": "^26.1.1",
     "@testing-library/react": "^16.1.0",
     "@testing-library/user-event": "^14.5.2",
     "bootstrap": "^5.3.3",
     "commafy-anything": "^4.0.0",
     "cross-fetch": "^4.0.0",
     "formik": "^2.4.6",
-    "i": "^0.3.7",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "nock": "^13.5.6",
@@ -60,7 +58,6 @@
     "eslint-plugin-react-hooks": "^4.0.0",
     "eslint-plugin-react-refresh": "^0.4.14",
     "eslint-plugin-testing-library": "^7.1.1",
-    "globals": "^15.12.0",
     "http-server": "^14.1.1",
     "jsdom": "^25.0.1",
     "typescript": "~5.6.2",
