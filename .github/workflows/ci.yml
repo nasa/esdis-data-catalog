@@ -110,5 +110,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with: 
-          path: dist/DataCatalog.js
-          name: DataCatalog.js
+          path: dist/dataCatalogMain.js
+          name: dataCatalogMain.js
