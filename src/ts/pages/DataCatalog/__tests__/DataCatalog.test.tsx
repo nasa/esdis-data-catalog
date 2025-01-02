@@ -397,18 +397,10 @@ describe('DataCatalog', () => {
   })
 
   describe('when navigating to the next page', () => {
-    window.scrollTo = vi.fn()
-
     test('should click the next button and page 2 should be active ', async () => {
       setupMockResponse()
 
       const { user } = setup({})
-
-      expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
-
-      await waitFor(async () => {
-        await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
-      })
 
       expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
