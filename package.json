@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .tsx,.ts",
     "preview": "vite preview",
     "test": "vitest",
-    "pretest-dist": "npm run build",
+    "pretest-dist": "npm run build -- --mode development",
     "test-dist": "http-server dist"
   },
   "dependencies": {
