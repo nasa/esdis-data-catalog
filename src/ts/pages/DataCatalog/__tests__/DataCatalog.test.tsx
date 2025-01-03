@@ -6,7 +6,7 @@ import {
   waitFor,
   within
 } from '@testing-library/react'
-import { MemoryRouter as Router } from 'react-router-dom'
+import { MemoryRouter as Router } from 'react-router'
 import { useMediaQuery } from 'react-responsive'
 import { filter, omit } from 'lodash-es'
 import React from 'react'
@@ -21,6 +21,8 @@ import DataCatalog from '../DataCatalog'
 vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
 }))
+
+window.scrollTo = vi.fn()
 
 const mockedUseMediaQuery = useMediaQuery as ReturnType<typeof vi.fn>
 
@@ -397,13 +399,10 @@ describe('DataCatalog', () => {
   })
 
   describe('when navigating to the next page', () => {
-    window.scrollTo = vi.fn()
-
     test('should click the next button and page 2 should be active ', async () => {
       setupMockResponse()
 
-      const user = userEvent.setup()
-      setup({})
+      const { user } = setup({})
 
       expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
@@ -414,9 +413,7 @@ describe('DataCatalog', () => {
       setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
       // Click the Next button
-      await waitFor(async () => {
-        await user.click(screen.getByRole('button', { name: 'Next' }))
-      })
+      await user.click(screen.getByRole('button', { name: 'Next' }))
 
       const pagination = screen.getByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
