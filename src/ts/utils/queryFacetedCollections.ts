@@ -16,6 +16,7 @@ const validParameters = [
   'page_num',
   'page_size',
   'platforms_h',
+  'latency',
   'processing_level_id_h',
   'science_keywords_h',
   'sort_key',

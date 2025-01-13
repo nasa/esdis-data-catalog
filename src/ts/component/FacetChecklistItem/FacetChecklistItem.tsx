@@ -16,13 +16,18 @@ export const FacetChecklistItem: React.FC<FacetChecklistItemProps> = ({
   onChange,
   param
 }) => {
+  console.log('🚀 ~ file: FacetChecklistItem.tsx:19 ~ param:', param)
   const { title, count, applied } = facet
 
   const onChangeHandler = () => {
+    console.log('🚀 ~ file: FacetChecklistItem.tsx:25 ~ facet:', facet)
+    console.log('🚀 ~ file: FacetChecklistItem.tsx:21 ~ title:', title)
     onChange(facet, !applied)
   }
 
   const id = `${param}=${title}`
+
+  console.log('🚀 ~ file: FacetChecklistItem.tsx:30 ~ id:', id)
 
   return (
     <li className="hzn-checklist-item">
