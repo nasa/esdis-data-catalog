@@ -59,7 +59,6 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
   const onChange = (facet: Facet, isChecked: boolean) => {
     const { apply, remove } = facet.links || {}
     if (isChecked && apply) {
-      console.log('🚀 ~ file: SearchFilters.tsx:62 ~ isChecked:', isChecked)
       setQueryString(apply.split('?')[1])
     }
 

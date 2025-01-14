@@ -106,6 +106,10 @@ const setup = ({ params }: { params?: string } = {}) => {
 describe('DataCatalog', () => {
   beforeEach(() => nock.cleanAll())
 
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
+
   test('request new collections upon form submission', async () => {
     const { user } = setup({})
 
