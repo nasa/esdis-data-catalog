@@ -412,7 +412,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(getConfig).toHaveBeenCalledWith('providersWithLandingPages')
   })
 
-  test('renders link to 404 when no other link is available', () => {
+  test('renders link to the cmr landing pages for that collection when no other link is available', () => {
     type Providers = {
       providersWithLandingPages: string[];
       [key: string]: string[] | string | number
@@ -422,16 +422,20 @@ describe('DataCatalog SearchResultItem component', () => {
       providersWithLandingPages: ['ANOTHER_PROVIDER']
     }
 
-    mockedGetConfig.mockImplementation(
+    mockedGetConfig.mockImplementationOnce(
       (configName: string) => providers[configName as keyof Providers]
+    )
+
+    mockedGetConfig.mockImplementationOnce(
+      () => 'https://cmr.example.com'
     )
 
     const metadata = mockUmm()
     delete metadata.umm.DOI
     metadata.umm.RelatedUrls.pop()
     renderMetadata(metadata)
-    expect(screen.getByText('Fake Collection')).toHaveAttribute('href', '/404')
-    expect(getConfig).toHaveBeenCalledWith('providersWithLandingPages')
+    expect(screen.getByText('Fake Collection')).toHaveAttribute('href', 'https://cmr.example.com/concepts/C100-FAKE')
+    expect(getConfig).toHaveBeenCalledWith('cmrHost')
   })
 
   test('does not link to a DOI when the UMM-C decides to replace the DOI link with an entirely different object making it seem like it\'s there, but it\'s definitely not, grrrrrr', () => {
