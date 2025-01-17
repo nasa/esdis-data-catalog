@@ -33,6 +33,7 @@ interface AppliedFiltersProps {
     page_num?: number
     page_size?: number
     processing_level_id_h?: string[]
+    latency?: string[]
     science_keywords_h?: string[]
     sort_key?: string
     temporal?: string[] | string
@@ -133,6 +134,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       'platforms_h',
       'horizontal_data_resolution_range',
       'granule_data_format_h',
+      'latency',
       'processing_level_id_h',
       'page_num'
     ]))

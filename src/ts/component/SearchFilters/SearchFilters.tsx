@@ -44,7 +44,8 @@ const namesToParams: { [key: string]: string } = {
   Platforms: 'platforms_h',
   'Horizontal Data Resolution': 'horizontal_data_resolution_range',
   'Data Format': 'granule_data_format_h',
-  'Processing Levels': 'processing_level_id'
+  'Processing Levels': 'processing_level_id',
+  Latency: 'latency'
 }
 
 const SearchFilters: React.FC<SearchFiltersProps> = ({
@@ -99,6 +100,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           </SearchFilterSection>
         )
       }
+
       <SearchFilterSection title="Temporal" eventKey="4" setSidebarOpened={setSidebarOpened}>
         <Accordion alwaysOpen className="hzn-filters__accordion_sub" defaultActiveKey={['4.0', '4.1']}>
           <Accordion.Item eventKey="4.0">
@@ -192,6 +194,18 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               name="processing levels"
               facets={getFacets('Processing Levels')}
               param={namesToParams['Processing Levels']}
+              onChange={onChange}
+            />
+          </SearchFilterSection>
+        )
+      }
+      {
+        getFacets('Latency').length > 0 && (
+          <SearchFilterSection title="Latency" eventKey="8" setSidebarOpened={setSidebarOpened}>
+            <FacetChecklist
+              name="Latency"
+              facets={getFacets('Latency')}
+              param={namesToParams.Latency}
               onChange={onChange}
             />
           </SearchFilterSection>

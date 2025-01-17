@@ -75,6 +75,9 @@ describe('DataCatalog SearchFilters component and facets', () => {
 
     expect(screen.getByText('Data Processing Level')).toBeInTheDocument()
     expect(screen.getByLabelText('Proc0 (10)')).toBeInTheDocument()
+
+    expect(screen.getByText('Latency')).toBeInTheDocument()
+    expect(screen.getByLabelText('Late0 (10)')).toBeInTheDocument()
   })
 
   test('populates filters with applied values', () => {
@@ -131,6 +134,7 @@ describe('DataCatalog SearchFilters component and facets', () => {
       expect(screen.queryByText('Observation Method')).not.toBeInTheDocument()
       expect(screen.queryByText('Data Format')).not.toBeInTheDocument()
       expect(screen.queryByText('Data Processing Level')).not.toBeInTheDocument()
+      expect(screen.queryByText('Latency')).not.toBeInTheDocument()
 
       // Check that the Temporal and Spatial sections are still rendered
       // as they don't depend on facets
