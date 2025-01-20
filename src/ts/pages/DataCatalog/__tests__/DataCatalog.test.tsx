@@ -77,7 +77,7 @@ async function setupSidebarTest() {
     </Router>
   )
 
-  await waitFor(async () => user.click(screen.getByRole('button', { name: 'Filter' })))
+  await user.click(await screen.findByRole('button', { name: 'Filter' }))
 
   return {
     user
@@ -104,10 +104,14 @@ const setup = ({ params }: { params?: string } = {}) => {
 }
 
 describe('DataCatalog', () => {
-  beforeEach(() => nock.cleanAll())
+  beforeEach(() => {
+    vi.clearAllMocks()
+    nock.cleanAll()
+  })
 
   afterEach(() => {
     vi.clearAllMocks()
+    nock.cleanAll()
   })
 
   test('request new collections upon form submission', async () => {
