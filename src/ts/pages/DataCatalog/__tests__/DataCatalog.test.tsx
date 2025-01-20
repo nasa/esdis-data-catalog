@@ -104,10 +104,7 @@ const setup = ({ params }: { params?: string } = {}) => {
 }
 
 describe('DataCatalog', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-    nock.cleanAll()
-  })
+  beforeEach(() => nock.cleanAll())
 
   afterEach(() => {
     vi.clearAllMocks()
