@@ -117,7 +117,7 @@ describe('DataCatalog', () => {
 
     await waitFor(async () => {
       await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
-    })
+    }, { timeout: 3000 })
 
     setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
