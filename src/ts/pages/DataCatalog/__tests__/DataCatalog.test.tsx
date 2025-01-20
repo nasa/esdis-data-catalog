@@ -418,7 +418,9 @@ describe('DataCatalog', () => {
       setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
       // Click the Next button
-      await user.click(screen.getByRole('button', { name: 'Next' }))
+      await waitFor(async () => {
+        await user.click(screen.getByRole('button', { name: 'Next' }))
+      }, { timeout: 3000 })
 
       const pagination = await screen.findByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
