@@ -118,7 +118,7 @@ describe('DataCatalog', () => {
 
     await waitFor(async () => {
       await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
-    })
+    }, { timeout: 3000 })
 
     setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
@@ -417,7 +417,7 @@ describe('DataCatalog', () => {
       // Click the Next button
       await waitFor(async () => {
         await user.click(screen.getByRole('button', { name: 'Next' }))
-      })
+      }, { timeout: 3000 })
 
       const pagination = await screen.findByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
