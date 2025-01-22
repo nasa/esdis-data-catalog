@@ -77,7 +77,7 @@ async function setupSidebarTest() {
     </Router>
   )
 
-  await waitFor(async () => user.click(screen.getByRole('button', { name: 'Filter' })))
+  await user.click(await screen.findByRole('button', { name: 'Filter' }))
 
   return {
     user
@@ -108,6 +108,7 @@ describe('DataCatalog', () => {
 
   afterEach(() => {
     vi.clearAllMocks()
+    nock.cleanAll()
   })
 
   test('request new collections upon form submission', async () => {
@@ -122,11 +123,8 @@ describe('DataCatalog', () => {
     setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
     // Click the submit button
-    await waitFor(async () => {
-      await user.click(screen.getByLabelText('Submit'))
-    })
-
-    await waitFor(() => expect(nock.isDone()).toBe(true))
+    const submitButton = await screen.findByLabelText('Submit')
+    await user.click(submitButton)
 
     expect(await screen.findByText('Found collection 1')).toBeTruthy()
   })
@@ -417,9 +415,11 @@ describe('DataCatalog', () => {
       setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
 
       // Click the Next button
-      await user.click(screen.getByRole('button', { name: 'Next' }))
+      await waitFor(async () => {
+        await user.click(screen.getByRole('button', { name: 'Next' }))
+      })
 
-      const pagination = screen.getByRole('list', { name: /pagination/i })
+      const pagination = await screen.findByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
 
       const activePage = pageItems.find((item) => item.classList.contains('active'))
@@ -455,11 +455,10 @@ describe('DataCatalog', () => {
   describe('when selecting a sort key', () => {
     test('clicking on usage as a sort key ', async () => {
       const params = 'page_size=20'
-      const user = userEvent.setup()
 
       setupMockResponse(params, 1, 1, 'Found ')
 
-      setup({ params })
+      const { user } = setup({ params })
 
       expect(await screen.findByText('Found collection 1')).toBeTruthy()
 
@@ -479,11 +478,10 @@ describe('DataCatalog', () => {
   describe('when loading a URL containing a sort_key', () => {
     test('loads the page, using and displaying the appropriate sort key', async () => {
       const params = 'sort_key=usage_score'
-      const user = userEvent.setup()
 
       setupMockResponse(params, 1, 1, 'Found ')
 
-      setup({ params })
+      const { user } = setup({ params })
 
       expect(await screen.findByText('Found collection 1')).toBeTruthy()
 
@@ -508,8 +506,7 @@ describe('DataCatalog', () => {
 
     test('clicking the "Filter" button opens the filters sidebar', async () => {
       setupMockResponse()
-      const user = userEvent.setup()
-      setup({})
+      const { user } = setup({})
 
       // RTL is not super happy with media queries / CSS, so we use class names as a proxy
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
@@ -524,8 +521,7 @@ describe('DataCatalog', () => {
       mockedUseMediaQuery.mockReturnValue(false)
 
       setupMockResponse()
-      const user = userEvent.setup()
-      setup({})
+      const { user } = setup({})
 
       // RTL is not super happy with media queries / CSS, so we use class names as a proxy
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
@@ -546,8 +542,7 @@ describe('DataCatalog', () => {
     mockedUseMediaQuery.mockReturnValue(false)
 
     setupMockResponse()
-    const user = userEvent.setup()
-    setup({})
+    const { user } = setup({})
 
     // RTL is not super happy with media queries / CSS, so we use class names as a proxy
     expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
@@ -619,8 +614,6 @@ describe('DataCatalog', () => {
       const appliedFacets = await screen.findAllByRole('button', { name: /Apply/i })
       await user.click(appliedFacets[0])
       expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
-
-      // Expect((await screen.findByTestId('search-filters')).classList.contains('show')).toBe(false)
     })
 
     test('displays the title of the filter group as a clickable back button', async () => {

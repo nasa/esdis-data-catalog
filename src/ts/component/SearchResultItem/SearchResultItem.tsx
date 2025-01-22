@@ -239,9 +239,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   const collection = metadata
 
   const collectionPath = getConfig('collectionPath') || '/collections/<%= id %>'
+  const cmrHost = getConfig('cmrHost')
   const providersWithLandingPages = getConfig('providersWithLandingPages')
-
-  const landingPageNotFound = getConfig('landingPageNotFound')
 
   const compiledTemplate = template(collectionPath as string)
 
@@ -272,12 +271,15 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
       return doi.link
     }
 
-    // If there's a configured landing page in the CMR
+    // If there's a configured landing page in the CMR metadata
     if (configuredLandingPage) {
       return configuredLandingPage
     }
 
-    return (landingPageNotFound as string) || '/404'
+    // Otherwise fall back to using the CMR landing pages endpoint
+    const defaultLandingPage = `${cmrHost}/concepts/${conceptId}`
+
+    return (defaultLandingPage as string)
   }
 
   return (
