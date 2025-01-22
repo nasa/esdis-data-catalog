@@ -271,11 +271,12 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
       return doi.link
     }
 
-    // If there's a configured landing page in the CMR
+    // If there's a configured landing page in the CMR metadata
     if (configuredLandingPage) {
       return configuredLandingPage
     }
 
+    // Otherwise fall back to using the CMR landing pages endpoint
     const defaultLandingPage = `${cmrHost}/concepts/${conceptId}`
 
     return (defaultLandingPage as string)
