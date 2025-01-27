@@ -266,7 +266,7 @@ describe('SearchResultList', () => {
 
   describe('Sort key', () => {
     describe('when selecting a sort key', () => {
-      test('calls setQuerySort with usage_score', async () => {
+      test('calls setQuerySort with -usage_score', async () => {
         const { props, user } = setup()
 
         await waitFor(async () => {
@@ -275,7 +275,7 @@ describe('SearchResultList', () => {
         })
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
-        expect(props.setQuerySort).toHaveBeenCalledWith('usage_score')
+        expect(props.setQuerySort).toHaveBeenCalledWith('-usage_score')
       })
 
       test('calls setQuerySort with start_data', async () => {
