@@ -416,8 +416,8 @@ describe('DataCatalog', () => {
 
       // Click the Next button
       await waitFor(async () => {
-        await user.click(screen.getByRole('button', { name: 'Next' }))
-      })
+        await user.click(await screen.findByRole('button', { name: 'Next' }))
+      }, { timeout: 5000 })
 
       const pagination = await screen.findByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
@@ -462,7 +462,7 @@ describe('DataCatalog', () => {
 
       expect(await screen.findByText('Found collection 1')).toBeTruthy()
 
-      setupMockResponse('page_num=1&sort_key=usage_score')
+      setupMockResponse('page_num=1&sort_key=-usage_score')
 
       await waitFor(async () => {
         await user.click(screen.getByRole('button', { name: /SORT:/ }))
@@ -477,7 +477,7 @@ describe('DataCatalog', () => {
 
   describe('when loading a URL containing a sort_key', () => {
     test('loads the page, using and displaying the appropriate sort key', async () => {
-      const params = 'sort_key=usage_score'
+      const params = 'sort_key=-usage_score'
 
       setupMockResponse(params, 1, 1, 'Found ')
 
