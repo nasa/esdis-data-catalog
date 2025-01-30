@@ -210,6 +210,21 @@ describe('AppliedFilters', () => {
     })
   })
 
+  describe('when sort key filter has the wrong direction', () => {
+    test('renders the single date', () => {
+      const { mockFormik } = setup({
+        overrideProps: {
+          filterValues: {
+            sort_key: 'usage_score'
+          }
+        }
+      })
+
+      expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(1)
+      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('sort_key', '-usage_score')
+    })
+  })
+
   describe('when removing a filter', () => {
     test('should remove the selected filter', async () => {
       const { user, props } = setup({})
