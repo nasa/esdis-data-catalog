@@ -498,6 +498,29 @@ describe('DataCatalog', () => {
       setupMockResponse()
       expect(screen.getByText(/Relevance/)).toBeInTheDocument()
     })
+
+    test.skip('sort key should normalize to the set direction', async () => {
+      const params = 'sort_key=usage_score'
+
+      setupMockResponse(params, 1, 1, 'Found ')
+
+      const { user } = setup({ params })
+
+      expect(await screen.findByText('Found collection 1')).toBeTruthy()
+
+      const rowElement = screen.getByRole('button', { name: /SORT: / })
+
+      expect(within(rowElement).getByText('usage')).toBeInTheDocument()
+
+      await waitFor(async () => {
+        await user.click(screen.getByRole('button', { name: /SORT:/ }))
+        await user.click(screen.getByRole('button', { name: 'Relevance' }))
+      })
+
+      // Calls CMR with a default search params because relevance is a default search
+      setupMockResponse()
+      expect(screen.getByText(/Relevance/)).toBeInTheDocument()
+    })
   })
 
   describe('responsive filters sidebar', () => {

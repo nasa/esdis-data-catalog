@@ -53,14 +53,26 @@ const temporalToTitle = (temporal: string[] | string) => {
   return `${start} to ${end}`
 }
 
+// TODO in earthdata Search we sort by onoing vs end_date the interface says end_date
+// Thats what its been currently doing should we change it to be ongoing?
+const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
+
+const matchSortKey = (inputKey: string, supportedKeys: string[]): string => {
+  const normalizedInput = inputKey.replace(/^-/, '').toLowerCase()
+
+  const matchedKey = supportedKeys.find((supportedKey) => supportedKey.replace(/^-/, '').toLowerCase() === normalizedInput)
+
+  return matchedKey ?? inputKey
+}
+
 export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   facets,
   filterValues,
   isLoading,
   setQueryString
 }) => {
-  const { temporal, bounding_box: boundingBox } = filterValues
-
+  const { temporal, bounding_box: boundingBox, sort_key: sortKey } = filterValues
+  console.log('🚀 ~ file: AppliedFilters.tsx:71 ~ sortKey:', sortKey)
   const formik = useFormikContext()
   const [applied, setApplied] = useState<AppliedFilter[]>([])
 
@@ -109,6 +121,11 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
         hasChildren: false,
         type: ''
       })
+    }
+
+    if (sortKey) {
+      const normalizedSortKey = matchSortKey(sortKey, supportedSortKeys)
+      formik.setFieldValue('sort_key', normalizedSortKey)
     }
 
     setApplied(nextApplied)
