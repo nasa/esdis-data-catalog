@@ -290,7 +290,19 @@ describe('SearchResultList', () => {
         expect(props.setQuerySort).toHaveBeenCalledWith('start_date')
       })
 
-      test('calls setQuerySort with end_data', async () => {
+      test('calls setQuerySort with relevance', async () => {
+        const { props, user } = setup()
+
+        await waitFor(async () => {
+          await user.click(screen.getByRole('button', { name: /SORT:/ }))
+          await user.click(screen.getByRole('button', { name: 'Relevance' }))
+        })
+
+        expect(props.setQuerySort).toHaveBeenCalledTimes(1)
+        expect(props.setQuerySort).toHaveBeenCalledWith('relevance')
+      })
+
+      test('calls setQuerySort with -ongoing', async () => {
         const { props, user } = setup()
 
         await waitFor(async () => {
@@ -299,17 +311,17 @@ describe('SearchResultList', () => {
         })
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
-        expect(props.setQuerySort).toHaveBeenCalledWith('end_date')
+        expect(props.setQuerySort).toHaveBeenCalledWith('-ongoing')
       })
     })
 
     describe('when the sort key is usage_score', () => {
       test('displays usage as the current selected sort key', () => {
         setup({
-          currentSortKey: 'usage_score'
+          currentSortKey: '-usage_score'
         })
 
-        const sortKeyDropdown = screen.getByRole('button', { name: /SORT: usage/ })
+        const sortKeyDropdown = screen.getByRole('button', { name: /SORT: Usage/ })
         expect(sortKeyDropdown).toBeInTheDocument()
       })
     })

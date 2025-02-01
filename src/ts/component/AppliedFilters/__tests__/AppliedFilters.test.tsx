@@ -210,18 +210,34 @@ describe('AppliedFilters', () => {
     })
   })
 
-  describe('when sort key filter has the wrong direction', () => {
-    test('renders the single date', () => {
-      const { mockFormik } = setup({
-        overrideProps: {
-          filterValues: {
-            sort_key: 'usage_score'
+  describe('when passing a sort key sort key filter is invalid', () => {
+    describe('when the sort key is invalid', () => {
+      test('calls setFieldValue to remove the sort key', () => {
+        const { mockFormik } = setup({
+          overrideProps: {
+            filterValues: {
+              sort_key: 'usage_score'
+            }
           }
-        }
-      })
+        })
 
-      expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(1)
-      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('sort_key', '-usage_score')
+        expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(1)
+        expect(mockFormik.setFieldValue).toHaveBeenCalledWith('sort_key', null)
+      })
+    })
+
+    describe('when the sort key is valid', () => {
+      test('passes the sort key in the CMR call', () => {
+        const { mockFormik } = setup({
+          overrideProps: {
+            filterValues: {
+              sort_key: '-usage_score'
+            }
+          }
+        })
+
+        expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(0)
+      })
     })
   })
 

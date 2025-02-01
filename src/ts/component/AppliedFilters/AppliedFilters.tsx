@@ -54,17 +54,6 @@ const temporalToTitle = (temporal: string[] | string) => {
   return `${start} to ${end}`
 }
 
-// Const matchValidSortKey = (inputKey: string): string => {
-//   // Thats what its been currently doing should we change it to be ongoing?
-//   const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
-
-//   const normalizedInput = inputKey.replace(/^-/, '').toLowerCase()
-
-//   const matchedKey = supportedSortKeys.find((supportedKey) => supportedKey.replace(/^-/, '').toLowerCase() === normalizedInput)
-
-//   return matchedKey ?? inputKey
-// }
-
 export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   facets,
   filterValues,
@@ -74,7 +63,6 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   const { temporal, bounding_box: boundingBox, sort_key: sortKey } = filterValues
   const formik = useFormikContext()
   const [applied, setApplied] = useState<AppliedFilter[]>([])
-  // Const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
 
   // This is fairly ugly how this has to work. Filter state of temporal / spatial
   // is managed by Formik and clears instantly. Filter state of facets is managed
@@ -123,7 +111,6 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       })
     }
 
-    // Normalize the sort key so that the order is consistent
     if (sortKey) {
       const validSortKey = getValidSortkey(sortKey)
       if (!validSortKey) {

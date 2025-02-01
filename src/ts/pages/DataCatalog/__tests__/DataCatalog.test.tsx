@@ -471,7 +471,7 @@ describe('DataCatalog', () => {
 
       const rowElement = screen.getByRole('button', { name: /SORT: / })
 
-      expect(within(rowElement).getByText('usage')).toBeInTheDocument()
+      expect(within(rowElement).getByText('Usage')).toBeInTheDocument()
     })
   })
 
@@ -487,7 +487,7 @@ describe('DataCatalog', () => {
 
       const rowElement = screen.getByRole('button', { name: /SORT: / })
 
-      expect(within(rowElement).getByText('usage')).toBeInTheDocument()
+      expect(within(rowElement).getByText('Usage')).toBeInTheDocument()
 
       await waitFor(async () => {
         await user.click(screen.getByRole('button', { name: /SORT:/ }))
