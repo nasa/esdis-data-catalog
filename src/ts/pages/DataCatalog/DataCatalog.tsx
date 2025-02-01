@@ -95,8 +95,6 @@ const countFilters = (facets: Facet, params: Params) => {
 }
 
 const DataCatalog: React.FC = () => {
-  // Const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date', 'relevance']
-
   // Get the browser history
   const navigate = useNavigate()
 
@@ -238,7 +236,6 @@ const DataCatalog: React.FC = () => {
   const setQuerySort = (sortKey: string) => {
     let updatedSearchParam = null
 
-    // Relevance is the default sort key and should not be included in the query
     if (!getValidSortkey(sortKey) || sortKey === defaultSortKey) {
       delete collectionSearchParams.sort_key
       updatedSearchParam = collectionSearchParams
