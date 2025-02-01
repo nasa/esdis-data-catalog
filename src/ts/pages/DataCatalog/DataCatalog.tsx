@@ -26,11 +26,7 @@ import { getConfig } from '../../utils/getConfig'
 import getAppliedFacets from '../../utils/getAppliedFacets'
 import { queryFacetedCollections } from '../../utils/queryFacetedCollections'
 import { stringifyCollectionsQuery } from '../../utils/stringifyCollectionsQuery'
-import {
-  collectionSortKeys,
-  defaultSortKey,
-  getValidSortkey
-} from '../../constants/collectionSortKeys'
+import { defaultSortKey, getValidSortkey } from '../../utils/getCollectionSortKeys'
 
 import LoadingBanner from '../../component/LoadingBanner/LoadingBanner'
 import ErrorBanner from '../../component/ErrorBanner/ErrorBanner'
@@ -113,16 +109,8 @@ const DataCatalog: React.FC = () => {
   const {
     page_num: currentPage = 1,
     page_size: currentPageSize = getConfig('defaultPageSize'),
-    // TODO we should not default to a sort key which isn't real
-    sort_key: currentSortKey = ''
+    sort_key: currentSortKey = defaultSortKey
   } = parsedQueryString
-
-  let passedSortKey = currentSortKey
-  const validSortKey2 = getValidSortkey(currentSortKey)
-  if (!validSortKey2) {
-    // Override with default sort key
-    passedSortKey = 'Relevance'
-  }
 
   const [collectionSearchParams, setCollectionSearchParams] = useState(parsedQueryString)
 
@@ -249,10 +237,9 @@ const DataCatalog: React.FC = () => {
 
   const setQuerySort = (sortKey: string) => {
     let updatedSearchParam = null
-    const validSortKey = getValidSortkey(sortKey)
 
     // Relevance is the default sort key and should not be included in the query
-    if (!validSortKey || validSortKey === defaultSortKey) {
+    if (!getValidSortkey(sortKey) || sortKey === defaultSortKey) {
       delete collectionSearchParams.sort_key
       updatedSearchParam = collectionSearchParams
     } else {
@@ -374,7 +361,7 @@ const DataCatalog: React.FC = () => {
                             setQueryPageSize={setQueryPageSize}
                             filterCount={filterCount}
                             setSidebarOpened={setSidebarOpened}
-                            currentSortKey={passedSortKey as string}
+                            currentSortKey={currentSortKey as string}
                             setQuerySort={setQuerySort}
                           />
                         )

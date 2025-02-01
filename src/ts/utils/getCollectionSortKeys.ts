@@ -1,3 +1,5 @@
+export const defaultSortKey = 'relevance'
+
 export const collectionSortKeys = [
   {
     key: 'relevance',
@@ -17,11 +19,8 @@ export const collectionSortKeys = [
   }
 ]
 
-export const defaultSortKey = 'Relevance'
-
-export const getValidSortkey = (x: string) => {
-  if (!x) return 'Relevance'
-  const found = collectionSortKeys.find((obj) => obj.key === x)
+export const getValidSortkey = (sortKey: string) => {
+  const found = collectionSortKeys.find((validSortKey) => validSortKey.key === sortKey)
 
   return found ? found.value : null
 }
