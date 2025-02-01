@@ -15,6 +15,8 @@ import {
 } from 'react-bootstrap'
 import SearchResultItem from '../SearchResultItem/SearchResultItem'
 
+import { collectionSortKeys, getValidSortkey } from '../../constants/collectionSortKeys'
+
 interface DOI {
   DOI?: string;
   Authority?: string
@@ -73,11 +75,6 @@ interface SearchResultsListProps {
   setSidebarOpened: (isOpened: boolean) => void;
 }
 
-interface SortKey {
-  key: string;
-  value: string;
-}
-
 export const SearchResultsList: React.FC<SearchResultsListProps> = ({
   collections,
   currentPage,
@@ -89,30 +86,10 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
   setQuerySort,
   setSidebarOpened
 }) => {
+  console.log('🚀 ~ file: SearchResultsList.tsx:92 ~ currentSortKey:', currentSortKey)
   const { count: collectionCount, items } = collections
 
   const rows = [10, 20, 50, 100]
-
-  const descUsageScore = '-usage_score'
-
-  const sortKeys: SortKey[] = [
-    {
-      key: 'relevance',
-      value: 'Relevance'
-    },
-    {
-      key: descUsageScore,
-      value: 'Usage'
-    },
-    {
-      key: 'start_date',
-      value: 'Start Date'
-    },
-    {
-      key: 'end_date',
-      value: 'End Date'
-    }
-  ]
 
   const totalPages = Math.ceil(collectionCount / currentPageSize)
 
@@ -257,14 +234,14 @@ export const SearchResultsList: React.FC<SearchResultsListProps> = ({
             <Dropdown className="search-result-sort__dropdown">
               <Dropdown.Toggle variant="none">
                 <span className="search-result-sort__label">SORT:</span>
-                <span className="search-result-sort__value">{currentSortKey === descUsageScore ? 'usage' : currentSortKey }</span>
+                <span className="search-result-sort__value">{getValidSortkey(currentSortKey)}</span>
                 <svg className="search-result-sort__svg-icon" width="10" height="10" viewBox="0 0 8 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" clipRule="evenodd" d="M4 3.855L7.233.6 8 1.372 4 5.4 0 1.372.767.6 4 3.855z" fill="black" />
                 </svg>
               </Dropdown.Toggle>
               <Dropdown.Menu>
                 {
-                  sortKeys.map((sortKey) => {
+                  collectionSortKeys.map((sortKey) => {
                     const { key, value } = sortKey
 
                     return (

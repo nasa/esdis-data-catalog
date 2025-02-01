@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap'
 import { omit } from 'lodash-es'
 
 import { Facet } from '../../../types/global'
+import { getValidSortkey } from '../../constants/collectionSortKeys'
 
 import getAppliedFacets from '../../utils/getAppliedFacets'
 
@@ -53,16 +54,16 @@ const temporalToTitle = (temporal: string[] | string) => {
   return `${start} to ${end}`
 }
 
-const matchValidSortKey = (inputKey: string): string => {
-  // Thats what its been currently doing should we change it to be ongoing?
-  const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
+// Const matchValidSortKey = (inputKey: string): string => {
+//   // Thats what its been currently doing should we change it to be ongoing?
+//   const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
 
-  const normalizedInput = inputKey.replace(/^-/, '').toLowerCase()
+//   const normalizedInput = inputKey.replace(/^-/, '').toLowerCase()
 
-  const matchedKey = supportedSortKeys.find((supportedKey) => supportedKey.replace(/^-/, '').toLowerCase() === normalizedInput)
+//   const matchedKey = supportedSortKeys.find((supportedKey) => supportedKey.replace(/^-/, '').toLowerCase() === normalizedInput)
 
-  return matchedKey ?? inputKey
-}
+//   return matchedKey ?? inputKey
+// }
 
 export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   facets,
@@ -73,6 +74,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   const { temporal, bounding_box: boundingBox, sort_key: sortKey } = filterValues
   const formik = useFormikContext()
   const [applied, setApplied] = useState<AppliedFilter[]>([])
+  // Const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date']
 
   // This is fairly ugly how this has to work. Filter state of temporal / spatial
   // is managed by Formik and clears instantly. Filter state of facets is managed
@@ -123,8 +125,14 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
 
     // Normalize the sort key so that the order is consistent
     if (sortKey) {
-      const normalizedSortKey = matchValidSortKey(sortKey)
-      formik.setFieldValue('sort_key', normalizedSortKey)
+      // Const normalizedSortKey = matchValidSortKey(sortKey)
+      // formik.setFieldValue('sort_key', normalizedSortKey)
+      const validSortKey = getValidSortkey(sortKey)
+      if (!validSortKey) {
+        console.log('delete the sort key value')
+        // TODO figure out if this should be undefined or null
+        formik.setFieldValue('sort_key', null)
+      }
     }
 
     setApplied(nextApplied)

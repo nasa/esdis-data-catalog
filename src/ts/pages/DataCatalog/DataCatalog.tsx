@@ -26,12 +26,18 @@ import { getConfig } from '../../utils/getConfig'
 import getAppliedFacets from '../../utils/getAppliedFacets'
 import { queryFacetedCollections } from '../../utils/queryFacetedCollections'
 import { stringifyCollectionsQuery } from '../../utils/stringifyCollectionsQuery'
+import {
+  collectionSortKeys,
+  defaultSortKey,
+  getValidSortkey
+} from '../../constants/collectionSortKeys'
 
 import LoadingBanner from '../../component/LoadingBanner/LoadingBanner'
 import ErrorBanner from '../../component/ErrorBanner/ErrorBanner'
 import AppliedFilters from '../../component/AppliedFilters/AppliedFilters'
 import SearchFilters from '../../component/SearchFilters/SearchFilters'
 import SearchResultsList from '../../component/SearchResultsList/SearchResultsList'
+
 import {
   Facet,
   Params,
@@ -93,6 +99,8 @@ const countFilters = (facets: Facet, params: Params) => {
 }
 
 const DataCatalog: React.FC = () => {
+  // Const supportedSortKeys = ['-score', '-usage_score', 'start_date', 'end_date', 'relevance']
+
   // Get the browser history
   const navigate = useNavigate()
 
@@ -105,8 +113,16 @@ const DataCatalog: React.FC = () => {
   const {
     page_num: currentPage = 1,
     page_size: currentPageSize = getConfig('defaultPageSize'),
-    sort_key: currentSortKey = 'Relevance'
+    // TODO we should not default to a sort key which isn't real
+    sort_key: currentSortKey = ''
   } = parsedQueryString
+
+  let passedSortKey = currentSortKey
+  const validSortKey2 = getValidSortkey(currentSortKey)
+  if (!validSortKey2) {
+    // Override with default sort key
+    passedSortKey = 'Relevance'
+  }
 
   const [collectionSearchParams, setCollectionSearchParams] = useState(parsedQueryString)
 
@@ -233,8 +249,10 @@ const DataCatalog: React.FC = () => {
 
   const setQuerySort = (sortKey: string) => {
     let updatedSearchParam = null
+    const validSortKey = getValidSortkey(sortKey)
 
-    if (sortKey === 'relevance') {
+    // Relevance is the default sort key and should not be included in the query
+    if (!validSortKey || validSortKey === defaultSortKey) {
       delete collectionSearchParams.sort_key
       updatedSearchParam = collectionSearchParams
     } else {
@@ -356,7 +374,7 @@ const DataCatalog: React.FC = () => {
                             setQueryPageSize={setQueryPageSize}
                             filterCount={filterCount}
                             setSidebarOpened={setSidebarOpened}
-                            currentSortKey={currentSortKey as string}
+                            currentSortKey={passedSortKey as string}
                             setQuerySort={setQuerySort}
                           />
                         )
