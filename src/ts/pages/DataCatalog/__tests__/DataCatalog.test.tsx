@@ -116,8 +116,10 @@ describe('DataCatalog', () => {
 
     expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
+    const searchbox = await screen.findByRole('searchbox')
+
     await waitFor(async () => {
-      await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
+      await user.type(searchbox, 'C002-FAKE')
     })
 
     setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
