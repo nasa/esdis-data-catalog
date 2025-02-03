@@ -15,11 +15,9 @@ import {
 } from 'react-bootstrap'
 import SearchResultItem from '../SearchResultItem/SearchResultItem'
 
-import {
-  collectionSortKeys,
-  defaultSortKey,
-  getValidSortkey
-} from '../../utils/getCollectionSortKeys'
+import { getValidSortkey } from '../../utils/getValidSortkey'
+
+import { collectionSortKeys, defaultSortKey } from '../../constants/sortKeys'
 
 interface DOI {
   DOI?: string;

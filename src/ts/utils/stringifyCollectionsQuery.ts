@@ -35,8 +35,6 @@ export const stringifyCollectionsQuery = (params: Params, removeDefaults = false
     delete toStringify.temporal
   }
 
-  // ...
-
   if (removeDefaults) {
     Object.entries(toStringify as Record<string, unknown>).forEach(([k, v]) => {
       if ((k in facetDefaultParams

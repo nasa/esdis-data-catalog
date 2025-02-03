@@ -26,13 +26,15 @@ import { getConfig } from '../../utils/getConfig'
 import getAppliedFacets from '../../utils/getAppliedFacets'
 import { queryFacetedCollections } from '../../utils/queryFacetedCollections'
 import { stringifyCollectionsQuery } from '../../utils/stringifyCollectionsQuery'
-import { defaultSortKey, getValidSortkey } from '../../utils/getCollectionSortKeys'
+import { getValidSortkey } from '../../utils/getValidSortkey'
 
 import LoadingBanner from '../../component/LoadingBanner/LoadingBanner'
 import ErrorBanner from '../../component/ErrorBanner/ErrorBanner'
 import AppliedFilters from '../../component/AppliedFilters/AppliedFilters'
 import SearchFilters from '../../component/SearchFilters/SearchFilters'
 import SearchResultsList from '../../component/SearchResultsList/SearchResultsList'
+
+import { defaultSortKey } from '../../constants/sortKeys'
 
 import {
   Facet,

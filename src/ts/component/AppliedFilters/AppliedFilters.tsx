@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap'
 import { omit } from 'lodash-es'
 
 import { Facet } from '../../../types/global'
-import { getValidSortkey } from '../../utils/getCollectionSortKeys'
+import { getValidSortkey } from '../../utils/getValidSortkey'
 
 import getAppliedFacets from '../../utils/getAppliedFacets'
 
@@ -113,6 +113,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
 
     if (sortKey) {
       const validSortKey = getValidSortkey(sortKey)
+      // Remove invalid sort keys to fallback to the default sort key
       if (!validSortKey) {
         formik.setFieldValue('sort_key', null)
       }

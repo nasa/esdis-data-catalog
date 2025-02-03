@@ -210,7 +210,7 @@ describe('AppliedFilters', () => {
     })
   })
 
-  describe('when passing a sort key sort key filter is invalid', () => {
+  describe('when the passing a sort_key in the filterValues', () => {
     describe('when the sort key is invalid', () => {
       test('calls setFieldValue to remove the sort key', () => {
         const { mockFormik } = setup({

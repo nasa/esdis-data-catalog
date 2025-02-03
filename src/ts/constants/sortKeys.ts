@@ -18,9 +18,3 @@ export const collectionSortKeys = [
     value: 'End Date'
   }
 ]
-
-export const getValidSortkey = (sortKey: string) => {
-  const found = collectionSortKeys.find((validSortKey) => validSortKey.key === sortKey)
-
-  return found ? found.value : null
-}
