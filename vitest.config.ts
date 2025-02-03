@@ -6,6 +6,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: 'test-setup.ts',
     clearMocks: true,
+    fileParallelism: false,
     coverage: {
       enabled: true,
       include: [
