@@ -210,6 +210,37 @@ describe('AppliedFilters', () => {
     })
   })
 
+  describe('when the passing a sort_key in the filterValues', () => {
+    describe('when the sort key is invalid', () => {
+      test('calls setFieldValue to remove the sort key', () => {
+        const { mockFormik } = setup({
+          overrideProps: {
+            filterValues: {
+              sort_key: 'usage_score'
+            }
+          }
+        })
+
+        expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(1)
+        expect(mockFormik.setFieldValue).toHaveBeenCalledWith('sort_key', null)
+      })
+    })
+
+    describe('when the sort key is valid', () => {
+      test('passes the sort key in the CMR call', () => {
+        const { mockFormik } = setup({
+          overrideProps: {
+            filterValues: {
+              sort_key: '-usage_score'
+            }
+          }
+        })
+
+        expect(mockFormik.setFieldValue).toHaveBeenCalledTimes(0)
+      })
+    })
+  })
+
   describe('when removing a filter', () => {
     test('should remove the selected filter', async () => {
       const { user, props } = setup({})

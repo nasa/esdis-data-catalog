@@ -26,12 +26,16 @@ import { getConfig } from '../../utils/getConfig'
 import getAppliedFacets from '../../utils/getAppliedFacets'
 import { queryFacetedCollections } from '../../utils/queryFacetedCollections'
 import { stringifyCollectionsQuery } from '../../utils/stringifyCollectionsQuery'
+import { getValidSortkey } from '../../utils/getValidSortkey'
 
 import LoadingBanner from '../../component/LoadingBanner/LoadingBanner'
 import ErrorBanner from '../../component/ErrorBanner/ErrorBanner'
 import AppliedFilters from '../../component/AppliedFilters/AppliedFilters'
 import SearchFilters from '../../component/SearchFilters/SearchFilters'
 import SearchResultsList from '../../component/SearchResultsList/SearchResultsList'
+
+import { defaultSortKey } from '../../constants/sortKeys'
+
 import {
   Facet,
   Params,
@@ -105,7 +109,7 @@ const DataCatalog: React.FC = () => {
   const {
     page_num: currentPage = 1,
     page_size: currentPageSize = getConfig('defaultPageSize'),
-    sort_key: currentSortKey = 'Relevance'
+    sort_key: currentSortKey = defaultSortKey
   } = parsedQueryString
 
   const [collectionSearchParams, setCollectionSearchParams] = useState(parsedQueryString)
@@ -234,7 +238,7 @@ const DataCatalog: React.FC = () => {
   const setQuerySort = (sortKey: string) => {
     let updatedSearchParam = null
 
-    if (sortKey === 'relevance') {
+    if (!getValidSortkey(sortKey) || sortKey === defaultSortKey) {
       delete collectionSearchParams.sort_key
       updatedSearchParam = collectionSearchParams
     } else {

@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap'
 import { omit } from 'lodash-es'
 
 import { Facet } from '../../../types/global'
+import { getValidSortkey } from '../../utils/getValidSortkey'
 
 import getAppliedFacets from '../../utils/getAppliedFacets'
 
@@ -59,8 +60,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   isLoading,
   setQueryString
 }) => {
-  const { temporal, bounding_box: boundingBox } = filterValues
-
+  const { temporal, bounding_box: boundingBox, sort_key: sortKey } = filterValues
   const formik = useFormikContext()
   const [applied, setApplied] = useState<AppliedFilter[]>([])
 
@@ -109,6 +109,14 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
         hasChildren: false,
         type: ''
       })
+    }
+
+    if (sortKey) {
+      const validSortKey = getValidSortkey(sortKey)
+      // Remove invalid sort keys to fallback to the default sort key
+      if (!validSortKey) {
+        formik.setFieldValue('sort_key', null)
+      }
     }
 
     setApplied(nextApplied)

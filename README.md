@@ -8,7 +8,7 @@
 #### Running Data-Catalog locally
 
 ```bash
-    npm run dev
+    npm run start
 ```
 
 #### Local Testing

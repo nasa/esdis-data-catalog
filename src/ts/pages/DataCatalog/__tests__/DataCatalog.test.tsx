@@ -116,8 +116,10 @@ describe('DataCatalog', () => {
 
     expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
+    const searchbox = await screen.findByRole('searchbox')
+
     await waitFor(async () => {
-      await user.type(screen.getByRole('searchbox'), 'C002-FAKE')
+      await user.type(searchbox, 'C002-FAKE')
     })
 
     setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
@@ -413,11 +415,12 @@ describe('DataCatalog', () => {
       })
 
       setupMockResponse('keyword=C002-FAKE', 1, 1, 'Found ')
+      const nextButton = await screen.findByRole('button', { name: 'Next' })
 
       // Click the Next button
       await waitFor(async () => {
-        await user.click(await screen.findByRole('button', { name: 'Next' }))
-      }, { timeout: 5000 })
+        await user.click(nextButton)
+      })
 
       const pagination = await screen.findByRole('list', { name: /pagination/i })
       const pageItems = within(pagination).getAllByRole('listitem')
@@ -471,7 +474,7 @@ describe('DataCatalog', () => {
 
       const rowElement = screen.getByRole('button', { name: /SORT: / })
 
-      expect(within(rowElement).getByText('usage')).toBeInTheDocument()
+      expect(within(rowElement).getByText('Usage')).toBeInTheDocument()
     })
   })
 
@@ -487,7 +490,7 @@ describe('DataCatalog', () => {
 
       const rowElement = screen.getByRole('button', { name: /SORT: / })
 
-      expect(within(rowElement).getByText('usage')).toBeInTheDocument()
+      expect(within(rowElement).getByText('Usage')).toBeInTheDocument()
 
       await waitFor(async () => {
         await user.click(screen.getByRole('button', { name: /SORT:/ }))
