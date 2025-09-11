@@ -42,6 +42,7 @@ const ickyValues = ['-Na-', 'Not Provided', 'Other (Ames)']
 const namesToParams: { [key: string]: string } = {
   Keywords: 'science_keywords_h',
   Platforms: 'platforms_h',
+  Organizations: 'data_center_h',
   'Horizontal Data Resolution': 'horizontal_data_resolution_range',
   'Data Format': 'granule_data_format_h',
   'Processing Levels': 'processing_level_id',
@@ -200,8 +201,20 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         )
       }
       {
+        getFacets('Organizations').length > 0 && (
+          <SearchFilterSection title="Center" eventKey="8" setSidebarOpened={setSidebarOpened}>
+            <FacetChecklist
+              name="Center"
+              facets={getFacets('Organizations')}
+              param={namesToParams.Organizations}
+              onChange={onChange}
+            />
+          </SearchFilterSection>
+        )
+      }
+      {
         getFacets('Latency').length > 0 && (
-          <SearchFilterSection title="Latency" eventKey="8" setSidebarOpened={setSidebarOpened}>
+          <SearchFilterSection title="Latency" eventKey="9" setSidebarOpened={setSidebarOpened}>
             <FacetChecklist
               name="Latency"
               facets={getFacets('Latency')}

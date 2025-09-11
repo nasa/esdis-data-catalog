@@ -8,6 +8,7 @@ interface Params {
   bounding_box?: string
   processing_level_id_h?: string[]
   latency?: string[]
+  data_center_h?: string[]
   science_keywords_h?: string[]
   temporal?: string[] | string
   keyword?: string

@@ -30,6 +30,7 @@ interface AppliedFiltersProps {
   facets: Facet;
   filterValues: {
     bounding_box?: string
+    data_center_h?: string[]
     keyword?: string
     page_num?: number
     page_size?: number
@@ -138,6 +139,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
     formik.setValues(omit(filterValues, [
       'temporal',
       'bounding_box',
+      'data_center_h',
       'science_keywords_h',
       'platforms_h',
       'horizontal_data_resolution_range',
