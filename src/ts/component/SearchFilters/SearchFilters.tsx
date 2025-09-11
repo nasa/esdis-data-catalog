@@ -204,7 +204,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         getFacets('Organizations').length > 0 && (
           <SearchFilterSection title="Center" eventKey="8" setSidebarOpened={setSidebarOpened}>
             <FacetChecklist
-              name="Center"
+              name="centers"
               facets={getFacets('Organizations')}
               param={namesToParams.Organizations}
               onChange={onChange}
