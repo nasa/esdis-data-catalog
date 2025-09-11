@@ -69,6 +69,7 @@ interface AppliedFacets {
   processingLevels?: number[];
   Latency?: number[];
   horizontalResolution?: number[];
+  organizations?: number[];
 }
 
 interface MockResponse {
@@ -96,7 +97,8 @@ export const makeMockResponse = (url: string, collectionCount: number, prefix = 
         mockFacetGroup(prefix, url, 'Data Format', 'granule_data_format_h[]', appliedFacets.dataFormat),
         mockFacetGroup(prefix, url, 'Processing Levels', 'processing_level_id_h[]', appliedFacets.processingLevels),
         mockFacetGroup(prefix, url, 'Latency', 'science_keywords_h[]', appliedFacets.Latency),
-        mockFacetGroup(prefix, url, 'Horizontal Data Resolution', 'horizontal_data_resolution_range[]', appliedFacets.horizontalResolution)
+        mockFacetGroup(prefix, url, 'Horizontal Data Resolution', 'horizontal_data_resolution_range[]', appliedFacets.horizontalResolution),
+        mockFacetGroup(prefix, url, 'Organizations', 'data_center_h[]', appliedFacets.organizations)
       ])
     }
   }

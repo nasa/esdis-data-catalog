@@ -10,6 +10,7 @@ import { Params, QueryResult } from '../../types/global'
 
 const validParameters = [
   'bounding_box',
+  'data_center_h',
   'granule_data_format_h',
   'horizontal_data_resolution_range',
   'keyword',
