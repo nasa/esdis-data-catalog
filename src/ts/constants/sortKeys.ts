@@ -1,7 +1,7 @@
 /**
  * The default sort key used for sorting collections.
  */
-export const defaultSortKey = 'relevance'
+export const defaultSortKey = '-score'
 
 /**
  * An array of objects representing the available sort keys for collections.
@@ -9,7 +9,7 @@ export const defaultSortKey = 'relevance'
  */
 export const collectionSortKeys = [
   {
-    key: 'relevance',
+    key: '-score',
     value: 'Relevance'
   },
   {

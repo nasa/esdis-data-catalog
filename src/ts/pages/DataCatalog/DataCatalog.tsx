@@ -238,7 +238,7 @@ const DataCatalog: React.FC = () => {
   const setQuerySort = (sortKey: string) => {
     let updatedSearchParam = null
 
-    if (!getValidSortkey(sortKey) || sortKey === defaultSortKey) {
+    if (!getValidSortkey(sortKey)) {
       delete collectionSearchParams.sort_key
       updatedSearchParam = collectionSearchParams
     } else {
