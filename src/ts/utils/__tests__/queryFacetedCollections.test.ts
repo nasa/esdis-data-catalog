@@ -84,7 +84,11 @@ describe('queryFacetedCollections', () => {
       )
 
       // Test with a custom sort_key provided
-      await queryFacetedCollections({ keyword: 'test', sort_key: 'start_date' })
+      await queryFacetedCollections({
+        keyword: 'test',
+        sort_key: 'start_date'
+      })
+
       expect(mockedStringifyCollectionsQuery).toHaveBeenCalledWith(
         expect.objectContaining({
           sort_key: ['start_date', '-create-data-date']
