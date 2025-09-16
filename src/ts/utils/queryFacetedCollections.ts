@@ -97,10 +97,6 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
     ...facetDefaultParams,
     ...cmrParams
   }, false)
-  // Join the sort keys if they're an array
-  if (Array.isArray(cmrParams.sort_key)) {
-    cmrParams.sort_key = cmrParams.sort_key.join(',')
-  }
 
   const collectionsQuery = stringifyCollectionsQuery(
     customMergeParams(collectionDefaultParams, cmrParams),
