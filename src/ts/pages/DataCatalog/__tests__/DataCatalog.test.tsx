@@ -61,12 +61,12 @@ function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefi
     appliedFacets
   )
 
-  nock(/cmr\.sit\.earthdata\.nasa\.gov/)
+  nock(/cmr/)
     .get('/search/collections.umm_json')
     .query(true) // This will match any query string
     .reply(200, searchResponse, { 'Cmr-Hits': hits.toString() })
 
-  nock(/cmr\.sit\.earthdata\.nasa\.gov/)
+  nock(/cmr/)
     .get('/search/collections.json')
     .query(true) // This will match any query string
     .reply(200, facetsResponse, { 'Cmr-Hits': hits.toString() })
