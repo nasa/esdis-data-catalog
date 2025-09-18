@@ -1,5 +1,6 @@
 /**
- * The default sort key used for sorting collections.
+ * The default sort key used for sorting collections is '-score'
+ * ('Relevance' is the display label for that).
  */
 export const defaultSortKey = '-score'
 
