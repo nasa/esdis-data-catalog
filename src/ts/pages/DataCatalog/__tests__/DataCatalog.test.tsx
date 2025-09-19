@@ -101,7 +101,6 @@ function joinUrl(url: string, params: string) {
   return `${baseUrl}?${updatedQueryString}`
 }
 
-
 function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefix = '', appliedFacets = {}) {
   const { searchResponse, facetsResponse } = makeMockResponse(
     joinUrl(defaultFacetsUrl, params),
