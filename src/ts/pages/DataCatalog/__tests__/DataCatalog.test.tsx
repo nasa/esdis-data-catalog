@@ -526,6 +526,8 @@ describe('DataCatalog', () => {
     })
   })
 
+  // TODO appears to be a url encoding issue on the test
+  // This works successfully in the application. Bumping nock also did not work.
   describe('when loading a URL containing a sort_key', () => {
     test.skip('loads the page, using and displaying the appropriate sort key', async () => {
       const params = 'sort_key[]=-usage_score'
