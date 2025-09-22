@@ -299,7 +299,7 @@ describe('SearchResultList', () => {
         })
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
-        expect(props.setQuerySort).toHaveBeenCalledWith('relevance')
+        expect(props.setQuerySort).toHaveBeenCalledWith('-score')
       })
 
       test('calls setQuerySort with -ongoing', async () => {

@@ -27,6 +27,57 @@ const validParameters = [
 type CustomError = Error & { response?: QueryResult };
 
 /**
+ * Merges default parameters with provided parameters, handling 'sort_key' specially.
+ *
+ * This function creates a new object based on the defaults and overrides them with
+ * values from the params object. For the 'sort_key' parameter, if it exists in both
+ * objects and the default value is an array, it replaces only the first element of
+ * the array, preserving any additional default sort keys.
+ *
+ * @param {object} defaults - The default parameters object.
+ * @param {object} params - The provided parameters object to merge with defaults.
+ * @returns {object} A new object with merged parameters.
+ *
+ * @example
+ * const defaults = {
+ *   page_size: 20,
+ *   sort_key: ['-score', '-create-data-date'],
+ *   consortium: 'EOSDIS'
+ * };
+ *
+ * const params = {
+ *   page_size: 50,
+ *   sort_key: 'start_date'
+ * };
+ *
+ * const result = customMergeParams(defaults, params);
+ * console.log(result);
+ * // Output:
+ * // {
+ * //   page_size: 50,
+ * //   sort_key: ['start_date', '-create-data-date'],
+ * //   consortium: 'EOSDIS'
+ * // }
+ */
+const customMergeParams = (defaults: any, params: any) => {
+  const result = { ...defaults }
+
+  Object.keys(params).forEach((key) => {
+    if (key === 'sort_key' && Array.isArray(result[key])) {
+      // If sort_key exists in params, replace the first element of the default array
+      if (params[key]) {
+        result[key] = [params[key], ...result[key].slice(1)]
+      }
+    } else {
+      // For all other keys, simply override the default value
+      result[key] = params[key]
+    }
+  })
+
+  return result
+}
+
+/**
  * Queries collections with facets in UMM-C format
  * @param {object} queryParams The query params in CMR's format
  * @returns {Promise<Response>} The response from the CMR
@@ -47,10 +98,11 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
     ...facetDefaultParams,
     ...cmrParams
   }, false)
-  const collectionsQuery = stringifyCollectionsQuery({
-    ...collectionDefaultParams,
-    ...cmrParams
-  }, false)
+
+  const collectionsQuery = stringifyCollectionsQuery(
+    customMergeParams(collectionDefaultParams, cmrParams),
+    false
+  )
   const facetsUrl = `${cmrHost}/search/collections.json?${facetsQuery}`
   const collectionsUrl = `${cmrHost}/search/collections.umm_json?${collectionsQuery}`
 

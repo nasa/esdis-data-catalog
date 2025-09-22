@@ -108,7 +108,7 @@ export const baseFacetsUrl = `${host}/search/collections.json`
 export const baseSearchUrl = `${host}/search/collections.umm_json`
 
 export const defaultFacetsParams = 'include_facets=v2&page_size=0&consortium=EOSDIS'
-export const defaultSearchParams = 'page_num=1&page_size=20&consortium=EOSDIS'
+export const defaultSearchParams = 'page_num=1&page_size=20&consortium=EOSDIS&sort_key[]=-score&sort_key[]=-create-data-date'
 
 export const defaultFacetsUrl = `${baseFacetsUrl}?${defaultFacetsParams}`
 export const defaultSearchUrl = `${baseSearchUrl}?${defaultSearchParams}`
