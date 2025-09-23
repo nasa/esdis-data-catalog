@@ -1,6 +1,10 @@
 import '../../css/horizon/index.scss'
 
-import React, { useEffect, useState } from 'react'
+import React, {
+  useEffect,
+  useState,
+  useCallback
+} from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import {
   debounce,
@@ -43,18 +47,15 @@ import {
 } from '../../../types/global'
 
 // Amount of time to delay submission and wait for more input
-const SUBMIT_DELAY_MS = 300
+const SUBMIT_DELAY_MS = 600
 
 interface AutoSaveFormikProps {
   isLoading: boolean;
+  debouncedSubmit: () => void;
 }
 
-const AutoSaveFormik: React.FC<AutoSaveFormikProps> = ({ isLoading }) => {
+const AutoSaveFormik: React.FC<AutoSaveFormikProps> = ({ isLoading, debouncedSubmit }) => {
   const formik = useFormikContext()
-  const debouncedSubmit = React.useCallback(() => {
-    const submit = debounce(() => formik.submitForm(), SUBMIT_DELAY_MS)
-    submit()
-  }, [formik])
 
   React.useEffect(() => {
     if (!isLoading && formik.dirty) debouncedSubmit()
@@ -267,111 +268,139 @@ const DataCatalog: React.FC = () => {
             values,
             handleChange,
             handleBlur,
-            handleSubmit: formHandleSubmit
-          }) => (
-            <>
-              <header className="hzn-main-header">
-                <Container className="pt-4">
-                  <h1>Data Catalog</h1>
-                  <Form onSubmit={formHandleSubmit}>
-                    <div className="hzn-search hzn-global-header">
-                      <Form.Control
-                        type="text"
-                        name="keyword"
-                        placeholder="Search using keywords, platform, dataset name, and more&hellip;"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.keyword as string || ''}
-                        data-testid="collection-search__keyword"
-                        role="searchbox"
-                      />
-                      <Button
-                        onClick={
-                          (e: React.MouseEvent<HTMLButtonElement>) => {
-                            e.preventDefault()
-                            formHandleSubmit()
-                          }
-                        }
-                        className="hzn-search__button"
-                        aria-label="Submit"
-                      />
-                    </div>
-                  </Form>
-                  <AppliedFilters
-                    facets={facets as Facet}
-                    filterValues={values}
-                    isLoading={loading}
-                    setQueryString={setQueryString}
-                  />
-                </Container>
-              </header>
-              <div className="hzn-body">
-                <Container>
-                  <Row className="justify-content-between">
-                    <Col
-                      id="search-filters"
-                      aria-hidden={!isSidebarOpened}
-                      className={`offcanvas-lg offcanvas-start hzn-sidebar hzn-offcanvas hzn-column${isSidebarOpened ? ' show' : ''}`}
-                      data-testid="search-filters"
-                    >
-                      {/* Header on narrow screens */}
-                      <header className="offcanvas-header hzn-offcanvas__header">
-                        <h1>Filters</h1>
-                        <button type="button" className="btn-close" onClick={() => setSidebarOpened(false)} aria-label="Close" />
-                      </header>
-                      {/* Header on wider screens */}
-                      <header className="offcanvas-lg">
-                        <h1>Filters</h1>
-                      </header>
-                      <SearchFilters
-                        facets={facets}
-                        filterValues={values}
-                        handleChange={handleChange}
-                        handleBlur={handleBlur}
-                        setQueryString={setQueryString}
-                        setSidebarOpened={setSidebarOpened}
-                      />
-                    </Col>
-                    <Col className="hzn-content hzn-column" aria-busy={called && loading} role="main">
-                      {
-                        (called && error && errorMessage) && (
-                          <ErrorBanner role="alert" message={errorMessage} />
-                        )
-                      }
+            handleSubmit: formHandleSubmit,
+            setFieldValue
+          }) => {
+            const debouncedSubmit = useCallback(
+              debounce((searchValues: Params) => {
+                const searchParams = pickBy(searchValues, identity)
+                delete searchParams.page_num
+                updateSearchParams(searchParams)
+              }, SUBMIT_DELAY_MS),
+              [updateSearchParams]
+            )
 
-                      {
-                        (called && loading) && (
-                          <LoadingBanner />
-                        )
-                      }
+            useEffect(() => () => {
+              debouncedSubmit.cancel()
+            }, [debouncedSubmit])
 
-                      {
-                        !loading && (
-                          <SearchResultsList
-                            collections={
-                              collections || {
-                                count: 0,
-                                items: []
-                              }
+            const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+              const { name, value } = e.target
+              setFieldValue(name, value)
+              debouncedSubmit({
+                ...values,
+                [name]: value
+              })
+            }
+
+            return (
+              <>
+                <header className="hzn-main-header">
+                  <Container className="pt-4">
+                    <h1>Data Catalog</h1>
+                    <Form onSubmit={formHandleSubmit}>
+                      <div className="hzn-search hzn-global-header">
+                        <Form.Control
+                          type="text"
+                          name="keyword"
+                          placeholder="Search using keywords, platform, dataset name, and more&hellip;"
+                          onChange={handleKeywordChange}
+                          onBlur={handleBlur}
+                          value={values.keyword as string || ''}
+                          data-testid="collection-search__keyword"
+                          role="searchbox"
+                        />
+                        <Button
+                          onClick={
+                            (e: React.MouseEvent<HTMLButtonElement>) => {
+                              e.preventDefault()
+                              formHandleSubmit()
                             }
-                            currentPage={toNumber(currentPage)}
-                            currentPageSize={toNumber(currentPageSize)}
-                            setQueryPage={setQueryPage}
-                            setQueryPageSize={setQueryPageSize}
-                            filterCount={filterCount}
-                            setSidebarOpened={setSidebarOpened}
-                            currentSortKey={currentSortKey as string}
-                            setQuerySort={setQuerySort}
-                          />
-                        )
-                      }
-                    </Col>
-                  </Row>
-                </Container>
-              </div>
-              <AutoSaveFormik isLoading={loading} />
-            </>
-          )
+                          }
+                          className="hzn-search__button"
+                          aria-label="Submit"
+                        />
+                      </div>
+                    </Form>
+                    <AppliedFilters
+                      facets={facets as Facet}
+                      filterValues={values}
+                      isLoading={loading}
+                      setQueryString={setQueryString}
+                    />
+                  </Container>
+                </header>
+                <div className="hzn-body">
+                  <Container>
+                    <Row className="justify-content-between">
+                      <Col
+                        id="search-filters"
+                        aria-hidden={!isSidebarOpened}
+                        className={`offcanvas-lg offcanvas-start hzn-sidebar hzn-offcanvas hzn-column${isSidebarOpened ? ' show' : ''}`}
+                        data-testid="search-filters"
+                      >
+                        {/* Header on narrow screens */}
+                        <header className="offcanvas-header hzn-offcanvas__header">
+                          <h1>Filters</h1>
+                          <button type="button" className="btn-close" onClick={() => setSidebarOpened(false)} aria-label="Close" />
+                        </header>
+                        {/* Header on wider screens */}
+                        <header className="offcanvas-lg">
+                          <h1>Filters</h1>
+                        </header>
+                        <SearchFilters
+                          facets={facets}
+                          filterValues={values}
+                          handleChange={handleChange}
+                          handleBlur={handleBlur}
+                          setQueryString={setQueryString}
+                          setSidebarOpened={setSidebarOpened}
+                        />
+                      </Col>
+                      <Col className="hzn-content hzn-column" aria-busy={called && loading} role="main">
+                        {
+                          (called && error && errorMessage) && (
+                            <ErrorBanner role="alert" message={errorMessage} />
+                          )
+                        }
+
+                        {
+                          (called && loading) && (
+                            <LoadingBanner />
+                          )
+                        }
+
+                        {
+                          !loading && (
+                            <SearchResultsList
+                              collections={
+                                collections || {
+                                  count: 0,
+                                  items: []
+                                }
+                              }
+                              currentPage={toNumber(currentPage)}
+                              currentPageSize={toNumber(currentPageSize)}
+                              setQueryPage={setQueryPage}
+                              setQueryPageSize={setQueryPageSize}
+                              filterCount={filterCount}
+                              setSidebarOpened={setSidebarOpened}
+                              currentSortKey={currentSortKey as string}
+                              setQuerySort={setQuerySort}
+                            />
+                          )
+                        }
+                      </Col>
+                    </Row>
+                  </Container>
+                </div>
+                <AutoSaveFormik
+                  isLoading={loading}
+                  debouncedSubmit={() => debouncedSubmit(values)}
+                />
+              </>
+            )
+          }
         }
       </Formik>
     </div>
