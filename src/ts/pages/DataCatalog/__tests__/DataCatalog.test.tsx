@@ -690,4 +690,26 @@ describe('DataCatalog', () => {
       expect((screen.getByLabelText('Found Keyw1 (20)') as HTMLInputElement).checked).toBe(true)
     })
   })
+
+  describe('keyword search debouncing', () => {
+    test('debounces keyword search input', async () => {
+      const { user } = setup({})
+
+      await screen.findByText('collection 20')
+
+      const searchbox = screen.getByRole('searchbox')
+
+      // Type 'test' quickly
+      await user.type(searchbox, 'test')
+
+      // Setup mock for the debounced search
+      setupMockResponse('keyword=test', 1, 1, 'Debounced ')
+
+      // The search should not have happened immediately
+      expect(screen.queryByText('Debounced collection 1')).toBeNull()
+
+      // Wait for the debounce delay
+      await screen.findByText('Debounced collection 1', {}, { timeout: 1000 })
+    })
+  })
 })
