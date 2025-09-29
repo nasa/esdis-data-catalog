@@ -104,6 +104,7 @@ describe('queryFacetedCollections', () => {
       expect(collectionDefaultParams.sort_key).toEqual(['-score', '-create-data-date'])
     })
   })
+
   describe('keyword handling', () => {
     test('should call getKeywordWithWildcard when keyword is provided', async () => {
       nock(cmrHost)
@@ -172,4 +173,3 @@ describe('queryFacetedCollections', () => {
     })
   })
 })
-
