@@ -63,7 +63,12 @@ function joinUrl(url: string, params: string) {
     params.split('&').forEach((pair) => {
       const [key, value] = pair.split('=')
       const decodedKey = decodeURIComponent(key)
-      const decodedValue = decodeURIComponent(value || '')
+      let decodedValue = decodeURIComponent(value || '')
+
+      // Check if the parameter is 'keyword' and modify its value
+      if (decodedKey === 'keyword') {
+        decodedValue = `${decodedValue}*`
+      }
 
       // Only add sort_key[] if the URL contains 'sort_key[]=-score&sort_key[]=-create-data-date'
       if (decodedKey === 'sort_key[]' && !hasSortKeyScoreAndDate) {
