@@ -22,6 +22,10 @@ vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
 }))
 
+vi.mock('../../utils/getKeywordWithWildcard', () => ({
+  getKeywordWithWildcard: vi.fn((keyword) => `${keyword}*`)
+}))
+
 window.scrollTo = vi.fn()
 
 const mockedUseMediaQuery = useMediaQuery as ReturnType<typeof vi.fn>
@@ -55,9 +59,6 @@ function joinUrl(url: string, params: string) {
     })
   }
 
-  // Check if the URL contains 'sort_key[]=-score&sort_key[]=-create-data-date'
-  const hasSortKeyScoreAndDate = url.includes('sort_key[]=-score') && url.includes('sort_key[]=-create-data-date')
-
   // Parse new params
   if (params) {
     params.split('&').forEach((pair) => {
@@ -65,14 +66,8 @@ function joinUrl(url: string, params: string) {
       const decodedKey = decodeURIComponent(key)
       let decodedValue = decodeURIComponent(value || '')
 
-      // Check if the parameter is 'keyword' and modify its value
-      if (decodedKey === 'keyword') {
-        decodedValue = `${decodedValue}*`
-      }
-
-      // Only add sort_key[] if the URL contains 'sort_key[]=-score&sort_key[]=-create-data-date'
-      if (decodedKey === 'sort_key[]' && !hasSortKeyScoreAndDate) {
-        return
+      if (decodedKey === 'keyword' && decodedValue) {
+        decodedValue += '*'
       }
 
       if (decodedKey.endsWith('[]')) {
@@ -91,8 +86,20 @@ function joinUrl(url: string, params: string) {
     })
   }
 
+  // Remove empty keyword
+  if (urlParams.keyword === '') {
+    delete urlParams.keyword
+  }
+
   // Build the updated query string
-  const updatedQueryString = Object.entries(urlParams)
+  const filteredQueryString = Object.entries(urlParams)
+    .filter(([, value]) => {
+      if (Array.isArray(value)) {
+        return value.length > 0
+      }
+
+      return value !== '' && value != null
+    })
     .map(([key, value]) => {
       if (Array.isArray(value)) {
         return value.map((v) => `${encodeURIComponent(key)}[]=${encodeURIComponent(v)}`).join('&')
@@ -103,7 +110,7 @@ function joinUrl(url: string, params: string) {
     .join('&')
 
   // Return the updated URL
-  return `${baseUrl}?${updatedQueryString}`
+  return filteredQueryString ? `${baseUrl}?${filteredQueryString}` : baseUrl
 }
 
 function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefix = '', appliedFacets = {}) {

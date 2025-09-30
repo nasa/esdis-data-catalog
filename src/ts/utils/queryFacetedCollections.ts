@@ -7,7 +7,6 @@ import { stringifyCollectionsQuery } from './stringifyCollectionsQuery'
 import collectionDefaultParams from '../constants/collectionDefaultParams'
 import facetDefaultParams from '../constants/facetDefaultParams'
 import { Params, QueryResult } from '../../types/global'
-import { getKeywordWithWildcard } from './getKeywordWithWildcard'
 
 const validParameters = [
   'bounding_box',
@@ -95,24 +94,13 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
   const cmrParams = pick(params, validParameters)
 
   const cmrHost = getConfig('cmrHost')
-
-  // Process keyword parameter with wildcards
-  const { keyword = '' } = cmrParams
-  const keywordWithWildcard = getKeywordWithWildcard(keyword)
-
-  // Create a new object with the updated keyword
-  const updatedCmrParams = {
-    ...cmrParams,
-    ...(keywordWithWildcard ? { keyword: keywordWithWildcard } : {})
-  }
-
   const facetsQuery = stringifyCollectionsQuery({
     ...facetDefaultParams,
-    ...updatedCmrParams
+    ...cmrParams
   }, false)
 
   const collectionsQuery = stringifyCollectionsQuery(
-    customMergeParams(collectionDefaultParams, updatedCmrParams),
+    customMergeParams(collectionDefaultParams, cmrParams),
     false
   )
   const facetsUrl = `${cmrHost}/search/collections.json?${facetsQuery}`

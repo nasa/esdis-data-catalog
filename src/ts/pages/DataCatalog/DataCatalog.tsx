@@ -45,6 +45,7 @@ import {
   Params,
   QueryResult
 } from '../../../types/global'
+import { getKeywordWithWildcard } from '../../utils/getKeywordWithWildcard'
 
 // Amount of time to delay submission and wait for more input
 const SUBMIT_DELAY_MS = 600
@@ -138,8 +139,15 @@ const DataCatalog: React.FC = () => {
         setCalled(true)
         setLoading(true)
 
+        // Create a new object with the transformed keyword
+        const keywordWithWildcard = getKeywordWithWildcard(collectionSearchParams.keyword as string)
+        const transformedParams = {
+          ...collectionSearchParams,
+          ...(keywordWithWildcard ? { keyword: keywordWithWildcard } : {})
+        }
         const response: QueryResult = await
-        queryFacetedCollections(collectionSearchParams as Params)
+        queryFacetedCollections(transformedParams as Params)
+
         const { facetData, data: responseData } = response
 
         const items = responseData?.items

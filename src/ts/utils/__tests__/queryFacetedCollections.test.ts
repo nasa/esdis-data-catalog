@@ -3,15 +3,12 @@ import { getConfig } from '../getConfig'
 import { stringifyCollectionsQuery } from '../stringifyCollectionsQuery'
 import { queryFacetedCollections } from '../queryFacetedCollections'
 import collectionDefaultParams from '../../constants/collectionDefaultParams'
-import { getKeywordWithWildcard } from '../getKeywordWithWildcard'
 
 vi.mock('../getConfig')
 vi.mock('../stringifyCollectionsQuery')
-vi.mock('../getKeywordWithWildcard')
 
 const mockedGetConfig = getConfig as ReturnType<typeof vi.fn>
 const mockedStringifyCollectionsQuery = stringifyCollectionsQuery as ReturnType<typeof vi.fn>
-const mockedGetKeywordWithWildcard = getKeywordWithWildcard as ReturnType<typeof vi.fn>
 
 describe('queryFacetedCollections', () => {
   const cmrHost = 'https://cmr.example.com'
@@ -19,7 +16,6 @@ describe('queryFacetedCollections', () => {
   beforeEach(() => {
     mockedGetConfig.mockReturnValue(cmrHost)
     mockedStringifyCollectionsQuery.mockReturnValue('mocked_query_string')
-    mockedGetKeywordWithWildcard.mockImplementation((keyword) => `${keyword}*`)
   })
 
   afterEach(() => {
@@ -102,52 +98,6 @@ describe('queryFacetedCollections', () => {
 
       // Verify that the default sort_key is preserved
       expect(collectionDefaultParams.sort_key).toEqual(['-score', '-create-data-date'])
-    })
-  })
-
-  describe('keyword handling', () => {
-    test('should call getKeywordWithWildcard when keyword is provided', async () => {
-      nock(cmrHost)
-        .get(/\/search\/collections\.json.*/)
-        .reply(200, { facets: 'mock facets data' })
-        .persist()
-
-      nock(cmrHost)
-        .get(/\/search\/collections\.umm_json.*/)
-        .reply(200, { items: 'mock collections data' })
-        .persist()
-
-      await queryFacetedCollections({ keyword: 'test' })
-
-      expect(mockedGetKeywordWithWildcard).toHaveBeenCalledWith('test')
-      expect(mockedStringifyCollectionsQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
-          keyword: 'test*'
-        }),
-        false
-      )
-    })
-
-    test('should use an empty string when keyword is not provided', async () => {
-      nock(cmrHost)
-        .get(/\/search\/collections\.json.*/)
-        .reply(200, { facets: 'mock facets data' })
-        .persist()
-
-      nock(cmrHost)
-        .get(/\/search\/collections\.umm_json.*/)
-        .reply(200, { items: 'mock collections data' })
-        .persist()
-
-      await queryFacetedCollections({})
-
-      expect(mockedGetKeywordWithWildcard).toHaveBeenCalledWith('')
-      expect(mockedStringifyCollectionsQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
-          keyword: '*'
-        }),
-        false
-      )
     })
   })
 })
