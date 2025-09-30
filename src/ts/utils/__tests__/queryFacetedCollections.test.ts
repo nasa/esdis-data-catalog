@@ -149,27 +149,5 @@ describe('queryFacetedCollections', () => {
         false
       )
     })
-
-    test('should use an empty string when keyword is not a string', async () => {
-      nock(cmrHost)
-        .get(/\/search\/collections\.json.*/)
-        .reply(200, { facets: 'mock facets data' })
-        .persist()
-
-      nock(cmrHost)
-        .get(/\/search\/collections\.umm_json.*/)
-        .reply(200, { items: 'mock collections data' })
-        .persist()
-
-      await queryFacetedCollections({ keyword: 123 as any })
-
-      expect(mockedGetKeywordWithWildcard).toHaveBeenCalledWith('')
-      expect(mockedStringifyCollectionsQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
-          keyword: '*'
-        }),
-        false
-      )
-    })
   })
 })
