@@ -22,10 +22,6 @@ vi.mock('react-responsive', () => ({
   useMediaQuery: vi.fn(() => true)
 }))
 
-vi.mock('../../utils/getKeywordWithWildcard', () => ({
-  getKeywordWithWildcard: vi.fn((keyword) => `${keyword}*`)
-}))
-
 window.scrollTo = vi.fn()
 
 const mockedUseMediaQuery = useMediaQuery as ReturnType<typeof vi.fn>
