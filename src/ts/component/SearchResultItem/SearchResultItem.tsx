@@ -101,7 +101,7 @@ function ummTemporalToHuman(umm: object): string | null {
 
   if (!start && !end) return null
   if (start === end) return start
-  if (!end) return `${start} ongoing`
+  if (!end) return `${start} to Present`
 
   return `${start} to ${end}`
 }

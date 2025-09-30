@@ -49,7 +49,7 @@ const temporalToTitle = (temporal: string[] | string) => {
   const [start, end] = temporal
   if (!start && !end) return null
   if (start === end) return start
-  if (!end) return `${start} ongoing`
+  if (!end) return `${start} to Present`
   if (!start) return `Up to ${end}`
 
   return `${start} to ${end}`

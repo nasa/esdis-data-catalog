@@ -137,12 +137,12 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByText('2021-01-03')).toBeInTheDocument()
   })
 
-  test('renders forward-processing collection temporal as "ongoing"', () => {
+  test('renders forward-processing collection temporal as "to Present"', () => {
     const metadata = mockUmm()
     delete metadata.umm.TemporalExtents[0].RangeDateTimes[0].EndingDateTime
     renderMetadata(metadata)
 
-    expect(screen.getByText('2021-01-01 ongoing')).toBeInTheDocument()
+    expect(screen.getByText('2021-01-01 to Present')).toBeInTheDocument()
   })
 
   test('renders temporal with start == end as a single date', () => {

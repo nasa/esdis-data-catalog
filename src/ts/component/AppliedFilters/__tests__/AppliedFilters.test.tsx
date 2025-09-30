@@ -178,7 +178,7 @@ describe('AppliedFilters', () => {
         }
       })
 
-      expect(screen.getByText('2020-01-01 ongoing')).toBeInTheDocument()
+      expect(screen.getByText('2020-01-01 to Present')).toBeInTheDocument()
     })
   })
 
