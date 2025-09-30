@@ -17,12 +17,15 @@ describe('getKeywordWithWildcard', () => {
     expect(getKeywordWithWildcard('red  apple  pie')).toBe('red* apple* pie*')
   })
 
-  test('should return undefined for empty string', () => {
-    expect(getKeywordWithWildcard('')).toBeUndefined()
+  test('should return an empty string for empty string input', () => {
+    expect(getKeywordWithWildcard('')).toBe('')
   })
 
-  test('should return undefined for undefined input', () => {
-    // @ts-ignore
-    expect(getKeywordWithWildcard(undefined)).toBeUndefined()
+  test('should return an empty string for undefined input', () => {
+    expect(getKeywordWithWildcard(undefined)).toBe('')
+  })
+
+  test('should return an empty string for null input', () => {
+    expect(getKeywordWithWildcard(null)).toBe('')
   })
 })
