@@ -96,14 +96,14 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
 
   const cmrHost = getConfig('cmrHost')
 
-  // Check if keyword exists and is a string, otherwise use an empty string
-  const keywordParam = typeof cmrParams.keyword === 'string' ? cmrParams.keyword : ''
-  const keywordWithWildcard = getKeywordWithWildcard(keywordParam)
+  // Process keyword parameter with wildcards
+  const { keyword = '' } = cmrParams
+  const keywordWithWildcard = getKeywordWithWildcard(keyword)
 
   // Create a new object with the updated keyword
   const updatedCmrParams = {
     ...cmrParams,
-    keyword: keywordWithWildcard
+    ...(keywordWithWildcard ? { keyword: keywordWithWildcard } : {})
   }
 
   const facetsQuery = stringifyCollectionsQuery({
