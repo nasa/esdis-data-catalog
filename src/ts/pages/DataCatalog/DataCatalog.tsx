@@ -128,6 +128,7 @@ const DataCatalog: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [called, setCalled] = useState<boolean>(false)
+  const [displayedKeyword, setDisplayedKeyword] = useState(parsedQueryString.keyword || '')
 
   // Whether or not the sidebar is open on smaller screens (always open on larger)
   const [isSidebarOpened, setSidebarOpened] = useState(false)
@@ -140,10 +141,9 @@ const DataCatalog: React.FC = () => {
         setLoading(true)
 
         // Create a new object with the transformed keyword
-        const keywordWithWildcard = getKeywordWithWildcard(collectionSearchParams.keyword as string)
         const transformedParams = {
           ...collectionSearchParams,
-          ...(keywordWithWildcard ? { keyword: keywordWithWildcard } : {})
+          keyword: getKeywordWithWildcard(collectionSearchParams.keyword as string)
         }
         const response: QueryResult = await
         queryFacetedCollections(transformedParams as Params)
@@ -186,10 +186,14 @@ const DataCatalog: React.FC = () => {
    * @param {Object} newParams New search parameters to be saved in the state
    */
   const updateSearchParams = (searchParams: Params) => {
-    setCollectionSearchParams(searchParams)
+    const newParams = {
+      ...searchParams,
+      keyword: displayedKeyword // Use the displayed keyword here
+    }
+    setCollectionSearchParams(newParams)
 
     navigate({
-      search: `?${stringifyCollectionsQuery(searchParams, true)}`
+      search: `?${stringifyCollectionsQuery(newParams, true)}`
     })
   }
 
@@ -292,12 +296,16 @@ const DataCatalog: React.FC = () => {
               debouncedSubmit.cancel()
             }, [debouncedSubmit])
 
-            const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+            const handleKeywordChange = (
+              e: React.ChangeEvent<
+                HTMLInputElement | HTMLTextAreaElement
+              >
+            ) => {
               const { name, value } = e.target
               setFieldValue(name, value)
               debouncedSubmit({
                 ...values,
-                [name]: value
+                [name]: getKeywordWithWildcard(value)
               })
             }
 
@@ -312,9 +320,14 @@ const DataCatalog: React.FC = () => {
                           type="text"
                           name="keyword"
                           placeholder="Search using keywords, platform, dataset name, and more&hellip;"
-                          onChange={handleKeywordChange}
+                          onChange={
+                            (e) => {
+                              handleKeywordChange(e)
+                              setDisplayedKeyword(e.target.value)
+                            }
+                          }
                           onBlur={handleBlur}
-                          value={values.keyword as string || ''}
+                          value={displayedKeyword}
                           data-testid="collection-search__keyword"
                           role="searchbox"
                         />
