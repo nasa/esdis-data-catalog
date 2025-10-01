@@ -46,9 +46,7 @@ import {
   QueryResult
 } from '../../../types/global'
 import { getKeywordWithWildcard } from '../../utils/getKeywordWithWildcard'
-
-// Amount of time to delay submission and wait for more input
-const SUBMIT_DELAY_MS = 600
+import { SUBMIT_DELAY_MS } from '../../constants/submitDelay'
 
 interface AutoSaveFormikProps {
   isLoading: boolean;
