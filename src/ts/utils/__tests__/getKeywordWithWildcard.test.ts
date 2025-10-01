@@ -18,14 +18,14 @@ describe('getKeywordWithWildcard', () => {
   })
 
   test('should return an empty string for empty string input', () => {
-    expect(getKeywordWithWildcard('')).toBe('')
+    expect(getKeywordWithWildcard('')).toBeUndefined()
   })
 
   test('should return an empty string for undefined input', () => {
-    expect(getKeywordWithWildcard(undefined)).toBe('')
+    expect(getKeywordWithWildcard(undefined)).toBeUndefined()
   })
 
   test('should return an empty string for null input', () => {
-    expect(getKeywordWithWildcard(null)).toBe('')
+    expect(getKeywordWithWildcard(null)).toBeUndefined()
   })
 })

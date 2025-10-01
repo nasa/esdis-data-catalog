@@ -6,7 +6,7 @@
  * 2. If the keyword is not an exact phrase, wildcards (*) are added after each word.
  *
  * @param keyword - The input keyword string to process.
- * @returns The processed keyword string with wildcards, or an empty string if the input is falsy.
+ * @returns The processed keyword string with wildcards, or undefined if the input is falsy.
  *
  * @example
  * Exact phrase - returns the same string
@@ -21,13 +21,13 @@
  * getKeywordWithWildcard('red apple') // Returns: 'red* apple*'
  *
  * @example
- * Empty string, undefined, or null - returns an empty string
- * getKeywordWithWildcard('') // Returns: ''
- * getKeywordWithWildcard(undefined) // Returns: ''
- * getKeywordWithWildcard(null) // Returns: ''
+ * Empty string, undefined, or null - returns undefined
+ * getKeywordWithWildcard('') // Returns: undefined
+ * getKeywordWithWildcard(undefined) // Returns: undefined
+ * getKeywordWithWildcard(null) // Returns: undefined
  */
-export const getKeywordWithWildcard = (keyword?: string | null): string => {
-  if (!keyword) return ''
+export const getKeywordWithWildcard = (keyword?: string | null): string | undefined => {
+  if (!keyword) return undefined
 
   if (keyword.match(/^".*"$/)) {
     return keyword
