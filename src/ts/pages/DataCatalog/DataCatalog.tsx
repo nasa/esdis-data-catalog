@@ -151,7 +151,6 @@ const DataCatalog: React.FC = () => {
         }
 
         const response: QueryResult = await
-        // QueryFacetedCollections(transformedParams as Params)
         queryFacetedCollections(transformedParams as Params)
 
         const { facetData, data: responseData } = response
