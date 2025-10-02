@@ -55,19 +55,15 @@ function joinUrl(url: string, params: string) {
     })
   }
 
-  // Check if the URL contains 'sort_key[]=-score&sort_key[]=-create-data-date'
-  const hasSortKeyScoreAndDate = url.includes('sort_key[]=-score') && url.includes('sort_key[]=-create-data-date')
-
   // Parse new params
   if (params) {
     params.split('&').forEach((pair) => {
       const [key, value] = pair.split('=')
       const decodedKey = decodeURIComponent(key)
-      const decodedValue = decodeURIComponent(value || '')
+      let decodedValue = decodeURIComponent(value || '')
 
-      // Only add sort_key[] if the URL contains 'sort_key[]=-score&sort_key[]=-create-data-date'
-      if (decodedKey === 'sort_key[]' && !hasSortKeyScoreAndDate) {
-        return
+      if (decodedKey === 'keyword' && decodedValue) {
+        decodedValue += '*'
       }
 
       if (decodedKey.endsWith('[]')) {
@@ -86,8 +82,20 @@ function joinUrl(url: string, params: string) {
     })
   }
 
+  // Remove empty keyword
+  if (urlParams.keyword === '') {
+    delete urlParams.keyword
+  }
+
   // Build the updated query string
-  const updatedQueryString = Object.entries(urlParams)
+  const filteredQueryString = Object.entries(urlParams)
+    .filter(([, value]) => {
+      if (Array.isArray(value)) {
+        return value.length > 0
+      }
+
+      return value !== '' && value != null
+    })
     .map(([key, value]) => {
       if (Array.isArray(value)) {
         return value.map((v) => `${encodeURIComponent(key)}[]=${encodeURIComponent(v)}`).join('&')
@@ -98,7 +106,7 @@ function joinUrl(url: string, params: string) {
     .join('&')
 
   // Return the updated URL
-  return `${baseUrl}?${updatedQueryString}`
+  return filteredQueryString ? `${baseUrl}?${filteredQueryString}` : baseUrl
 }
 
 function setupMockResponse(params = '', collectionCount = 20, hits = 2000, prefix = '', appliedFacets = {}) {
@@ -688,6 +696,28 @@ describe('DataCatalog', () => {
       expect(await screen.findByText('Found collection 1')).toBeTruthy()
       expect((screen.getByLabelText('Found Keyw0 (10)') as HTMLInputElement).checked).toBe(false)
       expect((screen.getByLabelText('Found Keyw1 (20)') as HTMLInputElement).checked).toBe(true)
+    })
+  })
+
+  describe('keyword search debouncing', () => {
+    test('debounces keyword search input', async () => {
+      const { user } = setup({})
+
+      await screen.findByText('collection 20')
+
+      const searchbox = screen.getByRole('searchbox')
+
+      // Type 'test' quickly
+      await user.type(searchbox, 'test')
+
+      // Setup mock for the debounced search
+      setupMockResponse('keyword=test', 1, 1, 'Debounced ')
+
+      // The search should not have happened immediately
+      expect(screen.queryByText('Debounced collection 1')).toBeNull()
+
+      // Wait for the debounce delay
+      await screen.findByText('Debounced collection 1', {}, { timeout: 1000 })
     })
   })
 })
