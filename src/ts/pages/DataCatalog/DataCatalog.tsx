@@ -1,10 +1,6 @@
 import '../../css/horizon/index.scss'
 
-import React, {
-  useEffect,
-  useState,
-  useCallback
-} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import {
   debounce,
@@ -50,15 +46,25 @@ import { SUBMIT_DELAY_MS } from '../../constants/submitDelay'
 
 interface AutoSaveFormikProps {
   isLoading: boolean;
-  debouncedSubmit: () => void;
 }
 
-const AutoSaveFormik: React.FC<AutoSaveFormikProps> = ({ isLoading, debouncedSubmit }) => {
+const AutoSaveFormik: React.FC<AutoSaveFormikProps> = ({ isLoading }) => {
   const formik = useFormikContext()
 
+  const debouncedSubmit = React.useMemo(
+    () => debounce(formik.submitForm, SUBMIT_DELAY_MS),
+    [formik.submitForm]
+  )
+
   React.useEffect(() => {
-    if (!isLoading && formik.dirty) debouncedSubmit()
-  }, [isLoading, debouncedSubmit, formik.values])
+    if (!isLoading && formik.dirty) {
+      debouncedSubmit()
+    }
+
+    return () => {
+      debouncedSubmit.cancel()
+    }
+  }, [isLoading, formik.values, debouncedSubmit])
 
   return null
 }
@@ -143,7 +149,9 @@ const DataCatalog: React.FC = () => {
           ...collectionSearchParams,
           keyword: getKeywordWithWildcard(collectionSearchParams.keyword as string)
         }
+
         const response: QueryResult = await
+        // QueryFacetedCollections(transformedParams as Params)
         queryFacetedCollections(transformedParams as Params)
 
         const { facetData, data: responseData } = response
@@ -195,6 +203,10 @@ const DataCatalog: React.FC = () => {
     })
   }
 
+  /**
+   * Sets the query string
+   * @param {string} str Query string to be set
+   */
   const setQueryString = (str: string) => {
     updateSearchParams(parseCollectionsQuery(str.replace(/(page_num=)\d+/, '$11')))
   }
@@ -221,6 +233,10 @@ const DataCatalog: React.FC = () => {
     hasChildren: false
   }
 
+  /**
+   * Sets the query page
+   * @param {number} pageNumber Page number to be set
+   */
   const setQueryPage = (pageNumber: number) => {
     // Combines current search params and selected page number
     const updatedSearchParam = {
@@ -281,19 +297,6 @@ const DataCatalog: React.FC = () => {
             handleSubmit: formHandleSubmit,
             setFieldValue
           }) => {
-            const debouncedSubmit = useCallback(
-              debounce((searchValues: Params) => {
-                const searchParams = pickBy(searchValues, identity)
-                delete searchParams.page_num
-                updateSearchParams(searchParams)
-              }, SUBMIT_DELAY_MS),
-              [updateSearchParams]
-            )
-
-            useEffect(() => () => {
-              debouncedSubmit.cancel()
-            }, [debouncedSubmit])
-
             const handleKeywordChange = (
               e: React.ChangeEvent<
                 HTMLInputElement | HTMLTextAreaElement
@@ -301,10 +304,6 @@ const DataCatalog: React.FC = () => {
             ) => {
               const { name, value } = e.target
               setFieldValue(name, value)
-              debouncedSubmit({
-                ...values,
-                [name]: getKeywordWithWildcard(value)
-              })
             }
 
             return (
@@ -415,7 +414,6 @@ const DataCatalog: React.FC = () => {
                 </div>
                 <AutoSaveFormik
                   isLoading={loading}
-                  debouncedSubmit={() => debouncedSubmit(values)}
                 />
               </>
             )
