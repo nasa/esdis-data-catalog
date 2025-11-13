@@ -202,7 +202,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
 
   const dates = umm.DataDates
-  const createDate = dates?.find(d => d.Type === 'CREATE')
+  const createDate = dates?.find((d) => d.Type === 'CREATE')
   const published = createDate && toDateStr(createDate.Date)
 
   return {
