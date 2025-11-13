@@ -54,8 +54,14 @@ const mockUmm = (): any => cloneDeep({
       }
     ],
     DataDates: [
-      { Date: '2020-01-01T00:00:00.000Z', Type: 'CREATE' },
-      { Date: '2020-01-02T00:00:00.000Z', Type: 'UPDATE' }
+      {
+        Date: '2020-01-01T00:00:00.000Z',
+        Type: 'CREATE'
+      },
+      {
+        Date: '2020-01-02T00:00:00.000Z',
+        Type: 'UPDATE'
+      }
     ],
     DOI: {
       Authority: 'https://doi.org/',
