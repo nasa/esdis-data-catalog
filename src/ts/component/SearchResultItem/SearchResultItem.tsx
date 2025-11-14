@@ -48,7 +48,7 @@ interface Umm {
   };
   Projects?: Array<{ ShortName: string }>;
   RelatedUrls?: Array<{ Type: string, URL: string }>;
-  DataDates?: Array<{ Date: string, Type: string }>;
+  DataDates?: Array<{ Type: string, Date: string }>;
   EntryTitle: string;
   Abstract: string;
   DOI?: DoiLink;
