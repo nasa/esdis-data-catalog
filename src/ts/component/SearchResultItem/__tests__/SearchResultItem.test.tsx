@@ -54,8 +54,14 @@ const mockUmm = (): any => cloneDeep({
       }
     ],
     DataDates: [
-      { Date: '2020-01-01T00:00:00.000Z' },
-      { Date: '2020-01-02T00:00:00.000Z' }
+      {
+        Date: '2020-01-01T00:00:00.000Z',
+        Type: 'CREATE'
+      },
+      {
+        Date: '2020-01-02T00:00:00.000Z',
+        Type: 'UPDATE'
+      }
     ],
     DOI: {
       Authority: 'https://doi.org/',
@@ -115,7 +121,7 @@ describe('DataCatalog SearchResultItem component', () => {
     // metadata in other tests.
     expect(screen.getByText('Fake Collection')).toBeInTheDocument()
     expect(screen.getByText('Fake Abstract')).toBeInTheDocument()
-    expect(screen.getByText('2020-01-02')).toBeInTheDocument()
+    expect(screen.getByText('2020-01-01')).toBeInTheDocument()
     expect(screen.getByText('Latitudes -3 to 4, Longitudes -1 to 2')).toBeInTheDocument()
     expect(screen.getByText('2021-01-01 to 2021-01-02')).toBeInTheDocument()
     expect(screen.getByTitle('File Format')).toBeInTheDocument()

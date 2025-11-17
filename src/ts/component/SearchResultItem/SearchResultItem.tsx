@@ -48,7 +48,7 @@ interface Umm {
   };
   Projects?: Array<{ ShortName: string }>;
   RelatedUrls?: Array<{ Type: string, URL: string }>;
-  DataDates?: Array<{ Date: string }>;
+  DataDates?: Array<{ Type: string, Date: string }>;
   EntryTitle: string;
   Abstract: string;
   DOI?: DoiLink;
@@ -202,7 +202,8 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
 
   const dates = umm.DataDates
-  const published = dates && dates.length > 0 && toDateStr(dates[dates.length - 1].Date)
+  const createDate = dates?.find((d) => d.Type === 'CREATE')
+  const published = createDate && toDateStr(createDate.Date)
 
   return {
     conceptId: meta['concept-id'],
