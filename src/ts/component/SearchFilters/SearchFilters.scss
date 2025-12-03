@@ -270,10 +270,16 @@
 
   .hzn-search-result__doi-link {
     color: #77777A;
+    text-decoration: none;
+  }
+
+  .hzn-search-result__shortname-version-doi {
+    color: #77777A;
     font-size: 14px;
     font-style: italic;
     line-height: 16px;
     letter-spacing: 0.25px;
     text-decoration: none;
+    gap: 0.625rem;
   }
 }

@@ -50,6 +50,8 @@ interface Umm {
   RelatedUrls?: Array<{ Type: string, URL: string }>;
   DataDates?: Array<{ Type: string, Date: string }>;
   EntryTitle: string;
+  ShortName: string;
+  Version: String;
   Abstract: string;
   DOI?: DoiLink;
 }
@@ -62,6 +64,8 @@ export interface Metadata {
   umm: {
     Abstract: string;
     EntryTitle: string;
+    ShortName: string;
+    Version: string;
     DOI?: DoiLink;
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
@@ -208,6 +212,8 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   return {
     conceptId: meta['concept-id'],
     title: umm.EntryTitle,
+    shortname: umm.ShortName,
+    version: umm.Version,
     summary: umm.Abstract,
     temporal: ummTemporalToHuman(umm),
     spatial: ummSpatialToSummary(umm),
@@ -225,6 +231,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   const {
     conceptId,
     title,
+    shortname,
+    version,
     summary,
     temporal,
     spatial,
@@ -257,6 +265,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     ProviderId: providerId,
     ...encodedUmm
   })
+
+  const shortnameVersion = shortname && version ? `${shortname} v${version}` : null
 
   const titleLink = (): string => {
     // Render a clickable title link if:
@@ -339,13 +349,14 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
           </Row>
         </Col>
       </Row>
-      {
-        doi && (
-          <div className="hzn-search-result__doi mb-2 mt-1">
+      <div className="hzn-search-result__shortname-version-doi d-flex mb-2 mt-1">
+        {shortnameVersion && (shortnameVersion)}
+        {
+          doi && (
             <a className="hzn-search-result__doi-link" href={doi.link}>{doi.text}</a>
-          </div>
-        )
-      }
+          )
+        }
+      </div>
     </div>
   )
 }
