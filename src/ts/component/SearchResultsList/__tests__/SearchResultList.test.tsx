@@ -25,7 +25,9 @@ const setup = (overrideProps = {}) => {
           },
           umm: {
             EntryTitle: 'Fake Collection 0',
-            Abstract: 'Fake Abstract 0'
+            Abstract: 'Fake Abstract 0',
+            ShortName: 'Fake Shortname 0',
+            Version: '1'
           }
         },
         {
@@ -35,7 +37,9 @@ const setup = (overrideProps = {}) => {
           },
           umm: {
             EntryTitle: 'Fake Collection 1',
-            Abstract: 'Fake Abstract 1'
+            Abstract: 'Fake Abstract 1',
+            ShortName: 'Fake Shortname 1',
+            Version: '2'
           }
         }
       ]
@@ -190,7 +194,9 @@ describe('SearchResultList', () => {
               },
               umm: {
                 EntryTitle: 'Fake Collection 0',
-                Abstract: 'Fake Abstract 0'
+                Abstract: 'Fake Abstract 0',
+                ShortName: 'Fake Shortname 0',
+                Version: '1'
               }
             },
             {
@@ -199,7 +205,9 @@ describe('SearchResultList', () => {
               },
               umm: {
                 EntryTitle: 'Fake Collection 1',
-                Abstract: 'Fake Abstract 1'
+                Abstract: 'Fake Abstract 1',
+                ShortName: 'Fake Shortname 1',
+                Version: '2'
               }
             }
           ]
@@ -225,7 +233,9 @@ describe('SearchResultList', () => {
                 },
                 umm: {
                   EntryTitle: 'Fake Collection 0',
-                  Abstract: 'Fake Abstract 0'
+                  Abstract: 'Fake Abstract 0',
+                  ShortName: 'Fake Shortname 0',
+                  Version: '1'
                 }
               },
               {
@@ -234,7 +244,9 @@ describe('SearchResultList', () => {
                 },
                 umm: {
                   EntryTitle: 'Fake Collection 1',
-                  Abstract: 'Fake Abstract 1'
+                  Abstract: 'Fake Abstract 1',
+                  ShortName: 'Fake Shortname 1',
+                  Version: '2'
                 }
               }
             ]
