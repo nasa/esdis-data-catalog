@@ -381,6 +381,14 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByText('Fake Collection')).toHaveAttribute('href', '/collections/c100-fake')
   })
 
+  test('does render shortname and version', () => {
+    const metadata = mockUmm()
+    metadata.umm.ShortName = 'FakeShortName'
+    metadata.umm.Version = '2'
+    renderMetadata(metadata)
+    expect(screen.getByText('FakeShortName v2')).toBeInTheDocument()
+  })
+
   test('renders link to DOI when provider is not in providersWithLandingPages', () => {
     type Providers = {
       providersWithLandingPages: string[];

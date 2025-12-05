@@ -37,6 +37,8 @@ interface CollectionItems {
   umm: {
     Abstract: string;
     EntryTitle: string;
+    ShortName: string;
+    Version: string;
     DOI?: DoiLink;
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
