@@ -340,6 +340,14 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
               </p>
             )
           }
+          <div className="hzn-search-result__shortname-version-doi d-flex mb-2 mt-1">
+            {shortnameVersion && (shortnameVersion)}
+            {
+              doi && (
+                <a className="hzn-search-result__doi-link" href={doi.link}>{doi.text}</a>
+              )
+            }
+          </div>
         </Col>
         <Col lg={3}>
           <Row>
@@ -349,14 +357,6 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
           </Row>
         </Col>
       </Row>
-      <div className="hzn-search-result__shortname-version-doi d-flex mb-2 mt-1">
-        {shortnameVersion && (shortnameVersion)}
-        {
-          doi && (
-            <a className="hzn-search-result__doi-link" href={doi.link}>{doi.text}</a>
-          )
-        }
-      </div>
     </div>
   )
 }
