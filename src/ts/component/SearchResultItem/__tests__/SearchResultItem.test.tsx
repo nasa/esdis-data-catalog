@@ -122,7 +122,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByText('Fake Collection')).toBeInTheDocument()
     expect(screen.getByText('Fake Abstract')).toBeInTheDocument()
     expect(screen.getByText('2020-01-01')).toBeInTheDocument()
-    expect(screen.getByText('Latitudes -3 to 4, Longitudes -1 to 2')).toBeInTheDocument()
+    expect(screen.getByText('Latitudes -3.0° to 4.0°, Longitudes -1.0° to 2.0°')).toBeInTheDocument()
     expect(screen.getByText('2021-01-01 to 2021-01-02')).toBeInTheDocument()
     expect(screen.getByTitle('File Format')).toBeInTheDocument()
     expect(screen.getByText('NetCDF4, GeoJSON')).toBeInTheDocument()
@@ -217,7 +217,7 @@ describe('DataCatalog SearchResultItem component', () => {
     }
 
     renderMetadata(metadata)
-    expect(screen.getByText('(1, 2)')).toBeInTheDocument()
+    expect(screen.getByText('(1.0°, 2.0°)')).toBeInTheDocument()
   })
 
   test('indicates multiple point spatial', () => {
@@ -236,7 +236,7 @@ describe('DataCatalog SearchResultItem component', () => {
     }
 
     renderMetadata(metadata)
-    expect(screen.getByText('(1, 2)...')).toBeInTheDocument()
+    expect(screen.getByText('(1.0°, 2.0°)...')).toBeInTheDocument()
   })
 
   test('renders bounding boxes defined as polygons as though they were bounding boxes', () => {
@@ -274,7 +274,7 @@ describe('DataCatalog SearchResultItem component', () => {
     }
 
     renderMetadata(metadata)
-    expect(screen.getByText('Latitudes -1 to 3, Longitudes -2 to 4')).toBeInTheDocument()
+    expect(screen.getByText('Latitudes -1.0° to 3.0°, Longitudes -2.0° to 4.0°')).toBeInTheDocument()
   })
 
   test('does not render non-cartesian rectangular', () => {
