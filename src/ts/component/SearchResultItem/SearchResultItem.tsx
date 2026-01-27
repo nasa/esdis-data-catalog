@@ -7,6 +7,7 @@ import {
   uniq
 } from 'lodash-es'
 import { getConfig } from '../../utils/getConfig'
+import { getDegrees } from '../../utils/getDegrees'
 import TextIcon from '../TextIcon/TextIcon'
 
 interface GeoPoint {
@@ -123,7 +124,7 @@ function ummSpatialToSummary(umm: object): string | null {
   } = geometry
 
   if (Points && Points[0]) {
-    let result = `(${Points[0].Latitude}, ${Points[0].Longitude})`
+    let result = `(${getDegrees(Points[0].Latitude)}, ${getDegrees(Points[0].Longitude)})`
     if (Points.length > 1) result += '...'
 
     return result
@@ -132,7 +133,7 @@ function ummSpatialToSummary(umm: object): string | null {
   const bboxToSummary = (west: number, east: number, south: number, north: number): string => {
     if (west === -180 && east === 180 && south === -90 && north === 90) return 'Global'
 
-    return `Latitudes ${south} to ${north}, Longitudes ${west} to ${east}`
+    return `Latitudes ${getDegrees(south)} to ${getDegrees(north)}, Longitudes ${getDegrees(west)} to ${getDegrees(east)}`
   }
 
   if (BoundingRectangles && BoundingRectangles[0]) {
