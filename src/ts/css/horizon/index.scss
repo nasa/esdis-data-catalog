@@ -203,14 +203,12 @@
     .offcanvas-lg { padding-left: 0; padding-right: 0; }
   }
 }
-
   /* START Hacks for horizon CSS while they fix */
   .page-slug-data-catalog > .node__content ._none > .container {
     max-width: 100%;
     width: 100%;
     padding: 0;
   }
-
 
   .hzn-main-header {
     padding-top: 4.5rem !important;
@@ -245,4 +243,14 @@
     padding-left: 0;
     padding-right: 0;
   }
+/* Bootstrap sets --bs-gutter-x on .container and .row > * globally via class selectors,
+     which leaks out of the .data-catalog-wrapper scope and adds unexpected padding to
+     host page elements that share those class names. Reset it to 0 outside our scope. */
+  .site-wide-alerts-container {
+  --bs-gutter-x: 0;
+
+  .container-fluid, .row > * {
+    --bs-gutter-x: 0;
+  }
+}
   // /* END CSS integration issues to fix */
