@@ -128,7 +128,6 @@ function normalizeDaacKey(value: string): string {
 }
 
 function findDaacSlug(normalizedKey: string): string | null {
-  // console.log(`findDAACSlug for ${normalizedKey}`)
   if (daacSlugMap[normalizedKey]) return daacSlugMap[normalizedKey]
 
   const partialMatch = daacSlugEntries.find(([key]) => normalizedKey.includes(key))
@@ -158,11 +157,9 @@ function getDaacLink(shortName: string | null): string | null {
 
   const displayName = getDaacDisplayName(shortName);
   const candidates = [shortName, displayName].filter((v): v is string => Boolean(v))
-  console.log({candidates})
   for (const candidate of candidates) {
     const normalized = normalizeDaacKey(candidate)
     const slug =findDaacSlug(normalized)
-    console.log(`cadedate of ${candidate} has normalized of ${normalized} and slug is ${slug}`)
     if(slug) {
       return `${EARTHDATA_CENTERS_BASE_URL}/${slug}`
     }
@@ -274,7 +271,6 @@ function doiLink(doi: DOI) {
  * @returns an object summarizing the UMM-C JSON appropriate for display
  */
 function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
-  // const daac = (umm.DataCenters || []).find(({ Roles }) => Roles.indexOf('ARCHIVER') !== -1)
   const archiverShortName = getArchiverShortName(umm);
 
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])

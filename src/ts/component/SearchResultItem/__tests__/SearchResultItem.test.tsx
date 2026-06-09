@@ -130,6 +130,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByText('Project 1, Project 2')).toBeInTheDocument()
     expect(screen.getByTitle('Archive Center')).toBeInTheDocument()
     expect(screen.getByText('FOO.DAAC')).toBeInTheDocument()
+    expect(screen.getByText('FOO.DAAC')).not.toHaveAttribute('href')
     expect(screen.getByText('ab:cd.ef')).toHaveAttribute('href', 'https://doi.org/ab:cd.ef')
     expect(screen.getByText('Spatial Coverage:')).toBeInTheDocument()
     expect(screen.getByText('Temporal Coverage:')).toBeInTheDocument()
@@ -557,5 +558,35 @@ describe('DataCatalog SearchResultItem component', () => {
 
     // Without RelatedUrls and DOI, it should fall back to the collection detail page
     expect(screen.getByText('Fake Collection')).not.toHaveAttribute('href', '/collections/c100-fake')
+  })
+
+  test('maps NASA path short name to Earthdata center URL', () => {
+    const metadata = mockUmm();
+    metadata.umm.DataCenters[1].ShortName = 'NASA/GSFC/SED/ESD/TISL/GESDISC';
+
+    renderMetadata(metadata);
+
+    expect(screen.getByText('GESDISC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/gesdisc-daac');
+
+  })
+
+  test('maps NASA NSIDC DAAC short name to Earthdata center URL', () => {
+    const metadata = mockUmm();
+    metadata.umm.DataCenters[1].ShortName = 'NASA NSIDC DAAC';
+
+    renderMetadata(metadata);
+
+    expect(screen.getByText('NASA NSIDC DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/nsidc-daac');
+
+  })
+
+    test('maps PO.DAAC short name to Earthdata center URL', () => {
+    const metadata = mockUmm();
+    metadata.umm.DataCenters[1].ShortName = 'PO.DAAC';
+
+    renderMetadata(metadata);
+
+    expect(screen.getByText('PO.DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/po-daac');
+
   })
 })
