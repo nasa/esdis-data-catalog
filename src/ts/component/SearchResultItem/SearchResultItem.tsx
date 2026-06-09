@@ -94,7 +94,7 @@ interface SearchResultItemProps {
   metadata: Metadata;
 }
 
-const EARTHDATA_CENTERS_BASE_URL = 'https://www.earthdata.nasa.gov/centers';
+const EARTHDATA_CENTERS_BASE_URL = 'https://www.earthdata.nasa.gov/centers'
 
 const daacSlugMap: Record<string, string> = {
   AFDRC: 'afdrc',
@@ -117,11 +117,11 @@ const daacSlugMap: Record<string, string> = {
   OMPSSIPS: 'omps-sips',
   ORNL: 'ornl-daac',
   PODAAC: 'po-daac',
-  SOUNDERSIPS: 'sounder-sips',
+  SOUNDERSIPS: 'sounder-sips'
 }
 
 const daacSlugEntries = Object.entries(daacSlugMap)
-  .sort(([left], [right]) => right.length - left.length);
+  .sort(([left], [right]) => right.length - left.length)
 
 function normalizeDaacKey(value: string): string {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
@@ -142,30 +142,26 @@ function getArchiverShortName(umm: Umm): string | null {
 }
 
 function getDaacDisplayName(shortName: string | null): string | null {
-  if(!shortName) return null
+  if (!shortName) return null
 
   return shortName.split('/').pop()?.trim() || shortName.trim()
 }
 
 /*
-// Normalize each Archiver short name by uppercasing and stripping punctuation and then 
+// Normalize each Archiver short name by uppercasing and stripping punctuation and then
 // resolve it against the known map of Centers slugs using exact match and then longest-key
 // partial match second. this handles inconsistent formats like NASA/GSFC and PO.DAAC
 */
 function getDaacLink(shortName: string | null): string | null {
   if (!shortName) return null
 
-  const displayName = getDaacDisplayName(shortName);
+  const displayName = getDaacDisplayName(shortName)
   const candidates = [shortName, displayName].filter((v): v is string => Boolean(v))
-  for (const candidate of candidates) {
-    const normalized = normalizeDaacKey(candidate)
-    const slug =findDaacSlug(normalized)
-    if(slug) {
-      return `${EARTHDATA_CENTERS_BASE_URL}/${slug}`
-    }
-  }
+  const match = candidates
+    .map((candidate) => findDaacSlug(normalizeDaacKey(candidate)))
+    .find((slug): slug is string => Boolean(slug))
 
-  return null
+  return match ? `${EARTHDATA_CENTERS_BASE_URL}/${match}` : null
 }
 
 function ummTemporalToHuman(umm: object): string | null {
@@ -271,13 +267,13 @@ function doiLink(doi: DOI) {
  * @returns an object summarizing the UMM-C JSON appropriate for display
  */
 function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
-  const archiverShortName = getArchiverShortName(umm);
+  const archiverShortName = getArchiverShortName(umm)
 
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])
     .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null
 
   const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
- 
+
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
 
   const dates = umm.DataDates
@@ -430,13 +426,13 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
           <Row>
             <TextIcon className="col-md-auto col-lg-12 mb-2" iconName="doc" title="File Format" field={fileFormats} />
             <TextIcon className="col-md-auto col-lg-12 mb-2" iconName="globe" title="Mission / Project" field={projects} />
-            <TextIcon 
+            <TextIcon
               className="col-md-auto col-lg-12 mb-2"
-              iconName="location" 
+              iconName="location"
               title="Archive Center"
-              field={daac} 
+              field={daac}
               href={daacLink || undefined}
-              />
+            />
           </Row>
         </Col>
       </Row>

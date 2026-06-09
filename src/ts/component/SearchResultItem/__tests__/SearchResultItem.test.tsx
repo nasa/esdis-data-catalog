@@ -561,32 +561,29 @@ describe('DataCatalog SearchResultItem component', () => {
   })
 
   test('maps NASA path short name to Earthdata center URL', () => {
-    const metadata = mockUmm();
-    metadata.umm.DataCenters[1].ShortName = 'NASA/GSFC/SED/ESD/TISL/GESDISC';
+    const metadata = mockUmm()
+    metadata.umm.DataCenters[1].ShortName = 'NASA/GSFC/SED/ESD/TISL/GESDISC'
 
-    renderMetadata(metadata);
+    renderMetadata(metadata)
 
-    expect(screen.getByText('GESDISC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/gesdisc-daac');
-
+    expect(screen.getByText('GESDISC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/gesdisc-daac')
   })
 
   test('maps NASA NSIDC DAAC short name to Earthdata center URL', () => {
-    const metadata = mockUmm();
-    metadata.umm.DataCenters[1].ShortName = 'NASA NSIDC DAAC';
+    const metadata = mockUmm()
+    metadata.umm.DataCenters[1].ShortName = 'NASA NSIDC DAAC'
 
-    renderMetadata(metadata);
+    renderMetadata(metadata)
 
-    expect(screen.getByText('NASA NSIDC DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/nsidc-daac');
-
+    expect(screen.getByText('NASA NSIDC DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/nsidc-daac')
   })
 
-    test('maps PO.DAAC short name to Earthdata center URL', () => {
-    const metadata = mockUmm();
-    metadata.umm.DataCenters[1].ShortName = 'PO.DAAC';
+  test('maps PO.DAAC short name to Earthdata center URL', () => {
+    const metadata = mockUmm()
+    metadata.umm.DataCenters[1].ShortName = 'PO.DAAC'
 
-    renderMetadata(metadata);
+    renderMetadata(metadata)
 
-    expect(screen.getByText('PO.DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/po-daac');
-
+    expect(screen.getByText('PO.DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/po-daac')
   })
 })

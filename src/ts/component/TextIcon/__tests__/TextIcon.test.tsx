@@ -57,9 +57,9 @@ describe('TextIcon', () => {
       />
     )
 
-    const link = screen.getByRole('link', { name: /test field/i });
+    const link = screen.getByRole('link', { name: /test field/i })
 
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute('href', 'http://test.com/daac');
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'http://test.com/daac')
   })
 })
