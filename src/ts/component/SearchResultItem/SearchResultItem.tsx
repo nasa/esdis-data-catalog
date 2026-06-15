@@ -152,7 +152,7 @@ function getDaacDisplayName(shortName: string | null): string | null {
 // resolve it against the known map of Centers slugs using exact match and then longest-key
 // partial match second. this handles inconsistent formats like NASA/GSFC and PO.DAAC
 */
-function getDaacLink(shortName: string | null): string | null {
+function getDataProviderLink(shortName: string | null): string | null {
   if (!shortName) return null
 
   const displayName = getDaacDisplayName(shortName)
@@ -291,7 +291,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
     configuredLandingPage: configuredLandingPage && configuredLandingPage.URL,
     doi: umm.DOI ? doiLink(umm.DOI) : undefined,
     daac: getDaacDisplayName(archiverShortName),
-    daacLink: getDaacLink(archiverShortName),
+    dataProviderLink: getDataProviderLink(archiverShortName),
     fileFormats,
     projects,
     published,
@@ -309,7 +309,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     temporal,
     spatial,
     daac,
-    daacLink,
+    dataProviderLink,
     configuredLandingPage,
     doi,
     fileFormats,
@@ -431,7 +431,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
               iconName="location"
               title="Archive Center"
               field={daac}
-              href={daacLink || undefined}
+              href={dataProviderLink || undefined}
             />
           </Row>
         </Col>
