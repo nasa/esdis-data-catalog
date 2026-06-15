@@ -22,7 +22,7 @@ export const TextIcon: React.FC<TextIconProps> = ({
     <i className={`hzn-icon hzn-icon-${iconName} hzn-text-icon__icon`} title={title} />
     {
       href
-        ? <a className="hzn-text-icon__field" href={href}>{field}</a>
+        ? <a className="hzn-link hzn-text-icon__field" href={href}>{field}</a>
         : <span className="hzn-text-icon__field">{field}</span>
     }
   </div>

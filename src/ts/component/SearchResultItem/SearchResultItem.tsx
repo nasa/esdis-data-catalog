@@ -417,7 +417,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
             {shortnameVersion && (shortnameVersion)}
             {
               doi && (
-                <a className="hzn-search-result__doi-link" href={doi.link}>{doi.text}</a>
+                <a className="hzn-link hzn-link--external hzn-search-result__doi-link" href={doi.link}>{doi.text}</a>
               )
             }
           </div>
