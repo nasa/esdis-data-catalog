@@ -103,7 +103,7 @@ const daacSlugMap: Record<string, string> = {
   ATMOSPHERE: 'atmosphere-sips',
   CDDIS: 'cddis-daac',
   GESDISC: 'gesdisc-daac',
-  GHRCDAAC: 'ghrc-daac',
+  GHRC: 'ghrc-daac',
   LAADSDAAC: 'laads-daac',
   LANDSIPS: 'land-sips',
   LP: 'lp-daac',
