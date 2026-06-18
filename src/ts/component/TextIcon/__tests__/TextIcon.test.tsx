@@ -45,4 +45,21 @@ describe('TextIcon', () => {
     const iconElement = screen.queryByTitle('Test Title')
     expect(iconElement).not.toBeInTheDocument()
   })
+
+  test('renders field as a link when href is provided', () => {
+    render(
+      <TextIcon
+        className="custom-class"
+        field="Test Field"
+        iconName="test-icon"
+        title="Test Title"
+        href="http://test.com/daac"
+      />
+    )
+
+    const link = screen.getByRole('link', { name: /test field/i })
+
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', 'http://test.com/daac')
+  })
 })

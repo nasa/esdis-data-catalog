@@ -8,6 +8,39 @@
 
   // Horizon design
 
+  .hzn-link {
+    color: inherit;
+    text-underline-offset: 0.25rem;
+    text-decoration: underline dashed;
+    text-decoration-thickness: 1px;
+    text-decoration-color: currentColor;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &:focus-visible {
+      text-decoration: none;
+      outline: 1px dashed currentColor;
+      outline-offset: 0.125rem;
+    }
+
+    &[aria-disabled='true'] {
+      color: #6f9ced;
+    }
+
+    &--external {
+      border-bottom: 1px dashed currentColor;
+      line-height: 1.125rem;
+      text-decoration: none;
+
+
+      &:hover {
+        border-bottom: 1px solid currentColor;
+      }
+    }
+  }
+
   .hzn-tophat {
     background-color: #000;
     height: 89px;
