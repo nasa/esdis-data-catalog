@@ -100,6 +100,30 @@ const mockUmm = (): any => cloneDeep({
         SingleDateTimes: ['2021-01-03T00:00:00.000Z']
       }
     ],
+    Platforms: [
+      {
+                        "ShortName": "MODELS",
+                        "Type": "Models",
+                        "LongName": "MODELS",
+                        "Instruments": [
+                            {
+                                "ShortName": "Computer",
+                                "LongName": "Computer"
+                            }
+                        ]
+                    },
+                    {
+                        "ShortName": "SOME-SAT",
+                        "Type": "Earth Observation Satellites",
+                        "LongName": "Orbiting Satellite",
+                        "Instruments": [
+                            {
+                                "ShortName": "SPECTROMETERS",
+                                "LongName": "Test Spectrometers"
+                            }
+                        ]
+                    }
+    ],
     Projects: [
       { ShortName: 'Project 1' },
       { ShortName: 'Project 2' }
@@ -131,6 +155,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByTitle('Archive Center')).toBeInTheDocument()
     expect(screen.getByText('FOO.DAAC')).toBeInTheDocument()
     expect(screen.getByText('FOO.DAAC')).not.toHaveAttribute('href')
+    expect(screen.getByRole('link', {name: 'Space Based Platforms'})).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/space-based-platforms')
     expect(screen.getByText('ab:cd.ef')).toHaveAttribute('href', 'https://doi.org/ab:cd.ef')
     expect(screen.getByText('Spatial Coverage:')).toBeInTheDocument()
     expect(screen.getByText('Temporal Coverage:')).toBeInTheDocument()
@@ -585,5 +610,62 @@ describe('DataCatalog SearchResultItem component', () => {
     renderMetadata(metadata)
 
     expect(screen.getByText('PO.DAAC')).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/centers/po-daac')
+  })
+
+  test('renders platform icon and link when at least one platform type is known', () => {
+    const metadata = mockUmm();
+    metadata.umm.Platforms =[
+      {
+        ShortName: 'Terra',
+        Type: 'Earth Observation Satellites',
+        LongName: 'Earth Observing System, Terra'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.getByTitle('Platform')).toBeVisible()
+    expect(screen.getByRole('link', {name: 'Space Based Platforms'})).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/space-based-platforms')
+  })
+
+  test('does not render platform icon or link when no linkable platform type is known', () => {
+    const metadata = mockUmm();
+    metadata.umm.Platforms =[
+      {
+        ShortName: 'MODELS',
+        Type: 'Models',
+        LongName: 'Models'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.queryByTitle('Platform')).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', {name: /air based platforms/i})).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', {name: /land based platforms/i})).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', {name: /space based platforms/i})).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', {name: /water based platforms/i})).not.toBeInTheDocument()
+  })
+
+  test('uses the first matching platform type when multiple platform types exist', () => {
+        const metadata = mockUmm();
+    metadata.umm.Platforms =[
+      {
+        ShortName: 'MODELS',
+        Type: 'Models',
+        LongName: 'Models'
+      },
+      {
+        ShortName: 'Ships',
+        Type: 'Vessels',
+        LongName:' Research Vessels'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.getByTitle('Platform')).toBeVisible()
+    expect(screen.getByRole('link', {name: /water based platforms/i})).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/water-based-platforms')
+
   })
 })
