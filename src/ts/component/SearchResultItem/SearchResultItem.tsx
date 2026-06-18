@@ -42,11 +42,19 @@ interface FileDistributionInfo {
   Format: string;
   // Add other properties if needed
 }
+
+interface Platform {
+  Type?: string;
+  ShortName?: string;
+  LongName?: string;
+}
+
 interface Umm {
   DataCenters?: Array<{ Roles: string[], ShortName: string }>;
   ArchiveAndDistributionInformation?: {
     FileDistributionInformation?: FileDistributionInfo[];
   };
+  Platforms?: Platform[];
   Projects?: Array<{ ShortName: string }>;
   RelatedUrls?: Array<{ Type: string, URL: string }>;
   DataDates?: Array<{ Type: string, Date: string }>;
@@ -68,6 +76,7 @@ export interface Metadata {
     ShortName: string;
     Version: string;
     DOI?: DoiLink;
+    Platforms?: Platform[];
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
       FileDistributionInformation: Array<{
@@ -95,6 +104,7 @@ interface SearchResultItemProps {
 }
 
 const EARTHDATA_CENTERS_BASE_URL = 'https://www.earthdata.nasa.gov/centers'
+const EARTHDATA_PLATFORMS_BASE_URL = "https://www.earthdata.nasa.gov/data/platforms"
 
 const daacSlugMap: Record<string, string> = {
   AFDRC: 'afdrc',
@@ -120,11 +130,46 @@ const daacSlugMap: Record<string, string> = {
   SOUNDERSIPS: 'sounder-sips'
 }
 
+const platformCategorySlugMap: Record<string, string> = {
+  // air-based
+  BALLOONS: 'air-based-platforms',
+  JET: 'air-based-platforms',
+  HELICOPTER: 'air-based-platforms',
+  PROPELLER: 'air-based-platforms',
+  ROTORCRAFT: 'air-based-platforms',
+  UAV: 'air-based-platforms',
+  // land-based
+  PERMANENTLANDSITES: 'land-based-platforms',
+  FIELDSITES: 'land-based-platforms',
+  // space-based
+  EARTHOBSERVATIONSATELLITES: 'space-based-platforms',
+  SPACESTATIONSCREWEDSPACECRAFT: 'space-based-platforms',
+  // water-based
+  VESSELS: 'water-based-platforms',
+  BUOYS: 'water-based-platforms'
+}
+
+const platformLabelMap: Record<string, string> = {
+  'air-based-platforms': 'Air Based Platforms',
+  'land-based-platforms': 'Land Based Platforms',
+  'space-based-platforms': 'Space Based Platforms',
+  'water-based-platforms': 'Water Based Platforms'
+}
+
 const daacSlugEntries = Object.entries(daacSlugMap)
   .sort(([left], [right]) => right.length - left.length)
 
 function normalizeDaacKey(value: string): string {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+function normalizePlatformType(value: string): string {
+  return value.toUpperCase().replace(/[^A-Z]/g, '')
+}
+
+function findPlatformSlug(category: string): string | null {
+  const normalizedCategory = normalizePlatformType(category)
+  return platformCategorySlugMap[normalizedCategory] || null
 }
 
 function findDaacSlug(normalizedKey: string): string | null {
@@ -162,6 +207,19 @@ function getDataProviderLink(shortName: string | null): string | null {
     .find((slug): slug is string => Boolean(slug))
 
   return match ? `${EARTHDATA_CENTERS_BASE_URL}/${match}` : null
+}
+
+function getPlatformLink(platform: Platform): { href: string, text: string } | null {
+  const category = platform.Type?.trim()
+  if (!category) return null
+
+  const slug = findPlatformSlug(category)
+  if (!slug) return null
+
+  return {
+    href: `${EARTHDATA_PLATFORMS_BASE_URL}/${slug}`,
+    text: platformLabelMap[slug]
+  }
 }
 
 function ummTemporalToHuman(umm: object): string | null {
@@ -272,6 +330,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])
     .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null
 
+  const platforms = (umm.Platforms || []).map(getPlatformLink)
   const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
 
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
@@ -293,6 +352,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
     daac: getDaacDisplayName(archiverShortName),
     dataProviderLink: getDataProviderLink(archiverShortName),
     fileFormats,
+    platforms,
     projects,
     published,
     providerId: meta['provider-id']
@@ -313,6 +373,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     configuredLandingPage,
     doi,
     fileFormats,
+    platforms,
     projects,
     published,
     providerId
@@ -340,6 +401,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   })
 
   const shortnameVersion = shortname && version ? `${shortname} v${version}` : null
+  const platformLinks = platforms.filter((platform): platform is {href: string, text: string } => Boolean(platform))
+  const platformLink = platformLinks[0] || null
 
   const titleLink = (): string => {
     // Render a clickable title link if:
@@ -433,6 +496,17 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
               field={daac}
               href={dataProviderLink || undefined}
             />
+            {
+              platformLink && (
+                <TextIcon
+                className="col-md-auto col-lg-12 mb-2"
+                iconName='orbiter'
+                title='Platform'
+                field={platformLink.text}
+                href={platformLink.href}
+              />
+            )
+            }
           </Row>
         </Col>
       </Row>
