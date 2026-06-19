@@ -104,7 +104,7 @@ interface SearchResultItemProps {
 }
 
 const EARTHDATA_CENTERS_BASE_URL = 'https://www.earthdata.nasa.gov/centers'
-const EARTHDATA_PLATFORMS_BASE_URL = "https://www.earthdata.nasa.gov/data/platforms"
+const EARTHDATA_PLATFORMS_BASE_URL = 'https://www.earthdata.nasa.gov/data/platforms'
 
 const daacSlugMap: Record<string, string> = {
   AFDRC: 'afdrc',
@@ -131,20 +131,20 @@ const daacSlugMap: Record<string, string> = {
 }
 
 const platformCategorySlugMap: Record<string, string> = {
-  // air-based
+  // Air-based
   BALLOONS: 'air-based-platforms',
   JET: 'air-based-platforms',
   HELICOPTER: 'air-based-platforms',
   PROPELLER: 'air-based-platforms',
   ROTORCRAFT: 'air-based-platforms',
   UAV: 'air-based-platforms',
-  // land-based
+  // Land-based
   PERMANENTLANDSITES: 'land-based-platforms',
   FIELDSITES: 'land-based-platforms',
-  // space-based
+  // Space-based
   EARTHOBSERVATIONSATELLITES: 'space-based-platforms',
   SPACESTATIONSCREWEDSPACECRAFT: 'space-based-platforms',
-  // water-based
+  // Water-based
   VESSELS: 'water-based-platforms',
   BUOYS: 'water-based-platforms'
 }
@@ -169,6 +169,7 @@ function normalizePlatformType(value: string): string {
 
 function findPlatformSlug(category: string): string | null {
   const normalizedCategory = normalizePlatformType(category)
+
   return platformCategorySlugMap[normalizedCategory] || null
 }
 
@@ -401,7 +402,8 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   })
 
   const shortnameVersion = shortname && version ? `${shortname} v${version}` : null
-  const platformLinks = platforms.filter((platform): platform is {href: string, text: string } => Boolean(platform))
+  const platformLinks = platforms
+    .filter((platform): platform is {href: string, text: string } => Boolean(platform))
   const platformLink = platformLinks[0] || null
 
   const titleLink = (): string => {
@@ -499,13 +501,13 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
             {
               platformLink && (
                 <TextIcon
-                className="col-md-auto col-lg-12 mb-2"
-                iconName='orbiter'
-                title='Platform'
-                field={platformLink.text}
-                href={platformLink.href}
-              />
-            )
+                  className="col-md-auto col-lg-12 mb-2"
+                  iconName="orbiter"
+                  title="Platform"
+                  field={platformLink.text}
+                  href={platformLink.href}
+                />
+              )
             }
           </Row>
         </Col>
