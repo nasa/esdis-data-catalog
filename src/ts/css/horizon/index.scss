@@ -8,7 +8,7 @@
 
   // Horizon design
 
-  .hzn-link {
+  .hzn-search-result .hzn-link {
     color: inherit;
     text-underline-offset: 0.25rem;
     text-decoration: underline dashed;
@@ -29,7 +29,7 @@
       color: #6f9ced;
     }
 
-    &--external {
+    &.hzn-link--external {
       border-bottom: 1px dashed currentColor;
       line-height: 1.125rem;
       text-decoration: none;

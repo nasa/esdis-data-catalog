@@ -133,19 +133,27 @@ const daacSlugMap: Record<string, string> = {
 const platformCategorySlugMap: Record<string, string> = {
   // Air-based
   BALLOONS: 'air-based-platforms',
+  DROPWINDSONDES: 'air-based-platforms',
   JET: 'air-based-platforms',
   HELICOPTER: 'air-based-platforms',
   PROPELLER: 'air-based-platforms',
+  ROCKETS: 'air-based-platforms',
   ROTORCRAFT: 'air-based-platforms',
   UAV: 'air-based-platforms',
   // Land-based
   PERMANENTLANDSITES: 'land-based-platforms',
   FIELDSITES: 'land-based-platforms',
+  VEHICLES: 'land-based-platforms',
   // Space-based
   EARTHOBSERVATIONSATELLITES: 'space-based-platforms',
+  INTERPLANETARYSPACECRAFT: 'space-based-platforms',
+  NAVIGATIONSATELLITES: 'space-based-platforms',
+  SOLARSPACEOSERVATIONSATELLITESSATELLITES: 'space-based-platforms',
   SPACESTATIONSCREWEDSPACECRAFT: 'space-based-platforms',
   // Water-based
   VESSELS: 'water-based-platforms',
+  FIXEDPLATFROMS: 'water-based-platforms',
+  UNCREWEDVEHICLES: 'water-based-platforms',
   BUOYS: 'water-based-platforms'
 }
 
