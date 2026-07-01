@@ -56,7 +56,7 @@ interface Umm {
   };
   Platforms?: Platform[];
   Projects?: Array<{ ShortName: string }>;
-  RelatedUrls?: Array<{ Type: string, URL: string }>;
+  RelatedUrls?: Array<{ Type: string, URL: string, URLContentType?: string, Description?: string }>;
   DataDates?: Array<{ Type: string, Date: string }>;
   EntryTitle: string;
   ShortName: string;
@@ -92,6 +92,11 @@ export interface Metadata {
       }>;
     };
     DataCenters?: Array<{ Roles: string[]; ShortName: string }>;
+    RelatedUrls?: Array<{
+      Type: string, URL: string
+      URLContentType?: string
+      description: string
+    }>;
     TemporalExtents?: object
     SpatialExtent?:{
       HorizontalSpatialDomain:object
@@ -104,7 +109,6 @@ interface SearchResultItemProps {
 }
 
 const EARTHDATA_CENTERS_BASE_URL = 'https://www.earthdata.nasa.gov/centers'
-const EARTHDATA_PLATFORMS_BASE_URL = 'https://www.earthdata.nasa.gov/data/platforms'
 
 const daacSlugMap: Record<string, string> = {
   AFDRC: 'afdrc',
@@ -130,55 +134,11 @@ const daacSlugMap: Record<string, string> = {
   SOUNDERSIPS: 'sounder-sips'
 }
 
-const platformCategorySlugMap: Record<string, string> = {
-  // Air-based
-  BALLOONS: 'air-based-platforms',
-  DROPWINDSONDES: 'air-based-platforms',
-  JET: 'air-based-platforms',
-  HELICOPTER: 'air-based-platforms',
-  PROPELLER: 'air-based-platforms',
-  ROCKETS: 'air-based-platforms',
-  ROTORCRAFT: 'air-based-platforms',
-  UAV: 'air-based-platforms',
-  // Land-based
-  PERMANENTLANDSITES: 'land-based-platforms',
-  FIELDSITES: 'land-based-platforms',
-  VEHICLES: 'land-based-platforms',
-  // Space-based
-  EARTHOBSERVATIONSATELLITES: 'space-based-platforms',
-  INTERPLANETARYSPACECRAFT: 'space-based-platforms',
-  NAVIGATIONSATELLITES: 'space-based-platforms',
-  SOLARSPACEOSERVATIONSATELLITESSATELLITES: 'space-based-platforms',
-  SPACESTATIONSCREWEDSPACECRAFT: 'space-based-platforms',
-  // Water-based
-  VESSELS: 'water-based-platforms',
-  FIXEDPLATFROMS: 'water-based-platforms',
-  UNCREWEDVEHICLES: 'water-based-platforms',
-  BUOYS: 'water-based-platforms'
-}
-
-const platformLabelMap: Record<string, string> = {
-  'air-based-platforms': 'Air Based Platforms',
-  'land-based-platforms': 'Land Based Platforms',
-  'space-based-platforms': 'Space Based Platforms',
-  'water-based-platforms': 'Water Based Platforms'
-}
-
 const daacSlugEntries = Object.entries(daacSlugMap)
   .sort(([left], [right]) => right.length - left.length)
 
 function normalizeDaacKey(value: string): string {
   return value.toUpperCase().replace(/[^A-Z0-9]/g, '')
-}
-
-function normalizePlatformType(value: string): string {
-  return value.toUpperCase().replace(/[^A-Z]/g, '')
-}
-
-function findPlatformSlug(category: string): string | null {
-  const normalizedCategory = normalizePlatformType(category)
-
-  return platformCategorySlugMap[normalizedCategory] || null
 }
 
 function findDaacSlug(normalizedKey: string): string | null {
@@ -216,19 +176,6 @@ function getDataProviderLink(shortName: string | null): string | null {
     .find((slug): slug is string => Boolean(slug))
 
   return match ? `${EARTHDATA_CENTERS_BASE_URL}/${match}` : null
-}
-
-function getPlatformLink(platform: Platform): { href: string, text: string } | null {
-  const category = platform.Type?.trim()
-  if (!category) return null
-
-  const slug = findPlatformSlug(category)
-  if (!slug) return null
-
-  return {
-    href: `${EARTHDATA_PLATFORMS_BASE_URL}/${slug}`,
-    text: platformLabelMap[slug]
-  }
 }
 
 function ummTemporalToHuman(umm: object): string | null {
@@ -339,7 +286,13 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])
     .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null
 
-  const platforms = (umm.Platforms || []).map(getPlatformLink)
+  const relatedUrlPlatform = (umm.RelatedUrls || []).find(({ URLContentType, URL }) => URLContentType === 'PublicationURL' && URL.includes('/data/platforms'))
+  const platforms = relatedUrlPlatform
+    ? [{
+      href: relatedUrlPlatform.URL,
+      text: relatedUrlPlatform.Description || 'platform'
+    }]
+    : []
   const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
 
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')

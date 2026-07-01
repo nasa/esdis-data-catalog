@@ -75,6 +75,12 @@ const mockUmm = (): any => cloneDeep({
       {
         Type: 'DATA SET LANDING PAGE',
         URL: 'https://example.com/landing/page'
+      },
+      {
+        Type: 'VIEW RELATED INFORMATION',
+        URLContentType: 'PublicationURL',
+        URL: 'https://www.test.gov/data/platforms/space-based-platforms/SOME_SAT',
+        Description: 'SOME-SAT Homepage'
       }
     ],
     SpatialExtent: {
@@ -155,7 +161,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByTitle('Archive Center')).toBeInTheDocument()
     expect(screen.getByText('FOO.DAAC')).toBeInTheDocument()
     expect(screen.getByText('FOO.DAAC')).not.toHaveAttribute('href')
-    expect(screen.getByRole('link', { name: 'Space Based Platforms' })).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/space-based-platforms')
+    expect(screen.getByRole('link', { name: 'SOME-SAT Homepage' })).toHaveAttribute('href', 'https://www.test.gov/data/platforms/space-based-platforms/SOME_SAT')
     expect(screen.getByText('ab:cd.ef')).toHaveAttribute('href', 'https://doi.org/ab:cd.ef')
     expect(screen.getByText('Spatial Coverage:')).toBeInTheDocument()
     expect(screen.getByText('Temporal Coverage:')).toBeInTheDocument()
@@ -472,7 +478,7 @@ describe('DataCatalog SearchResultItem component', () => {
 
     const metadata = mockUmm()
     delete metadata.umm.DOI
-    metadata.umm.RelatedUrls.pop()
+    metadata.umm.RelatedUrls = []
     renderMetadata(metadata)
     expect(screen.getByText('Fake Collection')).toHaveAttribute('href', 'https://cmr.example.com/concepts/C100-FAKE')
     expect(getConfig).toHaveBeenCalledWith('cmrHost')
@@ -614,57 +620,56 @@ describe('DataCatalog SearchResultItem component', () => {
 
   test('renders platform icon and link when at least one platform type is known', () => {
     const metadata = mockUmm()
-    metadata.umm.Platforms = [
+    metadata.umm.RelatedUrls = [
       {
-        ShortName: 'Terra',
-        Type: 'Earth Observation Satellites',
-        LongName: 'Earth Observing System, Terra'
+        Type: 'VIEW RELATED INFORMATION',
+        URLContentType: 'PublicationURL',
+        URL: 'https://www.test.gov/data/platforms/space-based-platforms/Terra',
+        Description: 'Terra Homepage'
       }
     ]
 
     renderMetadata(metadata)
 
     expect(screen.getByTitle('Platform')).toBeVisible()
-    expect(screen.getByRole('link', { name: 'Space Based Platforms' })).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/space-based-platforms')
+    expect(screen.getByRole('link', { name: /Terra Homepage/i })).toHaveAttribute('href', 'https://www.test.gov/data/platforms/space-based-platforms/Terra')
   })
 
-  test('does not render platform icon or link when no linkable platform type is known', () => {
+  test('does not render platform icon or link when no RelatedUrls contain a platform PublicationURL', () => {
     const metadata = mockUmm()
-    metadata.umm.Platforms = [
+    metadata.umm.RelatedUrls = [
       {
-        ShortName: 'MODELS',
-        Type: 'Models',
-        LongName: 'Models'
+        Type: 'DATASET LANDING PAGE',
+        URL: 'https://example.com/landing/page'
       }
     ]
 
     renderMetadata(metadata)
 
     expect(screen.queryByTitle('Platform')).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /air based platforms/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /land based platforms/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /space based platforms/i })).not.toBeInTheDocument()
-    expect(screen.queryByRole('link', { name: /water based platforms/i })).not.toBeInTheDocument()
   })
 
-  test('uses the first matching platform type when multiple platform types exist', () => {
+  test('only uses PublicationURL entries that contain a platform path', () => {
     const metadata = mockUmm()
-    metadata.umm.Platforms = [
+    metadata.umm.RelatedUrls = [
       {
-        ShortName: 'MODELS',
-        Type: 'Models',
-        LongName: 'Models'
+        Type: 'View Related Information',
+        URLContentType: 'PublicationURL',
+        URL: 'https://test.gov/data/instruments/OCTS',
+        Description: 'OCTS Homepage'
       },
       {
-        ShortName: 'Ships',
-        Type: 'Vessels',
-        LongName: ' Research Vessels'
+        Type: 'View Related Information',
+        URLContentType: 'PublicationURL',
+        URL: 'https://test.gov/data/platforms/space-based-platforms/SOME-SAT',
+        Description: 'SOME-SAT Homepage'
       }
     ]
 
     renderMetadata(metadata)
 
     expect(screen.getByTitle('Platform')).toBeVisible()
-    expect(screen.getByRole('link', { name: /water based platforms/i })).toHaveAttribute('href', 'https://www.earthdata.nasa.gov/data/platforms/water-based-platforms')
+    expect(screen.getByRole('link', { name: /SOME-SAT Homepage/i })).toHaveAttribute('href', 'https://test.gov/data/platforms/space-based-platforms/SOME-SAT')
+    expect(screen.queryByRole('link', { name: /OCTS Homepage/i })).not.toBeInTheDocument()
   })
 })
