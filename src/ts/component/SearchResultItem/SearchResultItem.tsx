@@ -42,13 +42,21 @@ interface FileDistributionInfo {
   Format: string;
   // Add other properties if needed
 }
+
+interface Platform {
+  Type?: string;
+  ShortName?: string;
+  LongName?: string;
+}
+
 interface Umm {
   DataCenters?: Array<{ Roles: string[], ShortName: string }>;
   ArchiveAndDistributionInformation?: {
     FileDistributionInformation?: FileDistributionInfo[];
   };
+  Platforms?: Platform[];
   Projects?: Array<{ ShortName: string }>;
-  RelatedUrls?: Array<{ Type: string, URL: string }>;
+  RelatedUrls?: Array<{ Type: string, URL: string, URLContentType?: string, Description?: string }>;
   DataDates?: Array<{ Type: string, Date: string }>;
   EntryTitle: string;
   ShortName: string;
@@ -68,6 +76,7 @@ export interface Metadata {
     ShortName: string;
     Version: string;
     DOI?: DoiLink;
+    Platforms?: Platform[];
     Projects?: Array<{ ShortName: string }>;
     ArchiveAndDistributionInformation?: {
       FileDistributionInformation: Array<{
@@ -83,6 +92,11 @@ export interface Metadata {
       }>;
     };
     DataCenters?: Array<{ Roles: string[]; ShortName: string }>;
+    RelatedUrls?: Array<{
+      Type: string, URL: string
+      URLContentType?: string
+      description: string
+    }>;
     TemporalExtents?: object
     SpatialExtent?:{
       HorizontalSpatialDomain:object
@@ -272,6 +286,13 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
   const fileFormats = get(umm, ['ArchiveAndDistributionInformation', 'FileDistributionInformation'], [])
     .filter((f: FileDistributionInfo) => f.FormatType === 'Native').map((f: FileDistributionInfo) => f.Format).join(', ') || null
 
+  const relatedUrlPlatform = (umm.RelatedUrls || []).find(({ URLContentType, URL }) => URLContentType === 'PublicationURL' && URL.includes('/data/platforms'))
+  const platforms = relatedUrlPlatform
+    ? [{
+      href: relatedUrlPlatform.URL,
+      text: relatedUrlPlatform.Description || 'platform'
+    }]
+    : []
   const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
 
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
@@ -293,6 +314,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
     daac: getDaacDisplayName(archiverShortName),
     dataProviderLink: getDataProviderLink(archiverShortName),
     fileFormats,
+    platforms,
     projects,
     published,
     providerId: meta['provider-id']
@@ -313,6 +335,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     configuredLandingPage,
     doi,
     fileFormats,
+    platforms,
     projects,
     published,
     providerId
@@ -340,6 +363,9 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   })
 
   const shortnameVersion = shortname && version ? `${shortname} v${version}` : null
+  const platformLinks = platforms
+    .filter((platform): platform is {href: string, text: string } => Boolean(platform))
+  const platformLink = platformLinks[0] || null
 
   const titleLink = (): string => {
     // Render a clickable title link if:
@@ -433,6 +459,17 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
               field={daac}
               href={dataProviderLink || undefined}
             />
+            {
+              platformLink && (
+                <TextIcon
+                  className="col-md-auto col-lg-12 mb-2"
+                  iconName="orbiter"
+                  title="Platform"
+                  field={platformLink.text}
+                  href={platformLink.href}
+                />
+              )
+            }
           </Row>
         </Col>
       </Row>
