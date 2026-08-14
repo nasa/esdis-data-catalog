@@ -649,7 +649,7 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.queryByTitle('Platform')).not.toBeInTheDocument()
   })
 
-  test('only uses PublicationURL entries that contain a platform path', () => {
+  test('only uses PublicationURL entries that contain a platform path for the platform link', () => {
     const metadata = mockUmm()
     metadata.umm.RelatedUrls = [
       {
@@ -670,6 +670,59 @@ describe('DataCatalog SearchResultItem component', () => {
 
     expect(screen.getByTitle('Platform')).toBeVisible()
     expect(screen.getByRole('link', { name: /SOME-SAT Homepage/i })).toHaveAttribute('href', 'https://test.gov/data/platforms/space-based-platforms/SOME-SAT')
-    expect(screen.queryByRole('link', { name: /OCTS Homepage/i })).not.toBeInTheDocument()
+  })
+
+  test('renders instrument icon and link when RelatedUrls contains an instrument PublicationURL', () => {
+    const metadata = mockUmm()
+    metadata.umm.RelatedUrls = [
+      {
+        Type: 'VIEW RELATED INFORMATION',
+        URLContentType: 'PublicationURL',
+        URL: 'https://www.test.gov/data/instruments/OCTS',
+        Description: 'OCTS Homepage'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.getByTitle('Instrument')).toBeVisible()
+    expect(screen.getByRole('link', { name: /OCTS Homepage/i })).toHaveAttribute('href', 'https://www.test.gov/data/instruments/OCTS')
+  })
+
+  test('does not render instrument icon or link when no RelatedUrls contain an instrument PublicationURL', () => {
+    const metadata = mockUmm()
+    metadata.umm.RelatedUrls = [
+      {
+        Type: 'DATASET LANDING PAGE',
+        URL: 'https://example.com/landing/page'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.queryByTitle('Instrument')).not.toBeInTheDocument()
+  })
+
+  test('only uses PublicationURL entries that contain an instrument path for the instrument link', () => {
+    const metadata = mockUmm()
+    metadata.umm.RelatedUrls = [
+      {
+        Type: 'View Related Information',
+        URLContentType: 'PublicationURL',
+        URL: 'https://test.gov/data/platforms/space-based-platforms/SOME-SAT',
+        Description: 'SOME-SAT Homepage'
+      },
+      {
+        Type: 'View Related Information',
+        URLContentType: 'PublicationURL',
+        URL: 'https://test.gov/data/instruments/OCTS',
+        Description: 'OCTS Homepage'
+      }
+    ]
+
+    renderMetadata(metadata)
+
+    expect(screen.getByTitle('Instrument')).toBeVisible()
+    expect(screen.getByRole('link', { name: /OCTS Homepage/i })).toHaveAttribute('href', 'https://test.gov/data/instruments/OCTS')
   })
 })
