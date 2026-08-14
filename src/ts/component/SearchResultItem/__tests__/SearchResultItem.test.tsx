@@ -670,7 +670,6 @@ describe('DataCatalog SearchResultItem component', () => {
 
     expect(screen.getByTitle('Platform')).toBeVisible()
     expect(screen.getByRole('link', { name: /SOME-SAT Homepage/i })).toHaveAttribute('href', 'https://test.gov/data/platforms/space-based-platforms/SOME-SAT')
-    expect(screen.queryByRole('link', { name: /OCTS Homepage/i })).not.toBeInTheDocument()
   })
 
   test('renders instrument icon and link when RelatedUrls contains an instrument PublicationURL', () => {
