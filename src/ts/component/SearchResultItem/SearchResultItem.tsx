@@ -486,7 +486,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
               instrumentLink && (
                 <TextIcon
                   className="col-md-auto col-lg-12 mb-2"
-                  iconName="sphere"
+                  iconName="generic"
                   title="Instrument"
                   field={instrumentLink.text}
                   href={instrumentLink.href}
