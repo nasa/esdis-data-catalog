@@ -293,6 +293,13 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
       text: relatedUrlPlatform.Description || 'platform'
     }]
     : []
+  const relatedUrlInstrument = (umm.RelatedUrls || []).find(({ URLContentType, URL }) => URLContentType === 'PublicationURL' && URL.includes('/data/instruments'))
+  const instruments = relatedUrlInstrument
+    ? [{
+      href: relatedUrlInstrument.URL,
+      text: relatedUrlInstrument.Description || 'instrument'
+    }]
+    : []
   const projects = (umm.Projects || []).map((p) => p.ShortName).join(', ') || null
 
   const configuredLandingPage = (umm.RelatedUrls || []).find(({ Type }) => Type === 'DATA SET LANDING PAGE')
@@ -315,6 +322,7 @@ function ummToSummary({ meta, umm }: { meta: Meta, umm: Umm }) {
     dataProviderLink: getDataProviderLink(archiverShortName),
     fileFormats,
     platforms,
+    instruments,
     projects,
     published,
     providerId: meta['provider-id']
@@ -336,6 +344,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     doi,
     fileFormats,
     platforms,
+    instruments,
     projects,
     published,
     providerId
@@ -366,6 +375,9 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
   const platformLinks = platforms
     .filter((platform): platform is {href: string, text: string } => Boolean(platform))
   const platformLink = platformLinks[0] || null
+  const instrumentLinks = instruments
+    .filter((instrument): instrument is {href: string, text: string } => Boolean(instrument))
+  const instrumentLink = instrumentLinks[0] || null
 
   const titleLink = (): string => {
     // Render a clickable title link if:
@@ -467,6 +479,17 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
                   title="Platform"
                   field={platformLink.text}
                   href={platformLink.href}
+                />
+              )
+            }
+            {
+              instrumentLink && (
+                <TextIcon
+                  className="col-md-auto col-lg-12 mb-2"
+                  iconName="generic"
+                  title="Instrument"
+                  field={instrumentLink.text}
+                  href={instrumentLink.href}
                 />
               )
             }
