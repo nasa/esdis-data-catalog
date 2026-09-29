@@ -98,6 +98,8 @@ const countFilters = (facets: Facet, params: Params) => {
   }
 
   if (params.bounding_box) result += 1
+  if (params.has_granules_or_cwic) result += 1
+  if (params.include_non_operational) result += 1
 
   return result
 }
@@ -280,10 +282,17 @@ const DataCatalog: React.FC = () => {
     updateSearchParams(parseCollectionsQuery(query))
   }
 
+  // Initialize additonal checkboxes as booleans so Formik doesn't treat them as arrays
+  const initialValues: Params = {
+    has_granules_or_cwic: false,
+    include_non_operational: false,
+    ...collectionSearchParams
+  }
+
   return (
     <div className="data-catalog-wrapper">
       <Formik
-        initialValues={collectionSearchParams}
+        initialValues={initialValues}
         onSubmit={handleSubmit}
         className="hzn"
         enableReinitialize

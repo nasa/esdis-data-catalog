@@ -13,6 +13,8 @@ export interface Facet {
 
 export interface Params {
   bounding_box?: string
+  has_granules_or_cwic?: boolean
+  include_non_operational?: boolean
   keyword?: string
   page_num?: number
   page_size?: number

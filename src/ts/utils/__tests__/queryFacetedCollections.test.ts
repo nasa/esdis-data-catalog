@@ -48,6 +48,39 @@ describe('queryFacetedCollections', () => {
     })
   })
 
+  test('should pass additional filters to both collection queries', async () => {
+    nock(cmrHost)
+      .get('/search/collections.json?mocked_query_string')
+      .reply(200, { facets: 'mock facets data' })
+
+    nock(cmrHost)
+      .get('/search/collections.umm_json?mocked_query_string')
+      .reply(200, { items: 'mock collections data' })
+
+    await queryFacetedCollections({
+      has_granules_or_cwic: true,
+      include_non_operational: true
+    })
+
+    expect(mockedStringifyCollectionsQuery).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        has_granules_or_cwic: true,
+        include_non_operational: true
+      }),
+      false
+    )
+
+    expect(mockedStringifyCollectionsQuery).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        has_granules_or_cwic: true,
+        include_non_operational: true
+      }),
+      false
+    )
+  })
+
   describe('when collections request fails', () => {
     test('should throw an error with the collections response', async () => {
       nock(cmrHost)

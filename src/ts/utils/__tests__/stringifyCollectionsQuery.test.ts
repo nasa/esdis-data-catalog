@@ -16,6 +16,15 @@ describe('stringifyCollectionsQuery', () => {
     })
   })
 
+  test('should stringify additional filter parameters', () => {
+    const result = stringifyCollectionsQuery({
+      has_granules_or_cwic: true,
+      include_non_operational: true
+    })
+
+    expect(result).toBe('has_granules_or_cwic=true&include_non_operational=true')
+  })
+
   describe('handling temporal parameter', () => {
     test('should join temporal array with comma', () => {
       const params = { temporal: ['2000-01-01', '2001-01-01'] }

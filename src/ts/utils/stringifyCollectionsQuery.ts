@@ -6,6 +6,8 @@ import facetDefaultParams from '../constants/facetDefaultParams'
 
 interface Params {
   bounding_box?: string
+  has_granules_or_cwic?: boolean
+  include_non_operational?: boolean
   processing_level_id_h?: string[]
   latency?: string[]
   data_center_h?: string[]

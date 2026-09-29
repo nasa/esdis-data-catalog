@@ -81,6 +81,10 @@ describe('DataCatalog SearchFilters component and facets', () => {
 
     expect(screen.getByText('Center')).toBeInTheDocument()
     expect(screen.getByLabelText('Orga0 (10)')).toBeInTheDocument()
+
+    expect(screen.getByText('Additional Filters')).toBeInTheDocument()
+    expect(screen.getByText('Include collections without granules')).toBeInTheDocument()
+    expect(screen.getByText('Include inactive collections')).toBeInTheDocument()
   })
 
   test('populates filters with applied values', () => {
@@ -96,12 +100,35 @@ describe('DataCatalog SearchFilters component and facets', () => {
     expect((screen.getByLabelText('End Date') as HTMLInputElement).value).toEqual('2024-02-02')
   })
 
+  test('populates additional filters with applied values', () => {
+    setup({
+      filterValues: {
+        has_granules_or_cwic: true,
+        include_non_operational: true
+      }
+    })
+
+    expect(screen.getByLabelText('Include collections without granules')).toBeChecked()
+    expect(screen.getByLabelText('Include inactive collections')).toBeChecked()
+  })
+
   test('calls handleChange on change', async () => {
     const { handleChange, user } = setup()
 
     await waitFor(() => user.type(screen.getByLabelText('Bounding Box'), '0,1,2,3'))
 
     expect(handleChange.mock.calls).toHaveLength('0,1,2,3'.length)
+  })
+
+  test('calls handleChange when an additional filter changes', async () => {
+    const { handleChange, user } = setup()
+
+    await user.click(screen.getByLabelText('Include collections without granules'))
+    await user.click(screen.getByLabelText('Include inactive collections'))
+
+    expect(handleChange).toHaveBeenCalledTimes(2)
+    expect(handleChange.mock.calls[0][0].target).toHaveAttribute('name', 'has_granules_or_cwic')
+    expect(handleChange.mock.calls[1][0].target).toHaveAttribute('name', 'include_non_operational')
   })
 
   test('calls handleBlur on blur', async () => {
@@ -150,8 +177,13 @@ describe('DataCatalog SearchFilters component and facets', () => {
       expect(screen.getByLabelText('End Date')).toBeInTheDocument()
       expect(screen.getByLabelText('Bounding Box')).toBeInTheDocument()
 
-      // Verify that no checkboxes are rendered
-      expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
+      // Verify that no facet checkboxes are rendered
+      expect(screen.queryByLabelText('Keyw0 (10)')).not.toBeInTheDocument()
+      expect(screen.queryByLabelText('Plat0 (10)')).not.toBeInTheDocument()
+
+      // Independent filters are always available independent of facets
+      expect(screen.getByLabelText('Include collections without granules')).toBeInTheDocument()
+      expect(screen.getByLabelText('Include inactive collections')).toBeInTheDocument()
     })
   })
 })

@@ -205,6 +205,34 @@ describe('DataCatalog', () => {
     expect(await screen.findByRole('button', { name: 'Found Keyw1' })).toBeTruthy()
   })
 
+  test('checking "Include collections without granules" sends has_granules_or_cwic=true and keeps the checkbox checked', async () => {
+    const { user } = setup({})
+
+    await screen.findByText('collection 1')
+    setupMockResponse('has_granules_or_cwic=true', 1, 1, 'Found')
+
+    const checkbox = screen.getByLabelText('Include collections without granules')
+    await user.click(checkbox)
+
+    expect(checkbox).toBeChecked()
+    expect(await screen.findByText('Found collection 1')).toBeTruthy()
+    expect(checkbox).toBeChecked()
+  })
+
+  test('checking "Include inactive collections" sends include_non_operational=true and keeps the checkbox checked', async () => {
+    const { user } = setup({})
+
+    await screen.findByText('collection 1')
+    setupMockResponse('include_non_operational=true', 1, 1, 'Found')
+
+    const checkbox = screen.getByLabelText('Include inactive collections')
+    await user.click(checkbox)
+
+    expect(checkbox).toBeChecked()
+    expect(await screen.findByText('Found collection 1')).toBeTruthy()
+    expect(checkbox).toBeChecked()
+  })
+
   describe('Loading a URL with keywords in it', () => {
     test('returns filtered results and populates the keyword search field', async () => {
       const key = 'keyword'
