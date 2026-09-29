@@ -90,7 +90,7 @@ describe('DataCatalog SearchFilters component and facets', () => {
   test('shows the inactive collections tooltip on hover', async () => {
     const { user } = setup()
 
-    await user.hover(screen.getByRole('img', {name: 'Inactive collections information' }))
+    await user.hover(screen.getByRole('button', { name: 'Inactive collections information' }))
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent(
       'Include collections labeled as planned, deprecated, preprint, in review, superseded, or not provided in results'

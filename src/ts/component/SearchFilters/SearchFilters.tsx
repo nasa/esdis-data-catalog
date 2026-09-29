@@ -267,12 +267,12 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           >
             <span
               className="hzn-additional-filter__info"
-              role="img"
+              role="button"
               tabIndex={0}
               aria-label="Inactive collections information"
-              >
-                ?
-              </span>
+            >
+              ?
+            </span>
           </OverlayTrigger>
         </div>
       </SearchFilterSection>
