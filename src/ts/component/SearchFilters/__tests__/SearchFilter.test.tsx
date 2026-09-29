@@ -87,6 +87,16 @@ describe('DataCatalog SearchFilters component and facets', () => {
     expect(screen.getByText('Include inactive collections')).toBeInTheDocument()
   })
 
+  test('shows the inactive collections tooltip on hover', async () => {
+    const { user } = setup()
+
+    await user.hover(screen.getByRole('img', {name: 'Inactive collections information' }))
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      'Include collections labeled as planned, deprecated, preprint, in review, superseded, or not provided in results'
+    )
+  })
+
   test('populates filters with applied values', () => {
     setup({
       filterValues: {

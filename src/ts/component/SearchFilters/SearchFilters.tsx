@@ -1,5 +1,9 @@
 import React from 'react'
-import { Accordion } from 'react-bootstrap'
+import {
+  Accordion,
+  OverlayTrigger,
+  Tooltip
+} from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import SearchFilterSection from '../SearchFilterSection/SearchFilterSection'
 import SearchFilterSectionList from '../SearchFilterSectionList/SearchFilterSectionList'
@@ -227,22 +231,50 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
         )
       }
       <SearchFilterSection title="Additional Filters" eventKey="10" setSidebarOpened={setSidebarOpened}>
-        <Form.Check
-          type="checkbox"
-          id="has_granules_or_cwic"
-          name="has_granules_or_cwic"
-          label="Include collections without granules"
-          checked={filterValues.has_granules_or_cwic === true}
-          onChange={handleChange}
-        />
-        <Form.Check
-          type="checkbox"
-          id="include_non_operational"
-          name="include_non_operational"
-          label="Include inactive collections"
-          checked={filterValues.include_non_operational === true}
-          onChange={handleChange}
-        />
+        <div className="hzn-additional-filter">
+          <input
+            id="has_granules_or_cwic"
+            type="checkbox"
+            name="has_granules_or_cwic"
+            checked={filterValues.has_granules_or_cwic === true}
+            onChange={handleChange}
+          />
+          <label htmlFor="has_granules_or_cwic">
+            Include collections without granules
+          </label>
+        </div>
+        <div className="hzn-additional-filter">
+          <input
+            id="include_non_operational"
+            type="checkbox"
+            name="include_non_operational"
+            checked={filterValues.include_non_operational === true}
+            onChange={handleChange}
+          />
+          <label htmlFor="include_non_operational">
+            Include inactive collections
+          </label>
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              (
+                <Tooltip id="inactive-collections-tooltip">
+                  Include collections labeled as planned, deprecated, preprint,
+                  in review, superseded, or not provided in results
+                </Tooltip>
+              )
+            }
+          >
+            <span
+              className="hzn-additional-filter__info"
+              role="img"
+              tabIndex={0}
+              aria-label="Inactive collections information"
+              >
+                ?
+              </span>
+          </OverlayTrigger>
+        </div>
       </SearchFilterSection>
       { /* Accordion.Item "Center" (No equivalent CMR field/facet. Requested CMR-9874) */ }
       { /* Accordion.Item "Date" (No equivalent. Probably won't do.) */ }
