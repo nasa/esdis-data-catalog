@@ -4,15 +4,25 @@ import { isEqual } from 'lodash'
 import collectionDefaultParams from '../constants/collectionDefaultParams'
 import facetDefaultParams from '../constants/facetDefaultParams'
 
+/** Parameters supported when serializing a CMR collections query. */
 interface Params {
+  /** Geographic bounding box used to filter collections. */
   bounding_box?: string
+  /** Whether to limit results to collections with granules or CWIC records. */
   has_granules_or_cwic?: boolean
+  /** Whether to include non-operational collections in the results. */
   include_non_operational?: boolean
+  /** Processing-level identifiers used to filter collections. */
   processing_level_id_h?: string[]
+  /** Latency values used to filter collections. */
   latency?: string[]
+  /** Data-center identifiers used to filter collections. */
   data_center_h?: string[]
+  /** Hierarchical science keywords used to filter collections. */
   science_keywords_h?: string[]
+  /** Temporal range as start/end values or a comma-separated string. */
   temporal?: string[] | string
+  /** Free-text search term applied to collections. */
   keyword?: string
 }
 
