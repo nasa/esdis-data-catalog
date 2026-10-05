@@ -93,7 +93,7 @@ describe('DataCatalog SearchFilters component and facets', () => {
     await user.hover(screen.getByRole('button', { name: 'Inactive collections information' }))
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent(
-      'Include collections labeled as planned, deprecated, preprint, in review, superseded, or not provided in results'
+      'Include collections labeled as planned, deprecated, preprint, in review, or not provided in results'
     )
   })
 

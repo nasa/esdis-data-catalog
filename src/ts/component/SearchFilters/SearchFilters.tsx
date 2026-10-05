@@ -260,7 +260,7 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
               (
                 <Tooltip id="inactive-collections-tooltip">
                   Include collections labeled as planned, deprecated, preprint,
-                  in review, superseded, or not provided in results
+                  in review, or not provided in results
                 </Tooltip>
               )
             }
