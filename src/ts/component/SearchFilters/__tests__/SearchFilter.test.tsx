@@ -110,10 +110,10 @@ describe('DataCatalog SearchFilters component and facets', () => {
     expect((screen.getByLabelText('End Date') as HTMLInputElement).value).toEqual('2024-02-02')
   })
 
-  test('populates additional filters with applied values', () => {
+  test('populates includes non operation with applied value', () => {
     setup({
       filterValues: {
-        has_granules_or_cwic: true,
+        has_granules_or_cwic: false,
         include_non_operational: true
       }
     })
@@ -137,8 +137,8 @@ describe('DataCatalog SearchFilters component and facets', () => {
     await user.click(screen.getByLabelText('Include inactive collections'))
 
     expect(handleChange).toHaveBeenCalledTimes(2)
-    expect(handleChange.mock.calls[0][0].target).toHaveAttribute('name', 'has_granules_or_cwic')
-    expect(handleChange.mock.calls[1][0].target).toHaveAttribute('name', 'include_non_operational')
+    expect(handleChange.mock.calls[0][0].target.name).toBe('has_granules_or_cwic')
+    expect(handleChange.mock.calls[1][0].target.name).toBe('include_non_operational')
   })
 
   test('calls handleBlur on blur', async () => {

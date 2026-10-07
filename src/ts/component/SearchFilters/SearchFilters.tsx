@@ -74,6 +74,17 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     }
   }
 
+  const handleHasGranulesOrCwicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange({
+      ...event,
+      target: {
+        name: 'has_granules_or_cwic',
+        type: 'checkbox',
+        checked: !event.target.checked
+      }
+    } as unknown as React.ChangeEvent<HTMLInputElement>)
+  }
+
   const getFacets = (t: string) => findChildFacets(facets as Facet, t)
     .filter(({ title }) => !ickyValues.includes(title))
 
@@ -236,8 +247,8 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
             id="has_granules_or_cwic"
             type="checkbox"
             name="has_granules_or_cwic"
-            checked={filterValues.has_granules_or_cwic === true}
-            onChange={handleChange}
+            checked={filterValues.has_granules_or_cwic === false}
+            onChange={handleHasGranulesOrCwicChange}
           />
           <label htmlFor="has_granules_or_cwic">
             Include collections without granules

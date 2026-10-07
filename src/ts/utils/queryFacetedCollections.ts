@@ -96,15 +96,14 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
   const cmrParams = pick(params, validParameters)
 
   const cmrHost = getConfig('cmrHost')
-  const facetsQuery = stringifyCollectionsQuery({
-    ...facetDefaultParams,
-    ...cmrParams
-  }, false)
+  // CMR only accepts has_granules_or_cwic=true; omit it otherwise to get all collections
+  const facetsParams = { ...facetDefaultParams, ...cmrParams }
+  if (facetsParams.has_granules_or_cwic !== true) delete facetsParams.has_granules_or_cwic
+  const facetsQuery = stringifyCollectionsQuery(facetsParams, false)
 
-  const collectionsQuery = stringifyCollectionsQuery(
-    customMergeParams(collectionDefaultParams, cmrParams),
-    false
-  )
+  const collectionsParams = customMergeParams(collectionDefaultParams, cmrParams)
+  if (collectionsParams.has_granules_or_cwic !== true) delete collectionsParams.has_granules_or_cwic
+  const collectionsQuery = stringifyCollectionsQuery(collectionsParams, false)
   const facetsUrl = `${cmrHost}/search/collections.json?${facetsQuery}`
   const collectionsUrl = `${cmrHost}/search/collections.umm_json?${collectionsQuery}`
 

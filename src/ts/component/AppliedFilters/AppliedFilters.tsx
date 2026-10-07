@@ -31,6 +31,8 @@ interface AppliedFiltersProps {
   filterValues: {
     bounding_box?: string
     data_center_h?: string[]
+    has_granules_or_cwic?: boolean
+    include_non_operational?: boolean
     keyword?: string
     page_num?: number
     page_size?: number
@@ -61,10 +63,15 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
   isLoading,
   setQueryString
 }) => {
-  const { temporal, bounding_box: boundingBox, sort_key: sortKey } = filterValues
+  const {
+    temporal,
+    bounding_box: boundingBox,
+    has_granules_or_cwic: hasGranulesOrCwic,
+    include_non_operational: includeNonOperational,
+    sort_key: sortKey
+  } = filterValues
   const formik = useFormikContext()
   const [applied, setApplied] = useState<AppliedFilter[]>([])
-
   // This is fairly ugly how this has to work. Filter state of temporal / spatial
   // is managed by Formik and clears instantly. Filter state of facets is managed
   // by CMR facet results and updates when CMR results return. When clicking "Clear
@@ -112,6 +119,38 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
       })
     }
 
+    if (hasGranulesOrCwic === false) {
+      nextApplied.push({
+        title: 'Include collections without granules',
+        links: {
+          remove: () => {
+            formik.setFieldValue('has_granules_or_cwic', true)
+            formik.setFieldValue('page_num', null)
+          }
+        },
+        applied: false,
+        count: 0,
+        hasChildren: false,
+        type: ''
+      })
+    }
+
+    if (includeNonOperational) {
+      nextApplied.push({
+        title: 'Include inactive collections',
+        links: {
+          remove: () => {
+            formik.setFieldValue('include_non_operational', false)
+            formik.setFieldValue('page_num', null)
+          }
+        },
+        applied: false,
+        count: 0,
+        hasChildren: false,
+        type: ''
+      })
+    }
+
     if (sortKey) {
       const validSortKey = getValidSortkey(sortKey)
       // Remove invalid sort keys to fallback to the default sort key
@@ -121,7 +160,7 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
     }
 
     setApplied(nextApplied)
-  }, [facets, temporal, boundingBox, isLoading, formik.dirty])
+  }, [facets, temporal, boundingBox, hasGranulesOrCwic, includeNonOperational, isLoading, formik.dirty]) // eslint-disable-line max-len
 
   const remove = (action: string | (() => void)) => {
     if (typeof action === 'string') {
@@ -139,6 +178,8 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
     formik.setValues(omit(filterValues, [
       'temporal',
       'bounding_box',
+      'has_granules_or_cwic',
+      'include_non_operational',
       'data_center_h',
       'science_keywords_h',
       'platforms_h',
