@@ -23,6 +23,15 @@ export const parseCollectionsQuery = (query: string) => {
     result.temporal = result.temporal.split(',')
   }
 
+  // Parse additional filters parameters as booleans
+  if (typeof result.has_granules_or_cwic === 'string') {
+    result.has_granules_or_cwic = result.has_granules_or_cwic === 'true'
+  }
+
+  if (typeof result.include_non_operational === 'string') {
+    result.include_non_operational = result.include_non_operational === 'true'
+  }
+
   // Remove default facet query params
   Object.entries(result).forEach(([k, v]) => {
     if (k in facetDefaultParams && facetDefaultParams[k as keyof FacetDefaultParams] === v) {

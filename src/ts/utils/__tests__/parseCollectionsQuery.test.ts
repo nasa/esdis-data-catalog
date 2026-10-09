@@ -33,6 +33,19 @@ describe('parseCollectionsQuery', () => {
     })
   })
 
+  describe('when parsing additional filter parameters', () => {
+    test('returns booleans', () => {
+      const result = parseCollectionsQuery(
+        'has_granules_or_cwic=true&include_non_operational=false'
+      )
+
+      expect(result).toEqual({
+        has_granules_or_cwic: true,
+        include_non_operational: false
+      })
+    })
+  })
+
   describe('when parsing facet params', () => {
     test('should remove default facet params', () => {
       const queryString = 'param=value&include_facets=v2&page_size=0&consortium=EOSDIS'
