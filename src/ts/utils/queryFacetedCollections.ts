@@ -97,7 +97,10 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
 
   const cmrHost = getConfig('cmrHost')
   // CMR only accepts has_granules_or_cwic=true; omit it otherwise to get all collections
-  const facetsParams = { ...facetDefaultParams, ...cmrParams }
+  const facetsParams = {
+    ...facetDefaultParams,
+    ...cmrParams
+  }
   if (facetsParams.has_granules_or_cwic !== true) delete facetsParams.has_granules_or_cwic
   const facetsQuery = stringifyCollectionsQuery(facetsParams, false)
 

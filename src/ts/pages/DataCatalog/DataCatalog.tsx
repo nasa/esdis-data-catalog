@@ -213,6 +213,7 @@ const DataCatalog: React.FC = () => {
     if (collectionSearchParams.has_granules_or_cwic === false && !('has_granules_or_cwic' in parsed)) {
       parsed.has_granules_or_cwic = false
     }
+
     updateSearchParams(parsed)
   }
 
