@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:color";
 
 /*
  * This file pulls in all the Bootstrap variables and customizations. This file is
@@ -79,7 +80,7 @@ $badge-border-radius: 0.25rem;
 */
 
 // $accordion-button-active-color: map.get($theme-colors, "blue");
-$accordion-button-active-bg: lighten(map.get($theme-colors, "blue-light"), 45%);
+$accordion-button-active-bg: color.mix(map.get($theme-colors, "blue-light"), white, 55%);
 
 /*
  * Navbar

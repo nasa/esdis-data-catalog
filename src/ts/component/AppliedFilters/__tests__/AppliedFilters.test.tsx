@@ -146,6 +146,68 @@ describe('AppliedFilters', () => {
     })
   })
 
+  describe('when has_granules_or_cwic filter is selected', () => {
+    test('renders the "Include collections without granules" text', () => {
+      setup({
+        overrideProps: {
+          filterValues: {
+            has_granules_or_cwic: false
+          }
+        }
+      })
+
+      expect(screen.getByText('Include collections without granules')).toBeInTheDocument()
+    })
+  })
+
+  describe('when removing has_granules_or_cwic filter', () => {
+    test('calls setFieldValue to remove has_granules_or_cwic and reset page_num', async () => {
+      const { mockFormik, user } = setup({
+        overrideProps: {
+          filterValues: {
+            has_granules_or_cwic: false
+          }
+        }
+      })
+
+      await user.click(screen.getByText('Include collections without granules'))
+
+      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('has_granules_or_cwic', true)
+      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('page_num', null)
+    })
+  })
+
+  describe('when include_non_operational filter is selected', () => {
+    test('renders the "Include inactive collections" text', () => {
+      setup({
+        overrideProps: {
+          filterValues: {
+            include_non_operational: true
+          }
+        }
+      })
+
+      expect(screen.getByText('Include inactive collections')).toBeInTheDocument()
+    })
+  })
+
+  describe('when removing include_non_operational filter', () => {
+    test('calls setFieldValue to remove include_non_operational and reset page_num', async () => {
+      const { mockFormik, user } = setup({
+        overrideProps: {
+          filterValues: {
+            include_non_operational: true
+          }
+        }
+      })
+
+      await user.click(screen.getByText('Include inactive collections'))
+
+      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('include_non_operational', false)
+      expect(mockFormik.setFieldValue).toHaveBeenCalledWith('page_num', null)
+    })
+  })
+
   describe('when clearing all filters', () => {
     test('calls setValues to clear all filters', async () => {
       const { mockFormik, user } = setup({
@@ -157,7 +219,9 @@ describe('AppliedFilters', () => {
             platforms_h: ['Platform1'],
             horizontal_data_resolution_range: ['1 km - < 10 km'],
             granule_data_format_h: ['NetCDF-4'],
-            processing_level_id_h: ['Level 1B']
+            processing_level_id_h: ['Level 1B'],
+            has_granules_or_cwic: true,
+            include_non_operational: true
           }
         }
       })

@@ -19,26 +19,43 @@
     padding-left: 0;
   }
 
-  .hzn-filters__facets li {
+  .hzn-filters__facets li,
+  .hzn-additional-filter {
     padding-left: 0;
     display: flex;
     margin-bottom: 0.8rem;
   }
 
-  .hzn-filters__facets input[type="checkbox"] {
+  .hzn-filters__facets input[type="checkbox"],
+  .hzn-additional-filter input[type="checkbox"]{
     width: 18px;
     min-width: 18px;
     height: 18px;
     margin: 0 0.5rem 0 0;
   }
 
-  .hzn-filters__facets label {
+  .hzn-filters__facets label,
+  .hzn-additional-filter label {
     font-family: var(--hzn-headings-font-family);
     font-size: 14px;
     line-height: 19px;
     letter-spacing: -0.25px;
     color: #2E2E32;
     user-select: none;
+  }
+
+  .hzn-additional-filter__info {
+    width: 16px;
+    height: 16px;
+    margin-left: 0.35rem;
+    padding: 0;
+    border: 1px solid #58585B;
+    border-radius: 50%;
+    background: transparent;
+    color: #58585B;
+    font-size: 11px;
+    line-height: 14px;
+    text-align: center;
   }
 
   /* Accordion */

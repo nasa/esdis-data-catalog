@@ -98,6 +98,8 @@ const countFilters = (facets: Facet, params: Params) => {
   }
 
   if (params.bounding_box) result += 1
+  if (params.has_granules_or_cwic === false) result += 1
+  if (params.include_non_operational) result += 1
 
   return result
 }
@@ -207,7 +209,12 @@ const DataCatalog: React.FC = () => {
    * @param {string} str Query string to be set
    */
   const setQueryString = (str: string) => {
-    updateSearchParams(parseCollectionsQuery(str.replace(/(page_num=)\d+/, '$11')))
+    const parsed = parseCollectionsQuery(str.replace(/(page_num=)\d+/, '$11'))
+    if (collectionSearchParams.has_granules_or_cwic === false && !('has_granules_or_cwic' in parsed)) {
+      parsed.has_granules_or_cwic = false
+    }
+
+    updateSearchParams(parsed)
   }
 
   /**
@@ -216,7 +223,10 @@ const DataCatalog: React.FC = () => {
    * @param {Object} param1 Formik provided callbacks
    */
   const handleSubmit = (values: Params, { setSubmitting }: FormikHelpers<Params>) => {
-    const searchParams = pickBy(values, identity)
+    const searchParams = pickBy(
+      values,
+      (value, key) => identity(value) || (key === 'has_granules_or_cwic' && value === false)
+    )
     setSubmitting(false)
 
     delete searchParams.page_num
@@ -280,10 +290,17 @@ const DataCatalog: React.FC = () => {
     updateSearchParams(parseCollectionsQuery(query))
   }
 
+  // Initialize additonal checkboxes as booleans so Formik doesn't treat them as arrays
+  const initialValues: Params = {
+    has_granules_or_cwic: true,
+    include_non_operational: false,
+    ...collectionSearchParams
+  }
+
   return (
     <div className="data-catalog-wrapper">
       <Formik
-        initialValues={collectionSearchParams}
+        initialValues={initialValues}
         onSubmit={handleSubmit}
         className="hzn"
         enableReinitialize

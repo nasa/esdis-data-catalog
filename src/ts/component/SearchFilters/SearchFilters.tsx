@@ -1,5 +1,9 @@
 import React from 'react'
-import { Accordion } from 'react-bootstrap'
+import {
+  Accordion,
+  OverlayTrigger,
+  Tooltip
+} from 'react-bootstrap'
 import Form from 'react-bootstrap/Form'
 import SearchFilterSection from '../SearchFilterSection/SearchFilterSection'
 import SearchFilterSectionList from '../SearchFilterSectionList/SearchFilterSectionList'
@@ -13,6 +17,8 @@ interface SearchFiltersProps {
   facets: object;
   filterValues: {
     bounding_box?: string
+    has_granules_or_cwic?:boolean
+    include_non_operational?: boolean
     processing_level_id_h?: string[];
     science_keywords_h?: string[];
     temporal?: string[] | string
@@ -66,6 +72,17 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
     if (!isChecked && remove) {
       setQueryString(remove.split('?')[1])
     }
+  }
+
+  const handleHasGranulesOrCwicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleChange({
+      ...event,
+      target: {
+        name: 'has_granules_or_cwic',
+        type: 'checkbox',
+        checked: !event.target.checked
+      }
+    } as unknown as React.ChangeEvent<HTMLInputElement>)
   }
 
   const getFacets = (t: string) => findChildFacets(facets as Facet, t)
@@ -224,6 +241,52 @@ const SearchFilters: React.FC<SearchFiltersProps> = ({
           </SearchFilterSection>
         )
       }
+      <SearchFilterSection title="Additional Filters" eventKey="10" setSidebarOpened={setSidebarOpened}>
+        <div className="hzn-additional-filter">
+          <input
+            id="has_granules_or_cwic"
+            type="checkbox"
+            name="has_granules_or_cwic"
+            checked={filterValues.has_granules_or_cwic === false}
+            onChange={handleHasGranulesOrCwicChange}
+          />
+          <label htmlFor="has_granules_or_cwic">
+            Include collections without granules
+          </label>
+        </div>
+        <div className="hzn-additional-filter">
+          <input
+            id="include_non_operational"
+            type="checkbox"
+            name="include_non_operational"
+            checked={filterValues.include_non_operational === true}
+            onChange={handleChange}
+          />
+          <label htmlFor="include_non_operational">
+            Include inactive collections
+          </label>
+          <OverlayTrigger
+            placement="right"
+            overlay={
+              (
+                <Tooltip id="inactive-collections-tooltip">
+                  Include collections labeled as planned, deprecated, preprint,
+                  in review, or not provided in results
+                </Tooltip>
+              )
+            }
+          >
+            <span
+              className="hzn-additional-filter__info"
+              role="button"
+              tabIndex={0}
+              aria-label="Inactive collections information"
+            >
+              ?
+            </span>
+          </OverlayTrigger>
+        </div>
+      </SearchFilterSection>
       { /* Accordion.Item "Center" (No equivalent CMR field/facet. Requested CMR-9874) */ }
       { /* Accordion.Item "Date" (No equivalent. Probably won't do.) */ }
     </SearchFilterSectionList>

@@ -12,7 +12,9 @@ const validParameters = [
   'bounding_box',
   'data_center_h',
   'granule_data_format_h',
+  'has_granules_or_cwic',
   'horizontal_data_resolution_range',
+  'include_non_operational',
   'keyword',
   'page_num',
   'page_size',
@@ -94,15 +96,17 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
   const cmrParams = pick(params, validParameters)
 
   const cmrHost = getConfig('cmrHost')
-  const facetsQuery = stringifyCollectionsQuery({
+  // CMR only accepts has_granules_or_cwic=true; omit it otherwise to get all collections
+  const facetsParams = {
     ...facetDefaultParams,
     ...cmrParams
-  }, false)
+  }
+  if (facetsParams.has_granules_or_cwic !== true) delete facetsParams.has_granules_or_cwic
+  const facetsQuery = stringifyCollectionsQuery(facetsParams, false)
 
-  const collectionsQuery = stringifyCollectionsQuery(
-    customMergeParams(collectionDefaultParams, cmrParams),
-    false
-  )
+  const collectionsParams = customMergeParams(collectionDefaultParams, cmrParams)
+  if (collectionsParams.has_granules_or_cwic !== true) delete collectionsParams.has_granules_or_cwic
+  const collectionsQuery = stringifyCollectionsQuery(collectionsParams, false)
   const facetsUrl = `${cmrHost}/search/collections.json?${facetsQuery}`
   const collectionsUrl = `${cmrHost}/search/collections.umm_json?${collectionsQuery}`
 
