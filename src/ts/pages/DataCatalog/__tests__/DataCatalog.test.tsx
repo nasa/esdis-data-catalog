@@ -727,7 +727,7 @@ describe('DataCatalog', () => {
   })
 
   describe('keyword search debouncing', () => {
-    test.skip('debounces keyword search input', async () => {
+    test('debounces keyword search input', async () => {
       const { user } = setup({})
 
       await screen.findByText('collection 20')
@@ -738,7 +738,7 @@ describe('DataCatalog', () => {
       await user.type(searchbox, 'test')
 
       // Setup mock for the debounced search
-      setupMockResponse('keyword=test', 1, 1, 'Debounced ')
+      setupMockResponse('has_granules_or_cwic=true&keyword=test', 1, 1, 'Debounced ')
 
       // The search should not have happened immediately
       expect(screen.queryByText('Debounced collection 1')).toBeNull()

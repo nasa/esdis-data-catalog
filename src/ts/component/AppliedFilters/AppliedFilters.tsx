@@ -160,7 +160,15 @@ export const AppliedFilters: React.FC<AppliedFiltersProps> = ({
     }
 
     setApplied(nextApplied)
-  }, [facets, temporal, boundingBox, hasGranulesOrCwic, includeNonOperational, isLoading, formik.dirty]) // eslint-disable-line max-len
+  }, [
+    facets,
+    temporal,
+    boundingBox,
+    hasGranulesOrCwic,
+    includeNonOperational,
+    isLoading,
+    formik.dirty
+  ])
 
   const remove = (action: string | (() => void)) => {
     if (typeof action === 'string') {
