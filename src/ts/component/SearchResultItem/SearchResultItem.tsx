@@ -384,7 +384,7 @@ export const SearchResultItem: React.FC<SearchResultItemProps> = ({ metadata }) 
     // 1. There's no list of providers with landing pages (all providers get links), or
     // 2. The current provider is in the list of providers that should have dataset landing pages
     if (!providersWithLandingPages || (providersWithLandingPages as string).includes(providerId)) {
-      return fullPath.toLowerCase().replace(/_/g, '-')
+      return fullPath.toLowerCase().replace(/[_-]+/g, '-')
     }
 
     // If a DOI is available and the provider is not in providersWithLandingPages,

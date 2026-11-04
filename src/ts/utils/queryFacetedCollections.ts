@@ -122,9 +122,8 @@ export const queryFacetedCollections = async (params: Params): Promise<QueryResu
     query: collectionsQuery
   }
   try {
-    // Clone required because fetch only allowed reading body once
-    result.data = await collections.clone().json()
-    result.facetData = await facets.clone().json()
+    result.data = await collections.json()
+    result.facetData = await facets.json()
   } catch (e) {
     console.warn('Unable to parse JSON', e)
   }
