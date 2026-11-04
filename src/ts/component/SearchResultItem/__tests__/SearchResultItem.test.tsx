@@ -413,6 +413,34 @@ describe('DataCatalog SearchResultItem component', () => {
     expect(screen.getByText('Fake Collection')).toHaveAttribute('href', '/collections/c100-fake')
   })
 
+  test.each([
+    ['EN1_MDSI_MER_RR__1P', '4'],
+    ['EN1_MDSI_MER_RR___1P', '4'],
+    ['EN1-MDSI-MER-RR--1P', '4'],
+    ['EN1_MDSI_MER_RR_-__1P', '4'],
+    ['EN1_MDSI_MER_RR_1P', '4'],
+    ['EN1_MDSI_MER_RR_1P_', '_4']
+  ])('renders single-dash collection links for ShortName %s and Version %s', (shortName, version) => {
+    const config = {
+      collectionPath: '/data/catalog/<%= ProviderId %>-<%= ShortName %>-<%= Version %>',
+      providersWithLandingPages: ['LAADS']
+    }
+    mockedGetConfig.mockImplementation(
+      (configName: string) => config[configName as keyof typeof config]
+    )
+
+    const metadata = mockUmm()
+    metadata.meta['provider-id'] = 'LAADS'
+    metadata.umm.ShortName = shortName
+    metadata.umm.Version = version
+    renderMetadata(metadata)
+
+    expect(screen.getByRole('link', { name: 'Fake Collection' })).toHaveAttribute(
+      'href',
+      '/data/catalog/laads-en1-mdsi-mer-rr-1p-4'
+    )
+  })
+
   test('does render shortname and version', () => {
     const metadata = mockUmm()
     metadata.umm.ShortName = 'FakeShortName'
