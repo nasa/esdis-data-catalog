@@ -48,6 +48,25 @@ describe('queryFacetedCollections', () => {
     })
   })
 
+  test.each(['facets', 'collections'])('reads a large %s response without stalling', async (largeResponse) => {
+    const facetData = { facets: largeResponse === 'facets' ? 'x'.repeat(128 * 1024) : 'mock facets data' }
+    const data = { items: largeResponse === 'collections' ? 'x'.repeat(128 * 1024) : 'mock collections data' }
+
+    nock(cmrHost)
+      .get('/search/collections.json?mocked_query_string')
+      .reply(200, facetData)
+
+    nock(cmrHost)
+      .get('/search/collections.umm_json?mocked_query_string')
+      .reply(200, data)
+
+    const result = await queryFacetedCollections({ keyword: 'test' })
+
+    expect(result.facetData).toEqual(facetData)
+    expect(result.data).toEqual(data)
+    expect(nock.isDone()).toBe(true)
+  })
+
   test('should pass additional filters to both collection queries', async () => {
     nock(cmrHost)
       .get('/search/collections.json?mocked_query_string')
