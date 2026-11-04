@@ -10,6 +10,15 @@ import userEvent from '@testing-library/user-event'
 
 import SearchResultsList from '../SearchResultsList'
 
+const expectScrollToTop = async () => {
+  // Finish the delayed scroll before the test environment can be torn down.
+  await waitFor(() => {
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0 })
+  })
+
+  expect(window.scrollTo).toHaveBeenCalledTimes(1)
+}
+
 const setup = (overrideProps = {}) => {
   const nextMock = vi.fn()
   const previousMock = vi.fn()
@@ -71,6 +80,10 @@ const setup = (overrideProps = {}) => {
 }
 
 describe('SearchResultList', () => {
+  beforeEach(() => {
+    window.scrollTo = vi.fn()
+  })
+
   test('renders the collections', () => {
     setup()
 
@@ -100,7 +113,6 @@ describe('SearchResultList', () => {
   })
 
   describe('Pagination', () => {
-    window.scrollTo = vi.fn()
     describe('when clicking on next page arrow', () => {
       test('should call setQueryPage with next page', async () => {
         const { props, user } = setup()
@@ -111,6 +123,7 @@ describe('SearchResultList', () => {
 
         expect(props.setQueryPage).toHaveBeenCalledTimes(1)
         expect(props.setQueryPage).toHaveBeenCalledWith(2)
+        await expectScrollToTop()
       })
 
       test('renders disabled next arrow when on the last page', () => {
@@ -139,6 +152,7 @@ describe('SearchResultList', () => {
 
         expect(props.setQueryPage).toHaveBeenCalledTimes(1)
         expect(props.setQueryPage).toHaveBeenCalledWith(4)
+        await expectScrollToTop()
       })
     })
 
@@ -150,6 +164,7 @@ describe('SearchResultList', () => {
 
         expect(props.setQueryPage).toHaveBeenCalledTimes(1)
         expect(props.setQueryPage).toHaveBeenCalledWith(5035)
+        await expectScrollToTop()
       })
     })
   })
@@ -166,6 +181,7 @@ describe('SearchResultList', () => {
 
       expect(props.setQueryPage).toHaveBeenCalledTimes(1)
       expect(props.setQueryPage).toHaveBeenCalledWith(1)
+      await expectScrollToTop()
     })
 
     test('renders a disabled previous arrow when current page is 1', () => {
@@ -220,7 +236,6 @@ describe('SearchResultList', () => {
   })
 
   describe('Page size', () => {
-    window.scrollTo = vi.fn()
     describe('when no page size is selected', () => {
       test('renders render the default page size of 10', () => {
         setup({
@@ -265,13 +280,12 @@ describe('SearchResultList', () => {
       test('should call setQueryPageSize with page 20', async () => {
         const { props, user } = setup()
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: /ROWS/ }))
-          await user.click(screen.getByRole('button', { name: '20' }))
-        })
+        await user.click(screen.getByRole('button', { name: /ROWS/ }))
+        await user.click(screen.getByRole('button', { name: '20' }))
 
         expect(props.setQueryPageSize).toHaveBeenCalledTimes(1)
         expect(props.setQueryPageSize).toHaveBeenCalledWith(20)
+        await expectScrollToTop()
       })
     })
   })
@@ -281,49 +295,45 @@ describe('SearchResultList', () => {
       test('calls setQuerySort with -usage_score', async () => {
         const { props, user } = setup()
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: /SORT:/ }))
-          await user.click(screen.getByRole('button', { name: 'Usage' }))
-        })
+        await user.click(screen.getByRole('button', { name: /SORT:/ }))
+        await user.click(screen.getByRole('button', { name: 'Usage' }))
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
         expect(props.setQuerySort).toHaveBeenCalledWith('-usage_score')
+        await expectScrollToTop()
       })
 
       test('calls setQuerySort with start_data', async () => {
         const { props, user } = setup()
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: /SORT:/ }))
-          await user.click(screen.getByRole('button', { name: 'Start Date' }))
-        })
+        await user.click(screen.getByRole('button', { name: /SORT:/ }))
+        await user.click(screen.getByRole('button', { name: 'Start Date' }))
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
         expect(props.setQuerySort).toHaveBeenCalledWith('start_date')
+        await expectScrollToTop()
       })
 
       test('calls setQuerySort with relevance', async () => {
         const { props, user } = setup()
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: /SORT:/ }))
-          await user.click(screen.getByRole('button', { name: 'Relevance' }))
-        })
+        await user.click(screen.getByRole('button', { name: /SORT:/ }))
+        await user.click(screen.getByRole('button', { name: 'Relevance' }))
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
         expect(props.setQuerySort).toHaveBeenCalledWith('-score')
+        await expectScrollToTop()
       })
 
       test('calls setQuerySort with -ongoing', async () => {
         const { props, user } = setup()
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: /SORT:/ }))
-          await user.click(screen.getByRole('button', { name: 'End Date' }))
-        })
+        await user.click(screen.getByRole('button', { name: /SORT:/ }))
+        await user.click(screen.getByRole('button', { name: 'End Date' }))
 
         expect(props.setQuerySort).toHaveBeenCalledTimes(1)
         expect(props.setQuerySort).toHaveBeenCalledWith('-ongoing')
+        await expectScrollToTop()
       })
     })
 

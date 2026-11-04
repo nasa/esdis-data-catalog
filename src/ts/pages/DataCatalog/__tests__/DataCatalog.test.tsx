@@ -124,6 +124,7 @@ const setupMockResponse = (params = '', collectionCount = 20, hits = 2000, prefi
 }
 
 async function setupSidebarTest() {
+  mockedUseMediaQuery.mockReturnValue(false)
   const user = userEvent.setup()
   setupMockResponse()
   render(
@@ -159,7 +160,10 @@ const setup = ({ params }: { params?: string } = {}) => {
 }
 
 describe('DataCatalog', () => {
-  beforeEach(() => nock.cleanAll())
+  beforeEach(() => {
+    nock.cleanAll()
+    mockedUseMediaQuery.mockReturnValue(true)
+  })
 
   afterEach(() => {
     vi.clearAllMocks()
@@ -396,14 +400,14 @@ describe('DataCatalog', () => {
 
       expect(screen.getByTestId('loading-banner__spinner')).toBeTruthy()
 
+      await screen.findByText('Found collection 1')
+
       if (filterName) {
         const newParams = filter(filterParams, (p) => p.indexOf(removedParamName) === -1).join('&')
         const newFacets = omit(appliedFacets, removedParamName)
         setupMockResponse(newParams, 1, 1, 'Found ', newFacets)
 
-        await waitFor(async () => {
-          await user.click(screen.getByRole('button', { name: filterName }))
-        })
+        await user.click(screen.getByRole('button', { name: filterName }))
 
         // Screen needs to settle down
         await waitFor(async () => {
@@ -646,6 +650,7 @@ describe('DataCatalog', () => {
   })
 
   test('the filter count displays the number of filters in parens when there are filters', async () => {
+    mockedUseMediaQuery.mockReturnValue(false)
     const filterParams = [
       'science_keywords_h[1][topic]=Found Keyw1',
       'platforms_h[1][basis]=Found Plat1',
