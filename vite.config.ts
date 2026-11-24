@@ -6,6 +6,7 @@ import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 export default defineConfig({
   plugins: [react(), cssInjectedByJsPlugin()],
   build: {
+    target: 'es2022',
     rollupOptions: {
       output: {
         entryFileNames: 'dataCatalogMain.js',
